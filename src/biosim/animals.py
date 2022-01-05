@@ -34,6 +34,17 @@ class Herbivores:
         :param incoming_params: Dictionary with parameters to replace default parameters.
         """
 
+        for parameter_key in incoming_params:
+            if parameter_key not in cls.default_params:
+                raise ValueError('Invalid parameter name: ' + parameter_key)
+            if incoming_params[parameter_key] <= 0:
+                raise ValueError('Parameter value cannot be below zero.')
+            if parameter_key == 'DeltaPhiMax' and incoming_params[parameter_key] <= 0:
+                raise ValueError('DeltaPhiMax shall be strictly positive.')
+            if parameter_key == 'eta' and not 0 <= incoming_params[parameter_key] <= 1:
+                raise ValueError('Eta must be in [0,1]')
+
+
     def __init__(self, age, weight):
         self.age = age
         self.weight = weight
