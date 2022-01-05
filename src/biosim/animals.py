@@ -2,7 +2,7 @@
 Module for herbivores
 """
 from .landscapes import Lowland
-import math
+from math import exp
 
 class Herbivores:
 
@@ -13,11 +13,18 @@ class Herbivores:
     def aging(self):
         self.age += 1
 
+    @staticmethod
+    def q(x, x_half, phi_aw, pos_neg):
+        q = (1 / (1 + exp(pos_neg * phi_aw * (x - x_half))))
+        return q
+
     def fitness(self, a_half=40, phi_age=0.6, w_half=10, phi_weight=0.1):
         if self.weight == 0:
             phi = 0
         else:
-            phi = (1/(1+math.exp(phi_age*(self.age-a_half)))) * (1/(1+math.exp(-phi_weight*(self.weight-w_half))))
+            q_pos = self.q(self.age, a_half, phi_age, 1)
+            q_neg = self.q(self.weight, w_half, phi_weight, -1)
+            phi = q_pos * q_neg
         return phi
 
     def weight_change(self, beta=0.9, eta=0.05):
