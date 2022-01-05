@@ -31,13 +31,29 @@ class Lowland:
         self.amount_fodder = self.param_f_max
 
     def herbs_population(self, ini_population):
-        for dict in ini_population:
-            for pop_dict in dict['pop']:
-                if pop_dict['species'] == 'Herbivore':
-                    self.list_herbivores.append(Herbivores(pop_dict['age'], pop_dict['weight']))
-                else:
-                    raise TypeError('The only accepted species is herbivore.')
+        """
+        Method for distributing herbivores into a list.
 
+        :param ini_population: Initial population in one cell.
+        :return: List with herbivores in one cell.
+        """
+
+        for pop_dict in ini_population:
+            if pop_dict['species'] == 'Herbivore':
+                self.list_herbivores.append(Herbivores(pop_dict['age'], pop_dict['weight']))
+            else:
+                raise TypeError('The only accepted species is herbivore.')
+        return self.list_herbivores
+
+    def count_herbs(self):
+        """
+        Method for counting herbivores.
+
+        :return: Amount of herbivores.
+        """
+
+        amount_herbs = len(self.list_herbivores)
+        return amount_herbs
 
     def feeding_herbs(self):
         if self.amount_fodder > 0:
@@ -45,3 +61,17 @@ class Lowland:
             self.amount_fodder -= amount_eaten
 
         # Kaller på funksjon som teller antall herbs fra lowland.
+
+        return self.amount_fodder
+
+
+"""
+if __name__ == "__main__":
+    poph = [{'species': 'Herbivore',
+            'age': 5,
+            'weight': 20}
+            for _ in range(5)]
+
+    list_h = Lowland.herbs_population(poph)
+    print(list_h)
+"""
