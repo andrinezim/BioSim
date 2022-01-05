@@ -1,7 +1,7 @@
 """
 Module for herbivores
 """
-from .landscapes import Lowland
+#from .landscapes import Lowland
 from math import exp
 
 class Herbivores:
@@ -105,6 +105,11 @@ class Herbivores:
         self.fitness()
 
     def herbs_eating(self):
+        """
+        Method for deciding how much a herbivore eats
+
+        :return: Eaten amount
+        """
         amount_fodder = Lowland.feeding_herbs()
         if self.default_params['F'] < amount_fodder:
             amount_eaten = self.default_params['F']
@@ -121,3 +126,20 @@ class Herbivores:
 
     def death(self):
         pass
+
+    def __repr__(self):
+        string = f'Age: {self.age}, Weight: {self.weight}, Fitness: {self.phi}'
+        return string
+
+if __name__ == "__main__":
+    poph = [{'species': 'Herbivore',
+                 'age': 5,
+                 'weight': 20} for _ in range(50)
+                 ]
+
+    list_aw = [[8,20], [8,20], [8,20], [8,20]]
+    for age, weight in list_aw:
+        print(Herbivores(age, weight).__repr__())
+        Herbivores(age, weight).aging()
+        print(Herbivores(age, weight).__repr__())
+
