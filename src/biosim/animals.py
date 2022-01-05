@@ -46,8 +46,21 @@ class Herbivores:
 
 
     def __init__(self, age, weight):
-        self.age = age
-        self.weight = weight
+        """
+        Method for saving age and weight values in class
+
+        :param age: Age of animal
+        :param weight: Weight of animal
+        """
+        if age < 0:
+            raise ValueError('Age cannot be below zero.')
+        else:
+            self.age = age
+
+        if weight < 0:
+            raise ValueError('Weight cannot be below zero.')
+        else:
+            self.weight = weight
 
     def aging(self):
         """
