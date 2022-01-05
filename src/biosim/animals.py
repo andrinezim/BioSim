@@ -11,10 +11,23 @@ class Herbivores:
         self.weight = weight
 
     def aging(self):
+        """
+        Method for aging each animal. Will be called every new year.
+        """
         self.age += 1
 
     @staticmethod
     def q(x, x_half, phi_aw, pos_neg):
+        """
+        Static function for fitness method
+
+        :param x: current age/weight of animal
+        :param x_half: constant parameter for age/weight
+        :param phi_aw: constant parameter for age/weight
+        :param pos_neg: determines positive(age)/negative(weight)
+
+        :return: value of q function
+        """
         q = (1 / (1 + exp(pos_neg * phi_aw * (x - x_half))))
         return q
 
