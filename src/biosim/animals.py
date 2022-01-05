@@ -65,24 +65,6 @@ class Herbivores:
         # Defining phi value for use in fitness and procreation functions
         self.phi = 0
 
-    def aging(self):
-        """
-        Method for aging each animal. Will be called every new year.
-        """
-        self.age += 1
-
-    def herbs_eating(self):
-        amount_fodder = Lowland.feeding_herbs()
-        if self.default_params['F'] < amount_fodder:
-            amount_eaten = self.default_params['F']
-        else:
-            amount_eaten = amount_fodder
-
-        self.weight_change()
-        self.fitness()
-
-        return amount_eaten
-
     @staticmethod
     def q(x, x_half, phi_aw, pos_neg):
         """
@@ -114,10 +96,25 @@ class Herbivores:
 
         return self.phi
 
-    def weight_change(self):
-        amount_eaten = self.herbs_eating()
+    def aging(self):
+        """
+        Method for aging each animal. Will be called every new year.
+        """
+        self.age += 1
+        self.weight = self.weight - (self.default_params['eta'] * self.weight)
+        self.fitness()
+
+    def herbs_eating(self):
+        amount_fodder = Lowland.feeding_herbs()
+        if self.default_params['F'] < amount_fodder:
+            amount_eaten = self.default_params['F']
+        else:
+            amount_eaten = amount_fodder
+
         self.weight += self.default_params['beta']*amount_eaten
-        self.weight -= self.default_params['eta']*self.weight
+        self.fitness()
+
+        return amount_eaten
 
     def procreation(self):
         pass
