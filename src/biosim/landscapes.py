@@ -20,5 +20,15 @@ class Lowland:
             cls.param_f_max = incoming_f_max
 
     def __init__(self):
-        pass
+        """
+        Method for saving values in class.
+        """
+
+        # Defining amount of fodder for use in feeding_herbs and feeding_carns functions.
+        self.amount_fodder = self.param_f_max
+
+    def feeding_herbs(self):
+        if self.amount_fodder > 0:
+            amount_eaten = Herbivores.herbs_eating(self.amount_fodder)
+            self.amount_fodder -= amount_eaten
 

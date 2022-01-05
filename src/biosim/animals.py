@@ -71,6 +71,18 @@ class Herbivores:
         """
         self.age += 1
 
+    def herbs_eating(self):
+        amount_fodder = Lowland.feeding_herbs()
+        if self.default_params['F'] < amount_fodder:
+            amount_eaten = self.default_params['F']
+        else:
+            amount_eaten = amount_fodder
+
+        self.weight_change()
+        self.fitness()
+
+        return amount_eaten
+
     @staticmethod
     def q(x, x_half, phi_aw, pos_neg):
         """
@@ -101,18 +113,6 @@ class Herbivores:
             self.phi = q_pos * q_neg
 
         return self.phi
-
-    def herbs_eating(self):
-        # kalle på funksjon fra lowland
-        if self.default_params['F'] < amount_fodder:
-            amount_eaten = self.default_params['F']
-        else:
-            amount_eaten = amount_fodder
-
-        self.weight_change()
-        self.fitness()
-
-        return amount_eaten
 
     def weight_change(self):
         amount_eaten = self.herbs_eating()
