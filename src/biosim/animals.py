@@ -1,7 +1,6 @@
 """
 Module for herbivores
 """
-#from .landscapes import Lowland
 from math import exp
 
 class Herbivores:
@@ -104,13 +103,13 @@ class Herbivores:
         self.weight = self.weight - (self.default_params['eta'] * self.weight)
         self.fitness()
 
-    def herbs_eating(self):
+    def herbs_eating(self, amount_fodder):
         """
         Method for deciding how much a herbivore eats
 
         :return: Eaten amount
         """
-        amount_fodder = Lowland.feeding_herbs()
+
         if self.default_params['F'] < amount_fodder:
             amount_eaten = self.default_params['F']
         else:

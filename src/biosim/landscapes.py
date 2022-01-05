@@ -1,7 +1,7 @@
 """
 Module for Lowland
 """
-from .animals import Herbivores
+from biosim.animals import Herbivores
 
 class Lowland:
 
@@ -65,13 +65,13 @@ class Lowland:
         return self.amount_fodder
 
 
-"""
+
 if __name__ == "__main__":
     poph = [{'species': 'Herbivore',
             'age': 5,
             'weight': 20}
             for _ in range(5)]
 
-    list_h = Lowland.herbs_population(poph)
+    c = Lowland()
+    list_h = c.herbs_population(ini_population=poph)
     print(list_h)
-"""
