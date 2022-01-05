@@ -5,17 +5,20 @@ from .animals import Herbivores
 
 class Lowland:
 
-    def __init__(self, f_max=800):
-        self.amount_fodder = f_max
+    param_f_max = 800
 
-    def feeding_herbs(self, F=10):
-        if F < self.amount_fodder:
-            amount_eaten = F
+    @classmethod
+    def set_params(cls, incoming_f_max):
+        """
+        Method for setting parameters.
+
+        :param incoming_f_max: The amount of fodder available for all herbivores in a cell.
+        """
+        if incoming_f_max < 0:
+            raise ValueError('Amount of fodder available cannot be below zero.')
         else:
-            amount_eaten = self.amount_fodder
+            cls.param_f_max = incoming_f_max
 
-        self.amount_fodder -= amount_eaten
-        Herbivores.weight_change()
-        Herbivores.fitness()
+    def __init__(self):
+        pass
 
-        return amount_eaten

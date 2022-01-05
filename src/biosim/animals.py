@@ -62,6 +62,9 @@ class Herbivores:
         else:
             self.weight = weight
 
+        # Defining phi value for use in fitness and procreation functions
+        self.phi = 0
+
     def aging(self):
         """
         Method for aging each animal. Will be called every new year.
@@ -81,21 +84,40 @@ class Herbivores:
         :return: value of q function
         """
         q = (1 / (1 + exp(pos_neg * phi_aw * (x - x_half))))
+
         return q
 
     def fitness(self):
-        if self.weight == 0:
-            phi = 0
-        else:
-            q_pos = self.q(self.age, default_params['a_half'], default_params['phi_age'], 1)
-            q_neg = self.q(self.weight, default_params['w_half'], default_params['phi_weight'], -1)
-            phi = q_pos * q_neg
-        return phi
+        """
+        Method for calculating fitness of animal.
 
-    def weight_change(self, beta=0.9, eta=0.05):
-        amount_eaten = Lowland.feeding_herbs()
-        self.weight += beta*amount_eaten
-        self.weight -= eta*self.weight
+        :return: Value of phi
+        """
+        if self.weight == 0:
+            self.phi = 0
+        else:
+            q_pos = self.q(self.age, self.default_params['a_half'], self.default_params['phi_age'], 1)
+            q_neg = self.q(self.weight, self.default_params['w_half'], self.default_params['phi_weight'], -1)
+            self.phi = q_pos * q_neg
+
+        return self.phi
+
+    def herbs_eating(self):
+        # kalle på funksjon fra lowland
+        if self.default_params['F'] < amount_fodder:
+            amount_eaten = self.default_params['F']
+        else:
+            amount_eaten = amount_fodder
+
+        self.weight_change()
+        self.fitness()
+
+        return amount_eaten
+
+    def weight_change(self):
+        amount_eaten = self.herbs_eating()
+        self.weight += self.default_params['beta']*amount_eaten
+        self.weight -= self.default_params['eta']*self.weight
 
     def procreation(self):
         pass
