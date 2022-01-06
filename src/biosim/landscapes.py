@@ -64,14 +64,8 @@ class Lowland:
 
         return self.amount_fodder
 
-
-
-if __name__ == "__main__":
-    poph = [{'species': 'Herbivore',
-            'age': 5,
-            'weight': 20}
-            for _ in range(5)]
-
-    c = Lowland()
-    list_h = c.herbs_population(ini_population=poph)
-    print(list_h)
+    def animal_dies(self):
+        """
+        Method for removing dead animals from the rest of the population.
+        """
+        self.list_herbivores = [herb for herb in self.list_herbivores if not Herbivores.death()]

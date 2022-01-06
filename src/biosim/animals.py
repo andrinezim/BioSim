@@ -63,7 +63,7 @@ class Herbivores:
             self.weight = weight
 
         # Defining phi value for use in fitness and procreation functions
-        self.phi = 0
+        self.phi = self.fitness()
 
     @staticmethod
     def q_func(x, x_half, phi_aw, pos_neg):
@@ -134,26 +134,9 @@ class Herbivores:
         death_prob = self.default_params['omega'] * (1 - self.phi)
         if self.weight == 0:
             return True
-        elif random.random() < death_prob:
-            return True
-        elif random.random() >= death_prob:
-            return False
-
+        else:
+            return random.random() < death_prob
 
     def __repr__(self):
         string = f'Age: {self.age}, Weight: {self.weight}, Fitness: {self.phi}'
         return string
-
-if __name__ == "__main__":
-    poph = [{'species': 'Herbivore',
-                 'age': 5,
-                 'weight': 20} for _ in range(50)
-                 ]
-
-    list_aw = [[8,0], [8,1], [8,20], [8,20]]
-    for age, weight in list_aw:
-        Herbivores(age, weight).fitness()
-        print(Herbivores(age, weight).death())
-
-
-
