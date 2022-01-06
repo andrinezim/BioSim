@@ -1,3 +1,8 @@
+
+__author__ = 'Andrine Zimmermann, Karin Mollatt'
+__email__ = 'andrine.zimmermann@nmbu.no, karin.mollatt@nmbu.no'
+
+
 """
 Module for Lowland
 """
@@ -55,24 +60,24 @@ class Lowland:
         return amount_herbs
 
     def feeding_herbs(self):
-        if self.amount_fodder > 0:
-            amount_eaten = Herbivores.herbs_eating(self.amount_fodder)
-            self.amount_fodder -= amount_eaten
+        """
+        Method for adjusting amount of fodder available in the cell.
+        """
+        self.list_herbivores = sorted(self.list_herbivores, key=lambda f: getattr(f, 'phi'))
 
-        # Kaller på funksjon som teller antall herbs fra lowland.
-
-        return self.amount_fodder
+        for herb in self.list_herbivores:
+            if self.amount_fodder > 0:
+                amount_eaten = herb.herbs_eating(self.amount_fodder)
+                self.amount_fodder -= amount_eaten
 
     def animal_gives_birth(self):
         """
         Method for adding a newborn to the population in the cell.
         """
-
         for herb in self.list_herbivores:
             newborn = herb.procreation()
             if newborn is not None:
                 self.list_herbivores.append(newborn)
-
 
     def animal_dies(self):
         """
