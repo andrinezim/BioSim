@@ -51,7 +51,6 @@ class Lowland:
 
         :return: Amount of herbivores.
         """
-
         amount_herbs = len(self.list_herbivores)
         return amount_herbs
 

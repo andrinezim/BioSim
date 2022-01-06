@@ -1,6 +1,7 @@
 """
 Module for herbivores
 """
+from biosim.landscapes import Lowland
 from math import exp
 import random
 
@@ -45,7 +46,7 @@ class Herbivores:
                 raise ValueError('Eta must be in [0,1]')
 
 
-    def __init__(self, age, weight):
+    def __init__(self, age=0, weight=None):
         """
         Method for saving age and weight values in class
 
@@ -59,6 +60,8 @@ class Herbivores:
 
         if weight < 0:
             raise ValueError('Weight cannot be below zero.')
+        elif weight is None:
+            self.weight = random.gauss(self.default_params['w_birth'], self.default_params['sigma_birth'])
         else:
             self.weight = weight
 
@@ -122,7 +125,24 @@ class Herbivores:
         return amount_eaten
 
     def procreation(self):
-        pass
+        amount_herbs = Lowland.count_herbs()
+        birth_prob = min(1, self.default_params['gamma']*self.phi*(amount_herbs-1))
+        demand = self.default_params['zeta']*(self.default_params['w_birth']+self.default_params['sigma_birth'])
+
+        if amount_herbs < 2:
+            return None
+        elif self.weight < demand:
+            return None
+        else:
+            if random.random() < birth_prob:
+                newborn = type(self)()
+                if self.weight > self.default_params['xi'] * newborn.weight:
+                    self.weight -= self.default_params['xi'] * newborn.weight
+                    return newborn
+                else:
+                    return None
+            else:
+                return None
 
     def death(self):
         """
