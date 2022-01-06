@@ -10,6 +10,8 @@ Template for BioSim class.
 # https://opensource.org/licenses/BSD-3-Clause
 # (C) Copyright 2021 Hans Ekkehard Plesser / NMBU
 
+from biosim.animals import Herbivores
+
 class BioSim:
     def __init__(self, island_map, ini_pop, seed,
                  vis_years=1, ymax_animals=None, cmax_animals=None, hist_specs=None,
@@ -64,6 +66,9 @@ class BioSim:
         :param species: String, name of animal species
         :param params: Dict with valid parameter specification for species
         """
+        if species == 'Herbivore':
+            Herbivores.set_params(params)
+
 
     def set_landscape_parameters(self, landscape, params):
         """

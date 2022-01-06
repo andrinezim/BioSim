@@ -5,7 +5,7 @@ __email__ = 'andrine.zimmermann@nmbu.no, karin.mollatt@nmbu.no'
 """
 Module for herbivores
 """
-from biosim.landscapes import Lowland
+
 from math import exp
 import random
 
@@ -46,7 +46,6 @@ class Herbivores:
                 raise ValueError('DeltaPhiMax shall be strictly positive.')
             if parameter_key == 'eta' and not 0 <= incoming_params[parameter_key] <= 1:
                 raise ValueError('Eta must be in [0,1]')
-
 
     def __init__(self, age=0, weight=None):
         """
@@ -125,14 +124,13 @@ class Herbivores:
 
         return amount_eaten
 
-    def procreation(self):
+    def procreation(self, amount_herbs):
         """
         Method to determine the probability of birth. Animals can mate if there are at least to
         animals of the same species in one cell. At birth, the mother looses the actual weight of the baby.
 
         :return: Return None is there is no birth, and returns newborn if there is new offspring
         """
-        amount_herbs = Lowland.count_herbs()
         birth_prob = min(1, self.default_params['gamma']*self.phi*(amount_herbs-1))
         demand = self.default_params['zeta']*(self.default_params['w_birth']+self.default_params['sigma_birth'])
 

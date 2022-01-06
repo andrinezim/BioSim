@@ -10,10 +10,7 @@ from biosim.landscapes import Lowland
 
 class Island:
 
-    map_params = {'L': Lowland,
-                  'H': Highland,
-                  'D': Desert,
-                  'W': Water}
+    map_params = {'L': Lowland}
 
     def __init__(self, island_map, ini_pop):
         """

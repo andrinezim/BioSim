@@ -34,6 +34,9 @@ class Lowland:
         # Defining amount of fodder for use in feeding_herbs and feeding_carns functions.
         self.amount_fodder = self.param_f_max
 
+        # Defining amount of fodder for use in count_herbs
+        self.amount_herbs = 0
+
     def herbs_population(self, ini_population):
         """
         Method for distributing herbivores into a list.
@@ -54,8 +57,8 @@ class Lowland:
 
         :return: Amount of herbivores.
         """
-        amount_herbs = len(self.list_herbivores)
-        return amount_herbs
+        self.amount_herbs = len(self.list_herbivores)
+        return self.amount_herbs
 
     def feeding_herbs(self):
         """
@@ -73,7 +76,7 @@ class Lowland:
         Method for adding a newborn to the population in the cell.
         """
         for herb in self.list_herbivores:
-            newborn = herb.procreation()
+            newborn = herb.procreation(self.amount_herbs)
             if newborn is not None:
                 self.list_herbivores.append(newborn)
 
