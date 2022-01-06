@@ -50,5 +50,18 @@ class Island:
 
         return map_dict
 
+    def adding_population(self, ini_pop):
+        """
+        Method for adding population to the island.
+
+        :param ini_pop: List of dictionaries specifying initial population
+        :return:
+        """
+
+        for dict_loc_pop in ini_pop:
+            loc = dict_loc_pop['loc']
+
+            pop = dict_loc_pop['pop']
+            self.map[loc].herbs_population(pop)
 
 
