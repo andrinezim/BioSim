@@ -63,6 +63,17 @@ class Lowland:
 
         return self.amount_fodder
 
+    def animal_gives_birth(self):
+        """
+        Method for adding a newborn to the population in the cell.
+        """
+
+        for herb in self.list_herbivores:
+            newborn = herb.procreation()
+            if newborn is not None:
+                self.list_herbivores.append(newborn)
+
+
     def animal_dies(self):
         """
         Method for removing dead animals from the rest of the population.
