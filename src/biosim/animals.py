@@ -130,6 +130,7 @@ class Herbivores:
 
         :return: True if animal dies, and False if it survives.
         """
+        random.seed(12345)
         death_prob = self.default_params['omega'] * (1 - self.phi)
         if self.weight == 0:
             return True
@@ -149,9 +150,10 @@ if __name__ == "__main__":
                  'weight': 20} for _ in range(50)
                  ]
 
-    list_aw = [[8,20], [8,20], [8,20], [8,20]]
+    list_aw = [[8,0], [8,1], [8,20], [8,20]]
     for age, weight in list_aw:
-        print(Herbivores(age, weight).__repr__())
-        Herbivores(age, weight).aging()
-        print(Herbivores(age, weight).__repr__())
+        Herbivores(age, weight).fitness()
+        print(Herbivores(age, weight).death())
+
+
 
