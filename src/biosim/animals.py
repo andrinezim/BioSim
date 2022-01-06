@@ -2,6 +2,7 @@
 Module for herbivores
 """
 from math import exp
+import random
 
 class Herbivores:
     """
@@ -65,7 +66,7 @@ class Herbivores:
         self.phi = 0
 
     @staticmethod
-    def q(x, x_half, phi_aw, pos_neg):
+    def q_func(x, x_half, phi_aw, pos_neg):
         """
         Static function for fitness method
 
@@ -86,11 +87,11 @@ class Herbivores:
 
         :return: Value of phi
         """
-        if self.weight == 0:
+        if self.weight <= 0:
             self.phi = 0
         else:
-            q_pos = self.q(self.age, self.default_params['a_half'], self.default_params['phi_age'], 1)
-            q_neg = self.q(self.weight, self.default_params['w_half'], self.default_params['phi_weight'], -1)
+            q_pos = self.q_func(self.age, self.default_params['a_half'], self.default_params['phi_age'], 1)
+            q_neg = self.q_func(self.weight, self.default_params['w_half'], self.default_params['phi_weight'], -1)
             self.phi = q_pos * q_neg
 
         return self.phi
@@ -124,7 +125,19 @@ class Herbivores:
         pass
 
     def death(self):
-        pass
+        """
+        Method of deciding if the animal dies or not.
+
+        :return: True if animal dies, and False if it survives.
+        """
+        death_prob = self.default_params['omega'] * (1 - self.phi)
+        if self.weight == 0:
+            return True
+        elif random.random() < death_prob:
+            return True
+        elif random.random() >= death_prob:
+            return False
+
 
     def __repr__(self):
         string = f'Age: {self.age}, Weight: {self.weight}, Fitness: {self.phi}'
