@@ -28,7 +28,6 @@ class Lowland:
         """
         Method for saving values in class.
         """
-
         # Defining empty list for use in herbs_population function
         self.list_herbivores = []
 
@@ -42,7 +41,6 @@ class Lowland:
         :param ini_population: Initial population in one cell.
         :return: List with herbivores in one cell.
         """
-
         for pop_dict in ini_population:
             if pop_dict['species'] == 'Herbivore':
                 self.list_herbivores.append(Herbivores(pop_dict['age'], pop_dict['weight']))
@@ -84,3 +82,10 @@ class Lowland:
         Method for removing dead animals from the rest of the population.
         """
         self.list_herbivores = [herb for herb in self.list_herbivores if not Herbivores.death()]
+
+    def animal_gets_older(self):
+        """
+        Method for aging an animal.
+        """
+        for herb in self.list_herbivores:
+            herb.aging()

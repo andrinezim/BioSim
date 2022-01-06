@@ -13,7 +13,6 @@ class Herbivores:
     """
     Class for herbivores.
     """
-
     default_params = {
                     "w_birth": 8.0,
                     "sigma_birth": 1.5,
@@ -38,7 +37,6 @@ class Herbivores:
 
         :param incoming_params: Dictionary with parameters to replace default parameters.
         """
-
         for parameter_key in incoming_params:
             if parameter_key not in cls.default_params:
                 raise ValueError('Invalid parameter name: ' + parameter_key)
@@ -108,7 +106,7 @@ class Herbivores:
         Method for aging each animal. Will be called every new year.
         """
         self.age += 1
-        self.weight = self.weight - (self.default_params['eta'] * self.weight)
+        self.weight -= (self.default_params['eta'] * self.weight)
         self.fitness()
 
     def herbs_eating(self, amount_fodder):
@@ -117,7 +115,6 @@ class Herbivores:
 
         :return: Eaten amount
         """
-
         if self.default_params['F'] < amount_fodder:
             amount_eaten = self.default_params['F']
         else:
