@@ -35,7 +35,7 @@ class Lowland:
         self.list_herbivores = []
 
         # Defining amount of fodder for use in feeding_herbs and feeding_carns functions.
-        self.amount_fodder = self.param_f_max
+        self.amount_fodder = 0
 
         # Defining amount of fodder for use in count_herbs
         self.amount_herbs = 0
@@ -53,6 +53,16 @@ class Lowland:
             else:
                 raise TypeError('The only accepted species is herbivore.')
         return self.list_herbivores
+
+    def eating_process(self):
+        """
+        Method for the eating process.
+
+        Begins with regrowing every year and making fodder available depending on the landscape type.
+        Then the herbivores eat in descending order of fitness.
+        """
+        self.grow_fodder()
+        self.feeding_herbs()
 
     def count_herbs(self):
         """
@@ -87,7 +97,7 @@ class Lowland:
         """
         Method for removing dead animals from the rest of the population.
         """
-        self.list_herbivores = [herb for herb in self.list_herbivores if not Herbivores.death()]
+        self.list_herbivores = [herb for herb in self.list_herbivores if not herb.death()]
 
     def animal_gets_older(self):
         """
@@ -95,3 +105,9 @@ class Lowland:
         """
         for herb in self.list_herbivores:
             herb.aging()
+
+    def grow_fodder(self):
+        """
+        Method for making fodder available.
+        """
+        self.amount_fodder = self.params_fodder['f_max']

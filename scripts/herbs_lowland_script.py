@@ -47,7 +47,7 @@ test_params = {
                     "w_birth": 10.0,
                     "sigma_birth": 2.5}
 test_list = ['Herbivore' for _ in range(2)]
-b = BioSim(island_map=geogr, ini_pop=poph, seed=123)
-for animal in test_list:
-    print(b.set_animal_parameters(animal, test_params))
-
+#b = BioSim(island_map=geogr, ini_pop=poph, seed=123)
+#for animal in test_list:
+#    print(b.set_animal_parameters(animal, test_params))
+#----------------------------

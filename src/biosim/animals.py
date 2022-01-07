@@ -61,10 +61,11 @@ class Herbivores:
         else:
             self.age = age
 
-        if weight < 0:
-            raise ValueError('Weight cannot be below zero.')
-        elif weight is None:
+
+        if weight is None:
             self.weight = random.gauss(self.default_params['w_birth'], self.default_params['sigma_birth'])
+        elif weight < 0:
+            raise ValueError('Weight cannot be below zero.')
         else:
             self.weight = weight
 
@@ -141,10 +142,11 @@ class Herbivores:
         elif self.weight < demand:
             return None
         else:
-            if random.random() < birth_prob:
+            if random.random() <= birth_prob:
                 newborn = type(self)()
                 if self.weight > self.default_params['xi'] * newborn.weight:
                     self.weight -= self.default_params['xi'] * newborn.weight
+                    self.fitness()
                     return newborn
                 else:
                     return None
@@ -157,7 +159,6 @@ class Herbivores:
 
         :return: True if animal dies, and False if it survives.
         """
-        random.seed(12345)
         death_prob = self.default_params['omega'] * (1 - self.phi)
         if self.weight == 0:
             return True
