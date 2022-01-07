@@ -4,20 +4,24 @@ __email__ = 'andrine.zimmermann@nmbu.no, karin.mollatt@nmbu.no'
 
 
 """
-Module for Lowland
+Module for Landscapes 
 """
-from biosim.animals import Herbivores, Animals
+from biosim.animals import Herbivores
 
-class Lowland:
 
-    params_fodder = {"f_max": 800}
+class Landscapes:
+    """
+    Class for Landscapes with subclasses Lowland, Highland, Desert and Water.
+    """
+
+    params_fodder = None
 
     @classmethod
     def set_params(cls, incoming_params):
         """
         Method for setting parameters.
 
-        :param incoming_f_max: The amount of fodder available for all herbivores in a cell.
+        :param incoming_params: The amount of fodder available for all animals in a cell.
         """
         for parameter_key in incoming_params:
             if parameter_key in cls.params_fodder:
@@ -64,6 +68,14 @@ class Lowland:
         self.grow_fodder()
         self.feeding_herbs()
 
+    def grow_fodder(self):
+        """
+        Method for making fodder available.
+
+        This function will be overwritten by subclasses.
+        """
+        pass
+
     def count_herbs(self):
         """
         Method for counting herbivores.
@@ -106,8 +118,24 @@ class Lowland:
         for herb in self.list_herbivores:
             herb.aging()
 
+
+class Lowland(Landscapes):
+    """
+    Subclass for Lowland with superclass Landscapes.
+    """
+    params_fodder = {"f_max": 800}
+
+    def __init__(self):
+        """
+        Method for saving values in class.
+        """
+        super().__init__()
+        self.amount_fodder = self.params_fodder["f_max"]
+
     def grow_fodder(self):
         """
         Method for making fodder available.
         """
-        self.amount_fodder = self.params_fodder['f_max']
+        self.amount_fodder = self.params_fodder["f_max"]
+
+
