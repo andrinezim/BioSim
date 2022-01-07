@@ -10,19 +10,22 @@ from biosim.animals import Herbivores
 
 class Lowland:
 
-    param_f_max = 800
+    params_fodder = {"f_max": 800}
 
     @classmethod
-    def set_params(cls, incoming_f_max):
+    def set_params(cls, incoming_params):
         """
         Method for setting parameters.
 
         :param incoming_f_max: The amount of fodder available for all herbivores in a cell.
         """
-        if incoming_f_max < 0:
-            raise ValueError('Amount of fodder available cannot be below zero.')
-        else:
-            cls.param_f_max = incoming_f_max
+        for parameter_key in incoming_params:
+            if parameter_key in cls.params_fodder:
+                if incoming_params[parameter_key] < 0:
+                    raise ValueError('Amount of fodder available cannot be below zero.')
+                cls.params_fodder.update(incoming_params)
+            else:
+                raise ValueError('Invalid parameter name: ' + parameter_key)
 
     def __init__(self):
         """

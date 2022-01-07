@@ -11,13 +11,24 @@ Template for BioSim class.
 # (C) Copyright 2021 Hans Ekkehard Plesser / NMBU
 
 from biosim.animals import Herbivores
+from biosim.landscapes import Lowland
+from biosim.island import Island
+import random
 
 class BioSim:
-    def __init__(self, island_map, ini_pop, seed,
-                 vis_years=1, ymax_animals=None, cmax_animals=None, hist_specs=None,
-                 img_dir=None, img_base=None, img_fmt='png', img_years=None,
+    def __init__(self,
+                 island_map,
+                 ini_pop,
+                 seed,
+                 vis_years=1,
+                 ymax_animals=None,
+                 cmax_animals=None,
+                 hist_specs=None,
+                 img_dir=None,
+                 img_base=None,
+                 img_fmt='png',
+                 img_years=None,
                  log_file=None):
-
         """
         :param island_map: Multi-line string specifying island geography
         :param ini_pop: List of dictionaries specifying initial population
@@ -51,10 +62,13 @@ class BioSim:
 
         img_dir and img_base must either be both None or both strings.
         """
+        random.seed(seed)
+
+        self.current_year = 0
+        self.final_step = None
 
         self.island_map = island_map
-        self.ini_pop = ini_pop
-        self.seed = seed
+        self.island = Island(island_map, ini_pop)
         self.img_dir = img_dir
         self.img_base = img_base
         self.img_years = img_years
@@ -77,6 +91,8 @@ class BioSim:
         :param landscape: String, code letter for landscape
         :param params: Dict with valid parameter specification for landscape
         """
+        if landscape == 'L':
+            Lowland.set_params(params)
 
     def simulate(self, num_years):
         """
