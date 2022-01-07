@@ -61,4 +61,12 @@ class Island:
             pop = dict_loc_pop['pop']
             self.map[loc].herbs_population(pop)
 
+    def annual_cycle_simulation(self):
+        """
+        Method for simulating one year one the island. It follows the annual cycle.
 
+        :return:
+        """
+
+        # return number of animals per species
+        pass

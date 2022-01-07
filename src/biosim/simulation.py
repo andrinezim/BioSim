@@ -14,6 +14,10 @@ from biosim.animals import Herbivores
 from biosim.landscapes import Lowland
 from biosim.island import Island
 import random
+import os
+
+_DEFAULT_GRAPHICS_NAME = 'biosim'
+_DEFAULT_IMG_FORMAT = "png"
 
 class BioSim:
     def __init__(self,
@@ -64,14 +68,24 @@ class BioSim:
         """
         random.seed(seed)
 
+        if img_years is None:
+            self.img_years = vis_years
+
+        self.vis_years = vis_years
+
         self.current_year = 0
-        self.final_step = None
+        self.final_year = None
 
         self.island_map = island_map
         self.island = Island(island_map, ini_pop)
-        self.img_dir = img_dir
-        self.img_base = img_base
-        self.img_years = img_years
+
+        if img_dir is None:
+            self.img_base = None
+        else:
+            self.img_base = os.path.join(img_dir, _DEFAULT_GRAPHICS_NAME)
+
+        self.img_fmt = img_fmt
+
 
     def set_animal_parameters(self, species, params):
         """
@@ -100,6 +114,14 @@ class BioSim:
 
         :param num_years: number of years to simulate
         """
+        self.final_year = self.current_year + num_years
+
+        while self.current_year < self.final_year:
+            self.island.annual_cycle_simulation()
+
+            # Add visualization if tests later
+
+        self.current_year += 1
 
     def add_population(self, population):
         """
@@ -107,7 +129,7 @@ class BioSim:
 
         :param population: List of dictionaries specifying population
         """
-        pass
+        self.island.adding_population(population)
 
     @property
     def year(self):
