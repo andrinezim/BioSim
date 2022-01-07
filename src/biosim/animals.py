@@ -3,32 +3,18 @@ __author__ = 'Andrine Zimmermann, Karin Mollatt'
 __email__ = 'andrine.zimmermann@nmbu.no, karin.mollatt@nmbu.no'
 
 """
-Module for herbivores
+Module for Animals
 """
 
 from math import exp
 import random
 
-class Herbivores:
+
+class Animals:
     """
-    Class for herbivores.
+    Class for animals with subclasses Herbivores and Carnivores.
     """
-    default_params = {
-                    "w_birth": 8.0,
-                    "sigma_birth": 1.5,
-                    "beta": 0.9,
-                    "eta": 0.05,
-                    "a_half": 40.0,
-                    "phi_age": 0.6,
-                    "w_half": 10.0,
-                    "phi_weight": 0.1,
-                    "mu": 0.25,
-                    "gamma": 0.2,
-                    "zeta": 3.5,
-                    "xi": 1.2,
-                    "omega": 0.4,
-                    "F": 10.0,
-                    "DeltaPhiMax": None}
+    default_params = None
 
     @classmethod
     def set_params(cls, incoming_params):
@@ -51,7 +37,7 @@ class Herbivores:
 
     def __init__(self, age=0, weight=None):
         """
-        Method for saving age and weight values in class
+        Method for saving values in class.
 
         :param age: Age of animal
         :param weight: Weight of animal
@@ -60,7 +46,6 @@ class Herbivores:
             raise ValueError('Age cannot be below zero.')
         else:
             self.age = age
-
 
         if weight is None:
             self.weight = random.gauss(self.default_params['w_birth'], self.default_params['sigma_birth'])
@@ -75,7 +60,7 @@ class Herbivores:
     @staticmethod
     def q_func(x, x_half, phi_aw, pos_neg):
         """
-        Static function for fitness method
+        Static function for fitness method.
 
         :param x: current age/weight of animal
         :param x_half: constant parameter for age/weight
@@ -105,34 +90,20 @@ class Herbivores:
 
     def aging(self):
         """
-        Method for aging each animal. Will be called every new year.
+        Method for aging each animal. Will increase by one every new year.
         """
         self.age += 1
         self.weight -= (self.default_params['eta'] * self.weight)
         self.fitness()
 
-    def herbs_eating(self, amount_fodder):
-        """
-        Method for deciding how much a herbivore eats
-
-        :return: Eaten amount
-        """
-        if self.default_params['F'] < amount_fodder:
-            amount_eaten = self.default_params['F']
-        else:
-            amount_eaten = amount_fodder
-
-        self.weight += self.default_params['beta']*amount_eaten
-        self.fitness()
-
-        return amount_eaten
-
     def procreation(self, amount_herbs):
         """
-        Method to determine the probability of birth. Animals can mate if there are at least to
-        animals of the same species in one cell. At birth, the mother looses the actual weight of the baby.
+        Method to determine the probability of birth.
 
-        :return: Return None is there is no birth, and returns newborn if there is new offspring
+        Animals can mate if there are at least to animals of the same
+        species in one cell. At birth, the mother looses the actual weight of the baby.
+
+        :return: Returns None if there is no birth, and returns newborn if there is new offspring
         """
         birth_prob = min(1, self.default_params['gamma']*self.phi*(amount_herbs-1))
         demand = self.default_params['zeta']*(self.default_params['w_birth']+self.default_params['sigma_birth'])
@@ -168,3 +139,50 @@ class Herbivores:
     def __repr__(self):
         string = f'Age: {self.age}, Weight: {self.weight}, Fitness: {self.phi}'
         return string
+
+
+class Herbivores(Animals):
+    """
+    Subclass for herbivores, with Animals as superclass.
+    """
+    default_params = {
+                    "w_birth": 8.0,
+                    "sigma_birth": 1.5,
+                    "beta": 0.9,
+                    "eta": 0.05,
+                    "a_half": 40.0,
+                    "phi_age": 0.6,
+                    "w_half": 10.0,
+                    "phi_weight": 0.1,
+                    "mu": 0.25,
+                    "gamma": 0.2,
+                    "zeta": 3.5,
+                    "xi": 1.2,
+                    "omega": 0.4,
+                    "F": 10.0,
+                    "DeltaPhiMax": None}
+
+    def __init__(self, age=0, weight=None):
+        """
+        Method for saving values in class.
+
+        :param age: Age of herbivore
+        :param weight: Weight of animal
+        """
+        super().__init__(age, weight)
+
+    def herbs_eating(self, amount_fodder):
+        """
+        Method for deciding how much a herbivore eats.
+
+        :return: Eaten amount
+        """
+        if self.default_params['F'] < amount_fodder:
+            amount_eaten = self.default_params['F']
+        else:
+            amount_eaten = amount_fodder
+
+        self.weight += self.default_params['beta']*amount_eaten
+        self.fitness()
+
+        return amount_eaten

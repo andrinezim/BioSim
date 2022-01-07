@@ -6,7 +6,7 @@ __email__ = 'andrine.zimmermann@nmbu.no, karin.mollatt@nmbu.no'
 """
 Module for Lowland
 """
-from biosim.animals import Herbivores
+from biosim.animals import Herbivores, Animals
 
 class Lowland:
 
