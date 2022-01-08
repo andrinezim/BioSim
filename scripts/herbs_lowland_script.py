@@ -18,7 +18,7 @@ poph = [{'species': 'Herbivore',
             for _ in range(5)]
 
 c = Lowland()
-list_h = c.herbs_population(ini_population=poph)
+list_h = c.animals_population(ini_population=poph)
 print(list_h)
 
 #-----------------

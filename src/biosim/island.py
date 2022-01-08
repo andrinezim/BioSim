@@ -59,7 +59,7 @@ class Island:
             loc = dict_loc_pop['loc']
 
             pop = dict_loc_pop['pop']
-            self.map[loc].herbs_population(pop)
+            self.map[loc].animals_population(pop)
 
     def annual_cycle_simulation(self):
         """

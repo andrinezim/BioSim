@@ -6,8 +6,9 @@ __email__ = 'andrine.zimmermann@nmbu.no, karin.mollatt@nmbu.no'
 """
 Module for Landscapes 
 """
-from biosim.animals import Herbivores
+from biosim.animals import Herbivores, Carnivores
 
+import random
 
 class Landscapes:
     """
@@ -35,8 +36,9 @@ class Landscapes:
         """
         Method for saving values in class.
         """
-        # Defining empty list for use in herbs_population function
+        # Defining empty lists for use in animals_population function
         self.list_herbivores = []
+        self.list_carnivores = []
 
         # Defining amount of fodder for use in feeding_herbs and feeding_carns functions.
         self.amount_fodder = 0
@@ -44,7 +46,7 @@ class Landscapes:
         # Defining amount of fodder for use in count_herbs
         self.amount_herbs = 0
 
-    def herbs_population(self, ini_population):
+    def animals_population(self, ini_population):
         """
         Method for distributing herbivores into a list.
 
@@ -52,11 +54,12 @@ class Landscapes:
         :return: List with herbivores in one cell.
         """
         for pop_dict in ini_population:
-            if pop_dict['species'] == 'Herbivore':
-                self.list_herbivores.append(Herbivores(pop_dict['age'], pop_dict['weight']))
+            if pop_dict["species"] == "Herbivore":
+                self.list_herbivores.append(Herbivores(pop_dict["age"], pop_dict["weight"]))
+            elif pop_dict["species"] == "Carnivore":
+                self.list_carnivores.append(Carnivores(pop_dict["age"], pop_dict["weight"]))
             else:
                 raise TypeError('The only accepted species is herbivore.')
-        return self.list_herbivores
 
     def eating_process(self):
         """
@@ -102,9 +105,15 @@ class Landscapes:
 
         :return:
         """
+        self.list_herbivores = sorted(self.list_herbivores, key=lambda f: getattr(f, 'phi'))
+        random.shuffle(self.list_carnivores)
 
-        # Fyll inn
-        pass
+        for carn in self.list_carnivores:
+            if self.amount_herbs > 0:
+                eaten_herbs = carn.carns_eating_herbs(self.list_herbivores)
+                if eaten_herbs is not None:
+                    self.list_herbivores = [herb for herb in self.list_herbivores
+                                            if herb not in eaten_herbs]
 
     def animal_gives_birth(self):
         """
