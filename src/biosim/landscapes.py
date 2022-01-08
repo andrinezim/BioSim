@@ -89,12 +89,22 @@ class Landscapes:
         """
         Method for adjusting amount of fodder available in the cell.
         """
-        self.list_herbivores = sorted(self.list_herbivores, key=lambda f: getattr(f, 'phi'))
+        self.list_herbivores = sorted(self.list_herbivores, key=lambda f: getattr(f, 'phi'), reverse=True)
 
         for herb in self.list_herbivores:
             if self.amount_fodder > 0:
                 amount_eaten = herb.herbs_eating(self.amount_fodder)
                 self.amount_fodder -= amount_eaten
+
+    def feeding_carn_with_herbs(self):
+        """
+        Method for feeding carnivore with herbivores.
+
+        :return:
+        """
+
+        # Fyll inn
+        pass
 
     def animal_gives_birth(self):
         """

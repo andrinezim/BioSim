@@ -160,14 +160,14 @@ class Herbivores(Animals):
                     "xi": 1.2,
                     "omega": 0.4,
                     "F": 10.0,
-                    "DeltaPhiMax": None}
+                    "DeltaPhiMax": 0}
 
     def __init__(self, age=0, weight=None):
         """
         Method for saving values in class.
 
         :param age: Age of herbivore
-        :param weight: Weight of animal
+        :param weight: Weight of herbivore
         """
         super().__init__(age, weight)
 
@@ -186,3 +186,62 @@ class Herbivores(Animals):
         self.fitness()
 
         return amount_eaten
+
+
+class Carnivores(Animals):
+    """
+    Subclass for carnivores, with Animals as superclass.
+    """
+    default_params = {
+                    "w_birth": 6.0,
+                    "sigma_birth": 1.0,
+                    "beta": 0.75,
+                    "eta": 0.125,
+                    "a_half": 40.0,
+                    "phi_age": 0.3,
+                    "w_half": 4.0,
+                    "phi_weight": 0.4,
+                    "mu": 0.4,
+                    "gamma": 0.8,
+                    "zeta": 3.5,
+                    "xi": 1.1,
+                    "omega": 0.8,
+                    "F": 50.0,
+                    "DeltaPhiMax": 10.0}
+
+    def __init__(self, age=0, weight=None):
+        """
+        Method for saving values in class.
+        :param age: Age of carnivore
+        :param weight: Weight of carnivore.
+        """
+        super().__init__(age, weight)
+
+    def carns_eating_herbs(self, sorted_list_fitness_herbs):
+        """
+        Method for carnivores hunting herbivores.
+
+        One carnivore hunts at a time, in random order. Two carnivores cannot prey on the same
+        herbivore. When hunting, each carnivore tries to kill one herbivore at a time, beginning with
+        the herbivore with the lowest fitness.
+
+        A carnivore continues to kill herbivores until:
+        - the carnivore has eaten an amount F
+            - if the herbivore weights more than F, the carnivore only eats amount F
+                - the rest of the herbivore goes to waste, and cannot be eaten by another carnivore.
+        - or has tried to kill each herbivore in the cell.
+
+        :return: List of dead herbivores.
+        """
+
+        eaten_herbs = []
+        weight_eaten_herbs = 0
+
+        for herb in sorted_list_fitness_herbs:
+            if self.phi <= herb.phi:
+                prob_kill = 0
+            elif 0 < (self.phi - herb.phi) < self.default_params["DeltaPhiMax"]:
+                prob_kill = (self.phi - herb.phi) / self.default_params["DeltaPhiMax"]
+            else:
+                prob_kill = 1
+
