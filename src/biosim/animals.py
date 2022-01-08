@@ -245,3 +245,14 @@ class Carnivores(Animals):
             else:
                 prob_kill = 1
 
+            if random.random() <= prob_kill:
+                amount_eaten = min(herb.weight, self.default_params["F"] - weight_eaten_herbs)
+                self.weight += self.default_params["beta"] * amount_eaten
+                self.fitness()
+                eaten_herbs.append(herb)
+                weight_eaten_herbs += amount_eaten
+
+                if weight_eaten_herbs >= self.default_params["F"]:
+                    return eaten_herbs
+            else:
+                return None
