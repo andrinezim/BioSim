@@ -10,6 +10,7 @@ from biosim.animals import Herbivores, Carnivores
 
 import random
 
+
 class Landscapes:
     """
     Class for Landscapes with subclasses Lowland, Highland, Desert and Water.
@@ -43,8 +44,9 @@ class Landscapes:
         # Defining amount of fodder for use in feeding_herbs and feeding_carns functions.
         self.amount_fodder = 0
 
-        # Defining amount of fodder for use in count_herbs
+        # Defining amount of animals for use in count_herbs and count_carns.
         self.amount_herbs = 0
+        self.amount_carns = 0
 
     def animals_population(self, ini_population):
         """
@@ -87,6 +89,15 @@ class Landscapes:
         """
         self.amount_herbs = len(self.list_herbivores)
         return self.amount_herbs
+
+    def count_carns(self):
+        """
+        Method for counting carnivores.
+
+        :return: Amount of carnivores.
+        """
+        self.amount_carns = len(self.list_carnivores)
+        return self.amount_carns
 
     def feeding_herbs(self):
         """

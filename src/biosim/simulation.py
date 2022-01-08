@@ -10,7 +10,7 @@ Template for BioSim class.
 # https://opensource.org/licenses/BSD-3-Clause
 # (C) Copyright 2021 Hans Ekkehard Plesser / NMBU
 
-from biosim.animals import Herbivores
+from biosim.animals import Herbivores, Carnivores
 from biosim.landscapes import Lowland
 from biosim.island import Island
 import random
@@ -86,7 +86,6 @@ class BioSim:
 
         self.img_fmt = img_fmt
 
-
     def set_animal_parameters(self, species, params):
         """
         Set parameters for animal species.
@@ -94,9 +93,10 @@ class BioSim:
         :param species: String, name of animal species
         :param params: Dict with valid parameter specification for species
         """
-        if species == 'Herbivore':
+        if species == "Herbivore":
             Herbivores.set_params(params)
-
+        elif species == "Carnivore":
+            Carnivores.set_params(params)
 
     def set_landscape_parameters(self, landscape, params):
         """

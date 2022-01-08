@@ -8,6 +8,7 @@ Module for island.
 
 from biosim.landscapes import Lowland
 
+
 class Island:
 
     map_params = {'L': Lowland}
@@ -23,8 +24,9 @@ class Island:
         # Defining the value for amount of years to use.
         self.amount_years = 0
 
+        self.ini_pop = ini_pop
         self.map = self.creating_map(island_map)
-        self.adding_population(ini_pop)
+        self.adding_population(self.ini_pop)
 
     def creating_map(self, island_map):
         """
@@ -47,15 +49,19 @@ class Island:
 
         return map_dict
 
-    def adding_population(self, ini_pop):
+    def adding_population(self, incoming_pop=None):
         """
         Method for adding population to the island.
 
-        :param ini_pop: List of dictionaries specifying initial population
+        :param incoming_pop: List of dictionaries specifying initial population
         :return:
         """
+        if incoming_pop is None:
+            current_pop = self.ini_pop
+        else:
+            current_pop = incoming_pop
 
-        for dict_loc_pop in ini_pop:
+        for dict_loc_pop in current_pop:
             loc = dict_loc_pop['loc']
 
             pop = dict_loc_pop['pop']
