@@ -108,9 +108,7 @@ class Animals:
         birth_prob = min(1, self.default_params['gamma']*self.phi*(amount_herbs-1))
         demand = self.default_params['zeta']*(self.default_params['w_birth']+self.default_params['sigma_birth'])
 
-        if amount_herbs < 2:
-            return None
-        elif self.weight < demand:
+        if self.weight < demand:
             return None
         else:
             if random.random() <= birth_prob:

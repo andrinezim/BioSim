@@ -28,26 +28,26 @@ ini_carns = [{'loc': (1, 1),
                        'weight': 20}
                       for _ in range(20)]}]
 
-lo = Lowland()
+# lo = Lowland()
 isl = Island("L", ini_herbs)
 
 params_fodder = {"f_max": 800}
 
-lo.set_params(params_fodder)
+Lowland.set_params(params_fodder)
 # lo.animals_population(poph)
 isl.adding_population()
 
 testlist = []
 
 for i in range(300):
-    print(lo.count_herbs(), lo.count_carns())
+    lo = isl.map[(1,1)]
+    print(lo.amount_herbs, lo.amount_carns)
     lo.eating_process()
     lo.animal_gives_birth()
     lo.animal_dies()
     lo.animal_gets_older()
 
-    amount = lo.count_herbs()
-    testlist.append(amount)
+    testlist.append(lo.amount_herbs)
 
 print(testlist)
 print(statistics.mean(testlist))

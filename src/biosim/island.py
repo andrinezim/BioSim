@@ -57,7 +57,7 @@ class Island:
         :return:
         """
         if incoming_pop is None:
-            current_pop = self.ini_pop
+            return
         else:
             current_pop = incoming_pop
 

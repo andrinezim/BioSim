@@ -44,10 +44,6 @@ class Landscapes:
         # Defining amount of fodder for use in feeding_herbs and feeding_carns functions.
         self.amount_fodder = 0
 
-        # Defining amount of animals for use in count_herbs and count_carns.
-        self.amount_herbs = 0
-        self.amount_carns = 0
-
     def animals_population(self, ini_population):
         """
         Method for distributing herbivores into a list.
@@ -62,6 +58,8 @@ class Landscapes:
                 self.list_carnivores.append(Carnivores(pop_dict["age"], pop_dict["weight"]))
             else:
                 raise TypeError('The only accepted species is herbivore.')
+        print(self.list_herbivores)
+        print(len(self.list_herbivores))
 
     def eating_process(self):
         """
@@ -80,24 +78,6 @@ class Landscapes:
         This function will be overwritten by subclasses.
         """
         pass
-
-    def count_herbs(self):
-        """
-        Method for counting herbivores.
-
-        :return: Amount of herbivores.
-        """
-        self.amount_herbs = len(self.list_herbivores)
-        return self.amount_herbs
-
-    def count_carns(self):
-        """
-        Method for counting carnivores.
-
-        :return: Amount of carnivores.
-        """
-        self.amount_carns = len(self.list_carnivores)
-        return self.amount_carns
 
     def feeding_herbs(self):
         """
@@ -120,7 +100,7 @@ class Landscapes:
         random.shuffle(self.list_carnivores)
 
         for carn in self.list_carnivores:
-            if self.amount_herbs > 0:
+            if len(self.list_herbivores) > 0:
                 eaten_herbs = carn.carns_eating_herbs(self.list_herbivores)
                 if eaten_herbs is not None:
                     self.list_herbivores = [herb for herb in self.list_herbivores
@@ -130,10 +110,13 @@ class Landscapes:
         """
         Method for adding a newborn to the population in the cell.
         """
+        newborns = []
         for herb in self.list_herbivores:
-            newborn = herb.procreation(self.amount_herbs)
+            newborn = herb.procreation(len(self.list_herbivores))
             if newborn is not None:
-                self.list_herbivores.append(newborn)
+                newborns.append(newborn)
+
+        self.list_herbivores.extend(newborns)
 
     def animal_dies(self):
         """
@@ -147,6 +130,14 @@ class Landscapes:
         """
         for herb in self.list_herbivores:
             herb.aging()
+
+    @property
+    def amount_herbs(self):
+        return len(self.list_herbivores)
+
+    @property
+    def amount_carns(self):
+        return len(self.list_carnivores)
 
 
 class Lowland(Landscapes):
