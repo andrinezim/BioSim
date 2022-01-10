@@ -6,7 +6,7 @@ __email__ = 'andrine.zimmermann@nmbu.no, karin.mollatt@nmbu.no'
 Module for island. 
 """
 
-from biosim.landscapes import Lowland
+from .landscapes import Lowland
 
 
 class Island:
