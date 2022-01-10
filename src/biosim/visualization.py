@@ -47,4 +47,35 @@ class Visualization:
         self._mean_ax = None
         self._mean_line = None
 
+    def update(self, step, sys_map, sys_mean):
+        """
+        Updates graphics with current data and save to file if necessary.
+
+        :param step: current time step
+        :param sys_map: current system status (2D array)
+        :param sys_mean: current mean value of system
+        :return:
+        """
+
+        self._update_system_map(sys_map)
+        self._update_mean_graph(step, sys_mean)
+        self._fig.canvas.flush_events()  # ensure every thing is drawn
+        plt.pause(0.01)  # pause required to pass control to GUI
+
+        self._save_graphics(step)
+
+    def make_movie(self):
+        pass
+
+    def setup(self):
+        pass
+
+    def _update_system_map(self):
+        pass
+
+    def _update_mean_graph(self):
+        pass
+
+    def _save_graphics(self):
+        pass
 
