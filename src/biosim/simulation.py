@@ -10,9 +10,9 @@ Template for BioSim class.
 # https://opensource.org/licenses/BSD-3-Clause
 # (C) Copyright 2021 Hans Ekkehard Plesser / NMBU
 
-from biosim.animals import Herbivores, Carnivores
-from biosim.landscapes import Lowland
-from biosim.island import Island
+from .animals import Herbivores, Carnivores
+from .landscapes import Lowland
+from .island import Island
 import random
 import os
 

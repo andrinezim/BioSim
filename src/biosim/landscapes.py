@@ -6,7 +6,7 @@ __email__ = 'andrine.zimmermann@nmbu.no, karin.mollatt@nmbu.no'
 """
 Module for Landscapes 
 """
-from biosim.animals import Herbivores, Carnivores
+from .animals import Herbivores, Carnivores
 
 import random
 
