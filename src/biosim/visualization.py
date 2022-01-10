@@ -8,6 +8,7 @@ Module for visualization graphics of Rossumøya.
 
 import matplotlib.pyplot as plt
 import os
+import numpy as np
 
 
 _DEFAULT_GRAPHICS_NAME = 'bio'
@@ -67,8 +68,40 @@ class Visualization:
     def make_movie(self):
         pass
 
-    def setup(self):
-        pass
+    def _setup_graphics(self, final_step, img_step):
+        """
+        Method for setting up the graphics.
+
+        :param final_step: last time-step to be visualized. (Upper limit of x-axis.)
+        :param img_step: interval between saving image to file.
+        """
+
+        self._img_step = img_step
+
+        # Create new figure window
+        if self._fig is None:
+            self._fig = plt.figure()
+
+        # Add right subplot for line graph of mean.
+        if self._mean_ax is None:
+            self._mean_ax = self._fig.add_subplot(1, 2, 2)
+            self._mean_ax.set_ylim(-0.05, 0.05)
+
+        # Needs updating on subsequent calls to simulate().
+        # Add 1 so we can show values for time zero and time final_step.
+        self._mean_ax.set_xlim(0, final_step + 1)
+
+        if self._mean_line is None:
+            mean_plot = self._mean_ax.plot(np.arange(0, final_step + 1),
+                                           np.full(final_step + 1, np.nan))
+            self._mean_line = mean_plot[0]
+        else:
+            x_data, y_data = self._mean_line.get_data()
+            x_new = np.arange(x_data[-1] + 1, final_step + 1)
+            if len(x_new) > 0:
+                y_new = np.full(x_new.shape, np.nan)
+                self._mean_line.set_data(np.hstack((x_data, x_new)),
+                                         np.hstack((y_data, y_new)))
 
     def _update_system_map(self):
         pass
