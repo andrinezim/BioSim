@@ -16,8 +16,6 @@ from .island import Island
 import random
 import os
 
-_DEFAULT_GRAPHICS_NAME = 'biosim'
-_DEFAULT_IMG_FORMAT = "png"
 
 class BioSim:
     def __init__(self,
