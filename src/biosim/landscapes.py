@@ -58,8 +58,6 @@ class Landscapes:
                 self.list_carnivores.append(Carnivores(pop_dict["age"], pop_dict["weight"]))
             else:
                 raise TypeError('The only accepted species is herbivore.')
-        print(self.list_herbivores)
-        print(len(self.list_herbivores))
 
     def eating_process(self):
         """
@@ -70,6 +68,7 @@ class Landscapes:
         """
         self.grow_fodder()
         self.feeding_herbs()
+        self.feeding_carn_with_herbs()
 
     def grow_fodder(self):
         """
@@ -110,13 +109,20 @@ class Landscapes:
         """
         Method for adding a newborn to the population in the cell.
         """
-        newborns = []
+        newborn_herbs = []
+        newborn_carns = []
+
         for herb in self.list_herbivores:
             newborn = herb.procreation(len(self.list_herbivores))
             if newborn is not None:
-                newborns.append(newborn)
+                newborn_herbs.append(newborn)
+        self.list_herbivores.extend(newborn_herbs)
 
-        self.list_herbivores.extend(newborns)
+        for carn in self.list_carnivores:
+            newborn = carn.procreation(len(self.list_carnivores))
+            if newborn is not None:
+                newborn_carns.append(newborn)
+        self.list_carnivores.extend(newborn_carns)
 
     def animal_dies(self):
         """
@@ -124,12 +130,17 @@ class Landscapes:
         """
         self.list_herbivores = [herb for herb in self.list_herbivores if not herb.death()]
 
+        self.list_carnivores = [carn for carn in self.list_carnivores if not carn.death()]
+
     def animal_gets_older(self):
         """
         Method for aging an animal.
         """
         for herb in self.list_herbivores:
             herb.aging()
+
+        for carn in self.list_carnivores:
+            carn.aging()
 
     @property
     def amount_herbs(self):
@@ -158,5 +169,3 @@ class Lowland(Landscapes):
         Method for making fodder available.
         """
         self.amount_fodder = self.params_fodder["f_max"]
-
-

@@ -35,12 +35,12 @@ params_fodder = {"f_max": 800}
 
 Lowland.set_params(params_fodder)
 # lo.animals_population(poph)
-isl.adding_population()
+# isl.adding_population(ini_carns)
 
 testlist = []
 
-for i in range(300):
-    lo = isl.map[(1,1)]
+for i in range(50):
+    lo = isl.map[(1, 1)]
     print(lo.amount_herbs, lo.amount_carns)
     lo.eating_process()
     lo.animal_gives_birth()
@@ -49,8 +49,22 @@ for i in range(300):
 
     testlist.append(lo.amount_herbs)
 
+isl.adding_population(ini_carns)
+for i in range(250):
+    lo = isl.map[(1, 1)]
+    print(lo.amount_herbs, lo.amount_carns)
+    lo.eating_process()
+    lo.animal_gives_birth()
+    lo.animal_dies()
+    lo.animal_gets_older()
+
+    testlist.append(lo.amount_herbs)
+
+
+
 print(testlist)
-print(statistics.mean(testlist))
+
+# print(statistics.mean(testlist))
 
 # plt.rcParams['figure.figsize'] = (12, 5)
 # plt.plot([i for i in range(300)], amount)

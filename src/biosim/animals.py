@@ -96,7 +96,7 @@ class Animals:
         self.weight -= (self.default_params['eta'] * self.weight)
         self.fitness()
 
-    def procreation(self, amount_herbs):
+    def procreation(self, amount_same_species):
         """
         Method to determine the probability of birth.
 
@@ -105,13 +105,13 @@ class Animals:
 
         :return: Returns None if there is no birth, and returns newborn if there is new offspring
         """
-        birth_prob = min(1, self.default_params['gamma']*self.phi*(amount_herbs-1))
+        birth_prob = min(1, self.default_params['gamma']*self.phi*(amount_same_species-1))
         demand = self.default_params['zeta']*(self.default_params['w_birth']+self.default_params['sigma_birth'])
 
         if self.weight < demand:
             return None
         else:
-            if random.random() <= birth_prob:
+            if random.random() < birth_prob:
                 newborn = type(self)()
                 if self.weight > self.default_params['xi'] * newborn.weight:
                     self.weight -= self.default_params['xi'] * newborn.weight
@@ -134,10 +134,6 @@ class Animals:
         else:
             return random.random() < death_prob
 
-    def __repr__(self):
-        string = f'Age: {self.age}, Weight: {self.weight}, Fitness: {self.phi}'
-        return string
-
 
 class Herbivores(Animals):
     """
@@ -157,8 +153,7 @@ class Herbivores(Animals):
                     "zeta": 3.5,
                     "xi": 1.2,
                     "omega": 0.4,
-                    "F": 10.0,
-                    "DeltaPhiMax": 0}
+                    "F": 10.0}
 
     def __init__(self, age=0, weight=None):
         """
@@ -252,5 +247,5 @@ class Carnivores(Animals):
 
                 if weight_eaten_herbs >= self.default_params["F"]:
                     return eaten_herbs
-            else:
-                return None
+
+        return eaten_herbs
