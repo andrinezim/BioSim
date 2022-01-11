@@ -2,12 +2,14 @@
 __author__ = 'Andrine Zimmermann, Karin Mollatt'
 __email__ = 'andrine.zimmermann@nmbu.no, karin.mollatt@nmbu.no'
 
+import pytest_mock
+
 """
 Testing the functions in animals.py
 """
 
-import pytest
 from biosim.animals import Herbivores, Carnivores
+import pytest
 
 
 class TestAnimals:
@@ -127,10 +129,15 @@ class TestAnimals:
 
         :param standard_herb: Standard herbivore class.
         """
+        # Mocker function
         pass
 
     def test_weight_negative(self):
-        pass
+        """
+        Testing that if we get a negative weight, a ValueError will be raised.
+        """
+        with pytest.raises(ValueError):
+            Herbivores(weight=-3)
 
     def test_weight_positive(self):
         pass
