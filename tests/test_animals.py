@@ -48,7 +48,7 @@ class TestAnimals:
         Testing that if we get the parameter DeltaPhiMax and it's below zero,
         a ValueError will be raised.
 
-        :param standard_herb: Standard herbivore class.
+        :param standard_carn: Standard carnivore class.
         """
         with pytest.raises(ValueError):
             standard_carn.set_params({"DeltaPhiMax": -1.5})
@@ -94,14 +94,39 @@ class TestAnimals:
 
 
     # Tests for __init__ method
-
     def test_age_negative(self):
-        pass
+        """
+        Testing that if we get a negative age, a ValueError will be raised.
+        """
+        with pytest.raises(ValueError):
+            Herbivores(age=-1)
 
-    def test_age_positve(self):
-        pass
+    def test_age_positive(self, standard_herb):
+        """
+        Testing that if we get a positive age, the class object's age is set to incoming age.
 
-    def test_weight_none(self):
+        :param standard_herb: Standard herbivore class.
+        """
+        standard_herb.age = 3
+        assert standard_herb.age == 3
+
+    def test_age_int(self, standard_herb):
+        """
+        Testing that the age can only be an integer, if not a ValueError will be raised.
+
+        :param standard_herb: Standard herbivore class.
+        """
+        try:
+            standard_herb.age = 3.3
+        except ValueError as error:
+            print(error)
+
+    def test_weight_none(self, standard_herb):
+        """
+        Testing if we don't get a weight input, the weight will be drawn from a Gaussian distribution.
+
+        :param standard_herb: Standard herbivore class.
+        """
         pass
 
     def test_weight_negative(self):
