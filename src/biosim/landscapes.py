@@ -153,7 +153,7 @@ class Landscapes:
 
 class Lowland(Landscapes):
     """
-    Subclass for Lowland with superclass Landscapes.
+    Subclass Lowland with superclass Landscapes.
     """
     params_fodder = {"f_max": 800}
 
@@ -162,7 +162,63 @@ class Lowland(Landscapes):
         Method for saving values in class.
         """
         super().__init__()
+
+    def grow_fodder(self):
+        """
+        Method for making fodder available.
+        """
         self.amount_fodder = self.params_fodder["f_max"]
+
+
+class Highland(Landscapes):
+    """
+    Subclass Highland with superclass Landscapes.
+    """
+    params_fodder = {"f_max": 300}
+
+    def __init__(self):
+        """
+        Method for saving values in class.
+        """
+        super().__init__()
+
+    def grow_fodder(self):
+        """
+        Method for making fodder available.
+        """
+        self.amount_fodder = self.params_fodder["f_max"]
+
+
+class Desert(Landscapes):
+    """
+    Subclass Desert with superclass Landscapes.
+    """
+    params_fodder = {"f_max": 0}
+
+    def __init__(self):
+        """
+        Method for making fodder available.
+        """
+        super().__init__()
+
+    def grow_fodder(self):
+        """
+        Method for making fodder available.
+        """
+        self.amount_fodder = self.params_fodder["f_max"]
+
+
+class Water(Landscapes):
+    """
+    Subclass Water with superclass Landscapes.
+    """
+    params_fodder = {"f_max": 0}
+
+    def __init__(self):
+        """
+        Method for making fodder available.
+        """
+        super().__init__()
 
     def grow_fodder(self):
         """
