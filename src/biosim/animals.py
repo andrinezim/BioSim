@@ -33,7 +33,7 @@ class Animals:
                     raise ValueError('Eta must be in [0,1]')
                 cls.default_params.update(incoming_params)
             else:
-                raise ValueError('Invalid parameter name: ' + parameter_key)
+                raise KeyError('Invalid parameter name: ' + parameter_key)
 
     def __init__(self, age=0, weight=None):
         """

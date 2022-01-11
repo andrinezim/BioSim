@@ -57,7 +57,7 @@ class Landscapes:
             elif pop_dict["species"] == "Carnivore":
                 self.list_carnivores.append(Carnivores(pop_dict["age"], pop_dict["weight"]))
             else:
-                raise TypeError('The only accepted species is herbivore.')
+                raise TypeError('The only accepted species are Herbivore and Carnivore.')
 
     def eating_process(self):
         """
