@@ -2,14 +2,13 @@
 __author__ = 'Andrine Zimmermann, Karin Mollatt'
 __email__ = 'andrine.zimmermann@nmbu.no, karin.mollatt@nmbu.no'
 
-import pytest_mock
-
 """
 Testing the functions in animals.py
 """
 
 from biosim.animals import Herbivores, Carnivores
 import pytest
+from math import exp
 
 
 class TestAnimals:
@@ -94,7 +93,6 @@ class TestAnimals:
         with pytest.raises(KeyError):
             standard_herb.set_params({"alpha": 1})
 
-
     # Tests for __init__ method
     def test_age_negative(self):
         """
@@ -139,8 +137,14 @@ class TestAnimals:
         with pytest.raises(ValueError):
             Herbivores(weight=-3)
 
-    def test_weight_positive(self):
-        pass
+    def test_weight_positive(self, standard_herb):
+        """
+        Testing that if the weight is positive, it is set to the weight input.
+
+        :param standard_herb: Standard herbivore class.
+        """
+        standard_herb.weight = 5
+        assert standard_herb.weight == 5
 
     def test_init_phi(self):
         pass
@@ -148,15 +152,36 @@ class TestAnimals:
 
     # Tests for q_func and fitness methods
 
-    def test_q_func(self):
-        pass
+    def test_q_func(self, standard_herb):
+        """
+        Testing if the q function calculates the correct value.
+
+        :param standard_herb: Standard herbivore class.
+        """
+        pos_neg = 1
+        phi_aw = 0.5
+        x = 5
+        x_half = 5
+
+        q = standard_herb.q_func(x, x_half, phi_aw, pos_neg)
+        assert q == 0.5
+
+        pos_neg = -1
+        phi_aw = 1
+        x = 6
+        x_half = 4
+
+        q = standard_herb.q_func(x, x_half, phi_aw, pos_neg)
+        assert q == (1/(1+(1/exp(2))))
 
     def test_fitness_weight_negative_equal(self):
-        pass
+        """
+        Testing that if the weight is zero or below, the fitness is zero.
+        """
+        assert Herbivores(weight=0).phi == 0
 
     def test_fitness_weight_positive(self):
         pass
-
 
     # Tests for aging method
     # mocking?
@@ -164,11 +189,26 @@ class TestAnimals:
     def test_aging(self):
         pass
 
-    def test_annual_weight_loss(self):
-        pass
+    def test_annual_weight_loss(self, standard_herb):
+        """
+        Testing if the animals lose weight every year.
 
-    def test_annual_fitness_update(self):
-        pass
+        :param standard_herb: Standard herbivore class.
+        """
+        current_weight = standard_herb.weight
+        standard_herb.aging()
+        assert standard_herb.weight == (current_weight - standard_herb.default_params["eta"] * current_weight)
+
+    def test_annual_fitness_update(self, standard_herb):
+        """
+        Testing that the weight updates when calling on the fitness function.
+
+        :param standard_herb: Standard herbivore class.
+        """
+        current_phi = standard_herb.phi
+        standard_herb.weight = 7
+        standard_herb.fitness()
+        assert standard_herb.phi != current_phi
 
 
     # Tests for procreation method
