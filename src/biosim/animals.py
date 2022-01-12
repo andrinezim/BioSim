@@ -59,6 +59,9 @@ class Animals:
         # Defining phi value for use in fitness and procreation functions
         self.phi = self.fitness()
 
+        # Defining an attribute that represents if an animal has migrated or not.
+        self.has_migrated = False
+
     @staticmethod
     def q_func(x, x_half, phi_aw, pos_neg):
         """
@@ -136,6 +139,16 @@ class Animals:
             return True
         else:
             return random.random() < death_prob
+
+    def probability_migrate(self):
+        """
+        Method for deciding if the animal wants to move.
+
+        The probability to move is calculated with mu * fitness of the animal.
+        """
+        prob_migrate = self.default_params["mu"] * self.phi
+        return prob_migrate
+
 
 
 class Herbivores(Animals):
