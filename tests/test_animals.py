@@ -162,6 +162,11 @@ class TestAnimals:
 
     # Tests for aging method
     def test_aging(self, mocker):
+        """
+        Testing if the animals ages every time the function is called.
+
+        Using mocker.spy to check if the function is called once.
+        """
         mocker.spy(Herbivores, 'aging')
         self.herb.aging()
         assert Herbivores.aging.call_count == 1
@@ -185,7 +190,6 @@ class TestAnimals:
 
 
     # Tests for procreation method
-
     def test_birth_prob(self):
         pass
 
@@ -193,15 +197,36 @@ class TestAnimals:
         pass
 
     def test_weight_lower_than_demand(self):
+        """
+        Testing if the function returns None if the weight of the animal
+        is lower than our demand.
+        Setting the weight to be low, to ensure that we are lower than the demand.
+        """
+        #demand = self.herb.default_params['zeta']*\
+        #         (self.herb.default_params['w_birth']+self.herb.default_params['sigma_birth'])
+        #self.herb.weight = demand - 1
+        #assert self.herb.fitness() is None
         pass
 
     def test_random_lower_than_birth_prob(self):
+        """
+        Testing if a newborn is made when the random drawn number is below birth_prob.
+
+        Using mocker to trick the function random.random to return 1.
+        """
         pass
 
     def test_random_higher_than_birth_prob(self):
         pass
 
     def test_weight_higher_than_newborn(self):
+        """
+                Testing that the animal's weight decreases, after giving birth, if their weight
+                is higher than the newborns weight (drawn from a gaussian distribution) times the
+                parameter "xi".
+                """
+        # newborn = Herbivores(age=0)
+        # self.herb.weight = (self.herb.default_params["xi"] * newborn.weight) + 10
         pass
 
     def test_weight_lower_than_newborn(self):
@@ -211,19 +236,44 @@ class TestAnimals:
     # Tests for death method
 
     def test_death_prob(self):
+        # not necessary?
         pass
 
     def test_weight_zero(self):
+        """
+        Testing that the death() method returns True, if the animal's weight is zero.
+        """
+        self.herb.weight = 0
+        assert self.herb.death() is True
+
+    def test_weight_not_zero_lower_than_prob(self, mocker):
+        """
+        Testing that if the weight is higher than zero AND the drawn number is LOWER
+        than the death probability, the death() method returns False.
+
+        Using mocker to trick the random.random function to return the value 1.
+        """
+        #mocker.patch("random.random", return_value=1)
+        #self.herb.weight = 2
+        #assert self.herb.death() is False
         pass
 
-    def test_weight_not_zero(self):
+    def test_weight_not_zero_higher_than_prob(self, mocker):
+        """
+        Testing that if the weight is higher than zero AND the drawn number is HIGHER
+        than the death probability, the death() method returns False.
+
+        Using mocker to trick the random.random function to return the value 1.
+        """
+        #mocker.patch("random.random", return_value=1)
+        #self.herb.weight = 2
+        #assert self.herb.death() is True
         pass
 
 
 class TestHerbivores:
 
     # Tests for herbs_eating method
-
     def test_F_lower_than_amount_fodder(self):
         pass
 
@@ -237,7 +287,6 @@ class TestHerbivores:
 class TestCarnivores:
 
     # Tests for carns_eating_herbs method
-
     def test_fitness_carn_lower_equal_than_fitness_herb(self):
         pass
 
