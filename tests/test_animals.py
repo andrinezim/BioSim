@@ -132,7 +132,7 @@ class TestAnimals:
 
     def test_weight_negative(self):
         """
-        Testing that if we get a negative weight, a ValueError will be raised.
+        Testing that if get a negative weight, a ValueError will be raised.
         """
         with pytest.raises(ValueError):
             Herbivores(weight=-3)
