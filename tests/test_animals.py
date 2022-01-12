@@ -17,81 +17,71 @@ class TestAnimals:
     def test_set_params(self, request):
         pass
 
-    @pytest.fixture
+    @pytest.fixture(autouse=True)
     def standard_herb(self):
         """
         Fixture setting standard herbivore.
 
         :return: Standard herbivore class.
         """
-        return Herbivores()
+        self.herb = Herbivores()
 
-    @pytest.fixture
+    @pytest.fixture(autouse=True)
     def standard_carn(self):
         """
         Fixture setting standard carnivore.
 
         :return: Standard carnivore class.
         """
-        return Carnivores()
+        self.carn = Carnivores()
 
-    def test_negative_param_value(self, standard_herb):
+    def test_negative_param_value(self):
         """
         Testing that we get a ValueError if the parameters are negative.
-
-        :param standard_herb: Standard herbivore class.
         """
         with pytest.raises(ValueError):
-            standard_herb.set_params({"sigma_birth": -1.5})
+            self.herb.set_params({"sigma_birth": -1.5})
 
-    def test_deltaphimax_negative(self, standard_carn):
+    def test_deltaphimax_negative(self):
         """
         Testing that if we get the parameter DeltaPhiMax and it's below zero,
         a ValueError will be raised.
-
-        :param standard_carn: Standard carnivore class.
         """
         with pytest.raises(ValueError):
-            standard_carn.set_params({"DeltaPhiMax": -1.5})
+            self.carn.set_params({"DeltaPhiMax": -1.5})
         with pytest.raises(ValueError):
-            standard_carn.set_params({"DeltaPhiMax": 0})
+            self.carn.set_params({"DeltaPhiMax": 0})
 
-    def test_eta_0_1(self, standard_herb):
+    def test_eta_0_1(self):
         """
         Testing that if we get the parameter eta and it's not in [0,1],
         a ValueError will be raised.
-
-        :param standard_herb: Standard herbivore class.
         """
         with pytest.raises(ValueError):
-            standard_herb.set_params({"eta": 2})
+            self.herb.set_params({"eta": 2})
         with pytest.raises(ValueError):
-            standard_herb.set_params({"eta": -2})
+            self.herb.set_params({"eta": -2})
 
-    def test_param_update(self, standard_herb):
+    def test_param_update(self):
         """
         Testing if the default params are updating.
-
-        :param standard_herb: Standard herbivore class.
         """
-        current_params = standard_herb.default_params
+        current_params = self.herb.default_params
         new_params = {
             "w_birth": 9.0,
             "sigma_birth": 2.5,
             "beta": 1.9,
             "eta": 0.55}
 
-        new_params = standard_herb.set_params(new_params)
+        new_params = self.herb.set_params(new_params)
         assert new_params != current_params
 
-    def test_invalid_param_name(self, standard_herb):
+    def test_invalid_param_name(self):
         """
         Testing that if we get an invalid parameter name, a KeyError is raised.
-
-        :param standard_herb: Standard herbivore class.
         """
         with pytest.raises(KeyError):
-            standard_herb.set_params({"alpha": 1})
+            self.herb.set_params({"alpha": 1})
 
     # Tests for __init__ method
     def test_age_negative(self):
@@ -101,32 +91,28 @@ class TestAnimals:
         with pytest.raises(ValueError):
             Herbivores(age=-1)
 
-    def test_age_positive(self, standard_herb):
+    def test_age_positive(self):
         """
         Testing that if we get a positive age, the class object's age is set to incoming age.
-
-        :param standard_herb: Standard herbivore class.
         """
-        standard_herb.age = 3
-        assert standard_herb.age == 3
+        self.herb.age = 3
+        assert self.herb.age == 3
 
-    def test_age_int(self, standard_herb):
+    def test_age_int(self):
         """
         Testing that the age can only be an integer, if not a ValueError will be raised.
-
-        :param standard_herb: Standard herbivore class.
         """
         with pytest.raises(ValueError):
             Herbivores(age=3.3)
 
-    def test_weight_none(self, standard_herb):
+    def test_weight_none(self, mocker):
         """
         Testing if we don't get a weight input, the weight will be drawn from a Gaussian distribution.
 
-        :param standard_herb: Standard herbivore class.
+        Using the mocker function to trick the function random.gauss to return 1.
         """
-        # Mocker function
-        pass
+        mocker.patch("random.gauss", return_value=1)
+        assert Herbivores().weight == 1
 
     def test_weight_negative(self):
         """
@@ -135,14 +121,12 @@ class TestAnimals:
         with pytest.raises(ValueError):
             Herbivores(weight=-3)
 
-    def test_weight_positive(self, standard_herb):
+    def test_weight_positive(self):
         """
         Testing that if the weight is positive, it is set to the weight input.
-
-        :param standard_herb: Standard herbivore class.
         """
-        standard_herb.weight = 5
-        assert standard_herb.weight == 5
+        self.herb.weight = 5
+        assert self.herb.weight == 5
 
     def test_init_phi(self):
         pass
@@ -150,18 +134,16 @@ class TestAnimals:
 
     # Tests for q_func and fitness methods
 
-    def test_q_func(self, standard_herb):
+    def test_q_func(self):
         """
         Testing if the q function calculates the correct value.
-
-        :param standard_herb: Standard herbivore class.
         """
         pos_neg = 1
         phi_aw = 0.5
         x = 5
         x_half = 5
 
-        q = standard_herb.q_func(x, x_half, phi_aw, pos_neg)
+        q = self.herb.q_func(x, x_half, phi_aw, pos_neg)
         assert q == 0.5
 
         pos_neg = -1
@@ -169,7 +151,7 @@ class TestAnimals:
         x = 6
         x_half = 4
 
-        q = standard_herb.q_func(x, x_half, phi_aw, pos_neg)
+        q = self.herb.q_func(x, x_half, phi_aw, pos_neg)
         assert q == (1/(1+(1/exp(2))))
 
     def test_fitness_weight_negative_equal(self):
@@ -187,26 +169,22 @@ class TestAnimals:
     def test_aging(self):
         pass
 
-    def test_annual_weight_loss(self, standard_herb):
+    def test_annual_weight_loss(self):
         """
         Testing if the animals lose weight every year.
-
-        :param standard_herb: Standard herbivore class.
         """
-        current_weight = standard_herb.weight
-        standard_herb.aging()
-        assert standard_herb.weight == (current_weight - standard_herb.default_params["eta"] * current_weight)
+        current_weight = self.herb.weight
+        self.herb.aging()
+        assert self.herb.weight == (current_weight - self.herb.default_params["eta"] * current_weight)
 
-    def test_annual_fitness_update(self, standard_herb):
+    def test_annual_fitness_update(self):
         """
         Testing that the weight updates when calling on the fitness function.
-
-        :param standard_herb: Standard herbivore class.
         """
-        current_phi = standard_herb.phi
-        standard_herb.weight = 7
-        standard_herb.fitness()
-        assert standard_herb.phi != current_phi
+        current_phi = self.herb.phi
+        self.herb.weight = 7
+        self.herb.fitness()
+        assert self.herb.phi != current_phi
 
 
     # Tests for procreation method
