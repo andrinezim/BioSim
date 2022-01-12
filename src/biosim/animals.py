@@ -149,6 +149,17 @@ class Animals:
         prob_migrate = self.default_params["mu"] * self.phi
         return prob_migrate
 
+    def has_migrated_true(self):
+        """
+        Method for setting the attribute has_migrated to True.
+        """
+        self.has_migrated = True
+
+    def has_migrated_false(self):
+        """
+        Method for setting the attribute has_migrated to False.
+        """
+        self.has_migrated = False
 
 
 class Herbivores(Animals):
