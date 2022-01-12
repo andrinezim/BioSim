@@ -43,9 +43,9 @@ class Animals:
         :param weight: Weight of animal
         """
         if age < 0:
-            raise ValueError('Age cannot be below zero or a float.')
-        elif age is float:
-            raise ValueError('Age cannot be below zero or a float.')
+            raise ValueError('Age cannot be below zero.')
+        elif type(age) is float:
+            raise ValueError('Age must be an integer.')
         else:
             self.age = age
 

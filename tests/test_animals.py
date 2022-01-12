@@ -116,10 +116,8 @@ class TestAnimals:
 
         :param standard_herb: Standard herbivore class.
         """
-        try:
-            standard_herb.age = 3.3
-        except ValueError as error:
-            print(error)
+        with pytest.raises(ValueError):
+            Herbivores(age=3.3)
 
     def test_weight_none(self, standard_herb):
         """
