@@ -83,6 +83,7 @@ class TestAnimals:
         with pytest.raises(KeyError):
             self.herb.set_params({"alpha": 1})
 
+
     # Tests for __init__ method
     def test_age_negative(self):
         """
@@ -133,26 +134,21 @@ class TestAnimals:
 
 
     # Tests for q_func and fitness methods
-
-    def test_q_func(self):
+    @pytest.mark.parametrize( "x, x_half, phi_aw, pos_neg, expected",
+                              [[5, 5, 0.5, 1, 0.5],
+                               [6, 4, 1, -1, (1/(1+(1/exp(2))))]])
+    def test_q_func(self, x, x_half, phi_aw, pos_neg, expected):
         """
         Testing if the q function calculates the correct value.
+
+        Using the pytest.mark.parametrize to run through the test multiple times,
+        without needing duplicated code.
+
+        The expected values are precalculated by hand.
         """
-        pos_neg = 1
-        phi_aw = 0.5
-        x = 5
-        x_half = 5
-
         q = self.herb.q_func(x, x_half, phi_aw, pos_neg)
-        assert q == 0.5
 
-        pos_neg = -1
-        phi_aw = 1
-        x = 6
-        x_half = 4
-
-        q = self.herb.q_func(x, x_half, phi_aw, pos_neg)
-        assert q == (1/(1+(1/exp(2))))
+        assert q == expected
 
     def test_fitness_weight_negative_equal(self):
         """
@@ -163,11 +159,12 @@ class TestAnimals:
     def test_fitness_weight_positive(self):
         pass
 
-    # Tests for aging method
-    # mocking?
 
-    def test_aging(self):
-        pass
+    # Tests for aging method
+    def test_aging(self, mocker):
+        mocker.spy(Herbivores, 'aging')
+        self.herb.aging()
+        assert Herbivores.aging.call_count == 1
 
     def test_annual_weight_loss(self):
         """
