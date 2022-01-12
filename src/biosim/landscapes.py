@@ -150,7 +150,7 @@ class Landscapes:
     def amount_carns(self):
         return len(self.list_carnivores)
 
-    def migrating_animals(self):
+    def distribute_migrated_animals(self):
         """
         Method for putting the animals that want to move in each list.
 

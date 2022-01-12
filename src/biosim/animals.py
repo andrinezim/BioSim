@@ -142,7 +142,7 @@ class Animals:
 
     def probability_migrate(self):
         """
-        Method for deciding if the animal wants to move.
+        Method for deciding if the animal wants to migrate.
 
         The probability to move is calculated with mu * fitness of the animal.
         """

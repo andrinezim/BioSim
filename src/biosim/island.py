@@ -2,16 +2,21 @@
 __author__ = 'Andrine Zimmermann, Karin Mollatt'
 __email__ = 'andrine.zimmermann@nmbu.no, karin.mollatt@nmbu.no'
 
+import random
+
 """
 Module for island. 
 """
 
-from .landscapes import Lowland
+from .landscapes import Lowland, Highland, Desert, Water
 
 
 class Island:
 
-    map_params = {'L': Lowland}
+    map_params = {"L": Lowland,
+                  "H": Highland,
+                  "D": Desert,
+                  "W": Water}
 
     def __init__(self, island_map, ini_pop):
         """
@@ -66,6 +71,47 @@ class Island:
 
             pop = dict_loc_pop['pop']
             self.map[loc].animals_population(pop)
+
+    # @staticmethod
+    def find_adjacent_cell_migrate(self, cell):
+        """
+        Method for finding the neighbouring cells, and deciding which cell to migrate to.
+
+        :return: The cell to be migrated to.
+        """
+        x_loc, y_loc = cell
+
+        north_loc = (x_loc, y_loc + 1)
+        south_loc = (x_loc, y_loc - 1)
+        east_loc = (x_loc + 1, y_loc)
+        west_loc = (x_loc - 1, y_loc)
+
+        loc_list = [north_loc, south_loc, east_loc, west_loc]
+
+        selected_cell = random.choice(loc_list)
+        return selected_cell
+
+    def migrating_animals(self, cell):
+        """
+        Method for migrating animals.
+
+        Ensures that the cell is an available landscape type. Water is the only unavailable landscape.
+        Puts the migrating animals in a new cell (location), and adds the animal to the population in that
+        cell. Also makes sure that the animal is removed from the population to the previous cell.
+
+        :param cell: Location tuple
+        """
+        if self.map[cell].available is True:
+            migrated_herbs, migrated_carns = self.map[cell].distribute_migrated_animals()
+            for herb in migrated_herbs:
+                next_loc = self.find_adjacent_cell_migrate(cell)
+                if self.map[next_loc].available is False:
+                    break
+                else:
+                    self.map[next_loc].adding_population(herb)
+                    herb.has_migrated = True
+                    # Remove from list.
+
 
     def annual_cycle_simulation(self):
         """
