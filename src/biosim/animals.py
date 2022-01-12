@@ -147,7 +147,10 @@ class Animals:
         The probability to move is calculated with mu * fitness of the animal.
         """
         prob_migrate = self.default_params["mu"] * self.phi
-        return prob_migrate
+        if random.random() < prob_migrate:
+            return True
+        else:
+            return False
 
     def has_migrated_true(self):
         """

@@ -150,12 +150,43 @@ class Landscapes:
     def amount_carns(self):
         return len(self.list_carnivores)
 
+    def migrating_animals(self):
+        """
+        Method for putting the animals that want to move in each list.
+
+        :return: Two lists with the herbivores and carnivores that migrate.
+        """
+        migrated_herbs = []
+        migrated_carns = []
+
+        for herb in self.list_herbivores:
+            if herb.has_migrated is False and herb.probability_migrate():
+                migrated_herbs.append(herb)
+
+        for carn in self.list_carnivores:
+            if carn.has_migrated is False and carn.probability_migrate():
+                migrated_carns.append(carn)
+
+        return migrated_herbs, migrated_carns
+
+    def annual_restart_migration(self):
+        """
+        Method for setting migration attribute back to False in the end of the year, if it has migrated.
+
+        An animal can only move once every year.
+        """
+        for herb in self.list_herbivores:
+            herb.has_migrated = False
+        for carn in self.list_carnivores:
+            carn.has_migrated = False
+
 
 class Lowland(Landscapes):
     """
     Subclass Lowland with superclass Landscapes.
     """
     params_fodder = {"f_max": 800}
+    available = True
 
     def __init__(self):
         """
@@ -175,6 +206,7 @@ class Highland(Landscapes):
     Subclass Highland with superclass Landscapes.
     """
     params_fodder = {"f_max": 300}
+    available = True
 
     def __init__(self):
         """
@@ -194,6 +226,7 @@ class Desert(Landscapes):
     Subclass Desert with superclass Landscapes.
     """
     params_fodder = {"f_max": 0}
+    available = True
 
     def __init__(self):
         """
@@ -213,6 +246,7 @@ class Water(Landscapes):
     Subclass Water with superclass Landscapes.
     """
     params_fodder = {"f_max": 0}
+    available = False
 
     def __init__(self):
         """
