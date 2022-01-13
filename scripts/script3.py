@@ -19,7 +19,7 @@ ini_herbs = [{'loc': (3, 3),
                       for _ in range(100)]}]
 
 sim = BioSim(island_map=geogr, ini_pop=ini_herbs, seed=123456, vis_years=1)
-sim.set_animal_parameters('Herbivore', {'mu': 1, 'omega': 0.00001, 'gamma': 0.00001, 'a_half': 1000})
+sim.set_animal_parameters('Herbivore', {'mu': 1, 'omega': 0.0000001, 'gamma': 0.0000001, 'a_half': 1000})
 sim.simulate(1)
 
 for cell in sim.island.map:

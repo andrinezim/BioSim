@@ -107,6 +107,7 @@ class Island:
 
         if self.map[cell].available is True:
             migrated_herbs, migrated_carns = self.map[cell].distribute_migrated_animals()
+
             for herb in migrated_herbs:
                 next_loc = self.find_adjacent_cell_migrate(cell)
                 if self.map[next_loc].available is False:
