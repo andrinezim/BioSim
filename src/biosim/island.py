@@ -131,14 +131,16 @@ class Island:
         for cell in self.map:
             self.map[cell].annual_restart_migration()
 
-
-
     def annual_cycle_simulation(self):
         """
         Method for simulating one year one the island. It follows the annual cycle.
-
-        :return:
         """
+        for cell in self.map:
+            self.map[cell].eating_procss()
+            self.map[cell].animal_gives_birth()
+            self.migrating_animals(cell)
+            self.map[cell].animal_gets_older()
+            self.map[cell].animal_dies()
 
-        # return number of animals per species
-        pass
+        self.restart_migration()
+
