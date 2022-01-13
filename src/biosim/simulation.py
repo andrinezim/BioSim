@@ -16,6 +16,7 @@ from .island import Island
 import random
 import os
 
+_DEFAULT_GRAPHICS_NAME = 'bio'
 
 class BioSim:
     def __init__(self,
@@ -91,9 +92,9 @@ class BioSim:
         :param species: String, name of animal species
         :param params: Dict with valid parameter specification for species
         """
-        if species == "Herbivore":
+        if species == 'Herbivore':
             Herbivores.set_params(params)
-        elif species == "Carnivore":
+        elif species == 'Carnivore':
             Carnivores.set_params(params)
 
     def set_landscape_parameters(self, landscape, params):

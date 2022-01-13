@@ -13,10 +13,10 @@ from .landscapes import Lowland, Highland, Desert, Water
 
 class Island:
 
-    map_params = {"L": Lowland,
-                  "H": Highland,
-                  "D": Desert,
-                  "W": Water}
+    map_params = {'L': Lowland,
+                  'H': Highland,
+                  'D': Desert,
+                  'W': Water}
 
     def __init__(self, island_map, ini_pop):
         """
@@ -68,7 +68,7 @@ class Island:
         for dict_loc_pop in current_pop:
             loc = dict_loc_pop['loc']
             if loc not in self.map:
-                raise KeyError("This location is invalid.")
+                raise KeyError('This location is invalid.')
 
             pop = dict_loc_pop['pop']
             self.map[loc].animals_population(pop)
