@@ -59,7 +59,6 @@ class Island:
         Method for adding population to the island.
 
         :param incoming_pop: List of dictionaries specifying initial population
-        :return:
         """
         if incoming_pop is None:
             return
@@ -68,12 +67,14 @@ class Island:
 
         for dict_loc_pop in current_pop:
             loc = dict_loc_pop['loc']
+            if loc not in self.map:
+                raise KeyError("This location is invalid.")
 
             pop = dict_loc_pop['pop']
             self.map[loc].animals_population(pop)
 
-    # @staticmethod
-    def find_adjacent_cell_migrate(self, cell):
+    @staticmethod
+    def find_adjacent_cell_migrate(cell):
         """
         Method for finding the neighbouring cells, and deciding which cell to migrate to.
 
@@ -110,7 +111,26 @@ class Island:
                 else:
                     self.map[next_loc].adding_population(herb)
                     herb.has_migrated = True
-                    # Remove from list.
+                    self.map[cell].list_herbivores.pop(herb)
+
+            for carn in migrated_carns:
+                next_loc = self.find_adjacent_cell_migrate(cell)
+                if self.map[next_loc].available is False:
+                    break
+                else:
+                    self.map[next_loc].adding_population(carn)
+                    carn.has_migrated = True
+                    self.map[cell].list_carnivores.pop(carn)
+
+    def restart_migration(self):
+        """
+        Method for setting has_migrated attribute back to False at the end of the year.
+
+        An animal can only migrate once each year.
+        """
+        for cell in self.map:
+            self.map[cell].annual_restart_migration()
+
 
 
     def annual_cycle_simulation(self):
