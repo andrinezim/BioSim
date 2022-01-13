@@ -59,6 +59,17 @@ class Landscapes:
             else:
                 raise TypeError('The only accepted species are Herbivore and Carnivore.')
 
+    def add_single_animal(self, animal):
+        """
+        Method for adding single to population in cell.
+
+        :param animal: Herbivore or carnivore class object.
+        """
+        if type(animal) == Herbivores():
+            self.list_herbivores.append(animal)
+        elif type(animal) == Carnivores():
+            self.list_carnivores.append(animal)
+
     def eating_process(self):
         """
         Method for the eating process.

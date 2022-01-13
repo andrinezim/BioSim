@@ -11,7 +11,7 @@ Template for BioSim class.
 # (C) Copyright 2021 Hans Ekkehard Plesser / NMBU
 
 from .animals import Herbivores, Carnivores
-from .landscapes import Lowland
+from .landscapes import Lowland, Highland, Desert, Water
 from .island import Island
 import random
 import os
@@ -105,6 +105,12 @@ class BioSim:
         """
         if landscape == 'L':
             Lowland.set_params(params)
+        elif landscape == 'H':
+            Highland.set_params(params)
+        elif landscape == 'D':
+            Desert.set_params(params)
+        elif landscape == 'W':
+            Water.set_params(params)
 
     def simulate(self, num_years):
         """

@@ -109,7 +109,7 @@ class Island:
                 if self.map[next_loc].available is False:
                     break
                 else:
-                    self.map[next_loc].adding_population(herb)
+                    self.map[next_loc].add_single_animal(herb)
                     herb.has_migrated = True
                     self.map[cell].list_herbivores.pop(herb)
 
@@ -118,7 +118,7 @@ class Island:
                 if self.map[next_loc].available is False:
                     break
                 else:
-                    self.map[next_loc].adding_population(carn)
+                    self.map[next_loc].add_single_animal(carn)
                     carn.has_migrated = True
                     self.map[cell].list_carnivores.pop(carn)
 
@@ -136,11 +136,10 @@ class Island:
         Method for simulating one year one the island. It follows the annual cycle.
         """
         for cell in self.map:
-            self.map[cell].eating_procss()
+            self.map[cell].eating_process()
             self.map[cell].animal_gives_birth()
             self.migrating_animals(cell)
             self.map[cell].animal_gets_older()
             self.map[cell].animal_dies()
 
         self.restart_migration()
-
