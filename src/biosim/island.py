@@ -102,6 +102,9 @@ class Island:
 
         :param cell: Location tuple
         """
+        moved_herbs = []
+        moved_carns = []
+
         if self.map[cell].available is True:
             migrated_herbs, migrated_carns = self.map[cell].distribute_migrated_animals()
             for herb in migrated_herbs:
@@ -111,7 +114,10 @@ class Island:
                 else:
                     self.map[next_loc].add_single_animal(herb)
                     herb.has_migrated = True
-                    self.map[cell].list_herbivores.pop(herb)
+                    moved_herbs.append(herb)
+
+            self.map[cell].list_herbivores = [herb for herb in self.map[cell].list_herbivores
+                                              if herb not in moved_herbs]
 
             for carn in migrated_carns:
                 next_loc = self.find_adjacent_cell_migrate(cell)
@@ -120,7 +126,10 @@ class Island:
                 else:
                     self.map[next_loc].add_single_animal(carn)
                     carn.has_migrated = True
-                    self.map[cell].list_carnivores.pop(carn)
+                    moved_carns.append(carn)
+
+            self.map[cell].list_carnivores = [carn for carn in self.map[cell].list_carnivores
+                                              if carn not in moved_carns]
 
     def restart_migration(self):
         """
