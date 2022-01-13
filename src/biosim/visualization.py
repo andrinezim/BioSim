@@ -34,7 +34,7 @@ _MAGICK_BINARY = 'magick'
 # update this to the directory and file-name beginning
 # for the graphics files
 _DEFAULT_GRAPHICS_DIR = os.path.join('../..', 'data')
-_DEFAULT_GRAPHICS_NAME = 'dv'
+_DEFAULT_GRAPHICS_NAME = 'bs'
 _DEFAULT_IMG_FORMAT = 'png'
 _DEFAULT_MOVIE_FORMAT = 'mp4'   # alternatives: mp4, gif
 
@@ -84,7 +84,7 @@ class Graphics:
         self._update_system_map(sys_map)
         self._update_mean_graph(step, sys_mean)
         self._fig.canvas.flush_events()  # ensure every thing is drawn
-        plt.pause(1e-6)  # pause required to pass control to GUI
+        plt.pause(0.001)  # pause required to pass control to GUI
 
         self._save_graphics(step)
 
@@ -156,7 +156,7 @@ class Graphics:
         # Add right subplot for line graph of mean.
         if self._mean_ax is None:
             self._mean_ax = self._fig.add_subplot(1, 2, 2)
-            self._mean_ax.set_ylim(-0.05, 0.05)
+            self._mean_ax.set_ylim(0, 0.05)
 
         # needs updating on subsequent calls to simulate()
         # add 1 so we can show values for time zero and time final_step
@@ -197,7 +197,7 @@ class Graphics:
         if self._img_base is None or step % self._img_step != 0:
             return
 
-        plt.savefig('{base}_{num:05d}.{type}'.format(base=self._img_base,
+        plt.savefig('{base}_{num:04d}.{type}'.format(base=self._img_base,
                                                      num=self._img_ctr,
                                                      type=self._img_fmt))
         self._img_ctr += 1

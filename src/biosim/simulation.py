@@ -10,13 +10,14 @@ Template for BioSim class.
 # https://opensource.org/licenses/BSD-3-Clause
 # (C) Copyright 2021 Hans Ekkehard Plesser / NMBU
 
-from .animals import Herbivores, Carnivores
 from .landscapes import Lowland, Highland, Desert, Water
+from .animals import Herbivores, Carnivores
+from .visualization import Graphics
 from .island import Island
 import random
 import os
 
-_DEFAULT_GRAPHICS_NAME = 'bio'
+_DEFAULT_GRAPHICS_NAME = 'bs'
 
 class BioSim:
     def __init__(self,
@@ -72,8 +73,8 @@ class BioSim:
 
         self.vis_years = vis_years
 
-        self.current_year = 0
-        self.final_year = None
+        self._current_year = 0
+        self._final_year = None
 
         self.island_map = island_map
         self.island = Island(island_map, ini_pop)
@@ -84,6 +85,8 @@ class BioSim:
             self.img_base = os.path.join(img_dir, _DEFAULT_GRAPHICS_NAME)
 
         self.img_fmt = img_fmt
+
+        self._graphics = Graphics(img_dir, img_base, img_fmt)
 
     def set_animal_parameters(self, species, params):
         """
@@ -119,14 +122,20 @@ class BioSim:
 
         :param num_years: number of years to simulate
         """
-        self.final_year = self.current_year + num_years
+        if self.img_years % self.vis_years != 0:
+            raise ValueError('img_years must be multiple of vis_years')
 
-        while self.current_year < self.final_year:
+        self._final_year = self._current_year + num_years
+        self._graphics._setup_graphics(self._final_year, self.img_years)
+
+        while self._current_year < self._final_year:
             self.island.annual_cycle_simulation()
+            self._current_year += 1
 
-            # Add visualization if tests later
-
-            self.current_year += 1
+            if self._current_year % self.vis_years == 0:
+                self._graphics.update(self._current_year,
+                                      self.island_map,
+                                      self._system.mean_value())
 
     def add_population(self, population):
         """
@@ -139,7 +148,7 @@ class BioSim:
     @property
     def year(self):
         """Last year simulated."""
-        pass
+        return self._current_year
 
     @property
     def num_animals(self):
@@ -153,4 +162,7 @@ class BioSim:
 
     def make_movie(self):
         """Create MPEG4 movie from visualization images saved."""
+        pass
+
+    def save_graphics(self):
         pass
