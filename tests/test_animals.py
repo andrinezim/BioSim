@@ -276,15 +276,27 @@ class TestAnimals:
 
 class TestHerbivores:
 
+    @pytest.fixture(autouse=True)
+    def standard_herb(self):
+        """
+        Fixture setting standard herbivore.
+
+        :return: Standard herbivore class.
+        """
+        self.herb = Herbivores()
+
     # Tests for herbs_eating method
     def test_F_lower_than_amount_fodder(self):
-        pass
+        ini_weight = self.herb.weight
+        self.herb.herbs_eating(20)
+        amount_eaten = self.herb.default_params["F"]
+        assert self.herb.weight == ini_weight + (self.herb.default_params["beta"] * amount_eaten)
 
     def test_F_higher_equal_than_amount_fodder(self):
-        pass
-
-    def test_weight_gain(self):
-        pass
+        ini_weight = self.herb.weight
+        self.herb.herbs_eating(5)
+        amount_eaten = 5
+        assert self.herb.weight == ini_weight + (self.herb.default_params["beta"] * amount_eaten)
 
 
 class TestCarnivores:
