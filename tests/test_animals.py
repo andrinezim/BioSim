@@ -162,15 +162,13 @@ class TestAnimals:
 
 
     # Tests for aging method
-    def test_aging(self, mocker):
+    def test_aging(self):
         """
         Testing if the animals ages every time the function is called.
-
-        Using mocker.spy to check if the function is called once.
         """
-        mocker.spy(Herbivores, 'aging')
+        self.herb.age = 3
         self.herb.aging()
-        assert Herbivores.aging.call_count == 1
+        assert self.herb.age == 4
 
     def test_annual_weight_loss(self):
         """
@@ -229,11 +227,11 @@ class TestAnimals:
         is higher than the newborns weight (drawn from a gaussian distribution) times the
         parameter "xi".
         """
-        """newborn = Herbivores(age=0)
-        self.herb.weight = (self.herb.default_params["xi"] * newborn.weight) + 10
-        self.herb.procreation(10)
-        assert self.herb.weight == 10"""
-        pass
+        self.herb.weight = 50
+        ini_weight = self.herb.weight
+        baby = self.herb.procreation(10)
+
+        assert self.herb.weight == ini_weight - (self.herb.default_params["xi"] * baby.weight)
 
     def test_weight_lower_than_newborn(self):
         """
@@ -260,10 +258,9 @@ class TestAnimals:
 
         Using mocker to trick the random.random function to return the value 1.
         """
-        """mocker.patch("random.random", return_value=1)
+        mocker.patch("random.random", return_value=0)
         self.herb.weight = 1
-        assert self.herb.death() is False"""
-        pass
+        assert self.herb.death() is True
 
     def test_death_weight_not_zero_higher_than_prob(self, mocker):
         """
@@ -272,10 +269,9 @@ class TestAnimals:
 
         Using mocker to trick the random.random function to return the value 1.
         """
-        """mocker.patch("random.random", return_value=1)
-        self.herb.weight = 2
-        assert self.herb.death() is True"""
-        pass
+        mocker.patch("random.random", return_value=1)
+        self.herb.weight = 20
+        assert self.herb.death() is False
 
 
 class TestHerbivores:
