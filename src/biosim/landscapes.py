@@ -52,10 +52,10 @@ class Landscapes:
         :return: List with herbivores in one cell.
         """
         for pop_dict in ini_population:
-            if pop_dict["species"] == "Herbivore":
-                self.list_herbivores.append(Herbivores(pop_dict["age"], pop_dict["weight"]))
-            elif pop_dict["species"] == "Carnivore":
-                self.list_carnivores.append(Carnivores(pop_dict["age"], pop_dict["weight"]))
+            if pop_dict['species'] == 'Herbivore':
+                self.list_herbivores.append(Herbivores(pop_dict['age'], pop_dict['weight']))
+            elif pop_dict['species'] == 'Carnivore':
+                self.list_carnivores.append(Carnivores(pop_dict['age'], pop_dict['weight']))
             else:
                 raise TypeError('The only accepted species are Herbivore and Carnivore.')
 
@@ -65,9 +65,9 @@ class Landscapes:
 
         :param animal: Herbivore or carnivore class object.
         """
-        if animal.species == "Herbivores":
+        if animal.species == 'Herbivores':
             self.list_herbivores.append(animal)
-        elif animal.species == "Carnivores":
+        elif animal.species == 'Carnivores':
             self.list_carnivores.append(animal)
 
     def eating_process(self):
@@ -196,7 +196,7 @@ class Lowland(Landscapes):
     """
     Subclass Lowland with superclass Landscapes.
     """
-    params_fodder = {"f_max": 800}
+    params_fodder = {'f_max': 800}
     available = True
 
     def __init__(self):
@@ -209,14 +209,14 @@ class Lowland(Landscapes):
         """
         Method for making fodder available.
         """
-        self.amount_fodder = self.params_fodder["f_max"]
+        self.amount_fodder = self.params_fodder['f_max']
 
 
 class Highland(Landscapes):
     """
     Subclass Highland with superclass Landscapes.
     """
-    params_fodder = {"f_max": 300}
+    params_fodder = {'f_max': 300}
     available = True
 
     def __init__(self):
@@ -229,14 +229,14 @@ class Highland(Landscapes):
         """
         Method for making fodder available.
         """
-        self.amount_fodder = self.params_fodder["f_max"]
+        self.amount_fodder = self.params_fodder['f_max']
 
 
 class Desert(Landscapes):
     """
     Subclass Desert with superclass Landscapes.
     """
-    params_fodder = {"f_max": 0}
+    params_fodder = {'f_max': 0}
     available = True
 
     def __init__(self):
@@ -249,14 +249,14 @@ class Desert(Landscapes):
         """
         Method for making fodder available.
         """
-        self.amount_fodder = self.params_fodder["f_max"]
+        self.amount_fodder = self.params_fodder['f_max']
 
 
 class Water(Landscapes):
     """
     Subclass Water with superclass Landscapes.
     """
-    params_fodder = {"f_max": 0}
+    params_fodder = {'f_max': 0}
     available = False
 
     def __init__(self):
@@ -269,4 +269,4 @@ class Water(Landscapes):
         """
         Method for making fodder available.
         """
-        self.amount_fodder = self.params_fodder["f_max"]
+        self.amount_fodder = self.params_fodder['f_max']
