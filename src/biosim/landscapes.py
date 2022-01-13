@@ -65,9 +65,9 @@ class Landscapes:
 
         :param animal: Herbivore or carnivore class object.
         """
-        if type(animal) == Herbivores():
+        if animal.species == "Herbivores":
             self.list_herbivores.append(animal)
-        elif type(animal) == Carnivores():
+        elif animal.species == "Carnivores":
             self.list_carnivores.append(animal)
 
     def eating_process(self):

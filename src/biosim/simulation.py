@@ -125,7 +125,7 @@ class BioSim:
 
             # Add visualization if tests later
 
-        self.current_year += 1
+            self.current_year += 1
 
     def add_population(self, population):
         """
