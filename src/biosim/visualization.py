@@ -74,6 +74,12 @@ class Graphics:
         self._mean_ax = None
         self._mean_line_herb = None
         self._mean_line_carn = None
+        self._year_ax = None
+        self._year_text = None
+        self._herb_ax = None
+        self._herb_axis = None
+        self._carn_ax = None
+        self._carn_axis = None
 
     def update(self, sys_map, amount_animals_species, step):
         """
@@ -132,7 +138,7 @@ class Graphics:
         else:
             raise ValueError('Unknown movie format: ' + movie_fmt)
 
-    def _setup_graphics(self, y_lim, final_year, img_step):
+    def _setup_graphics(self, y_lim, final_year, img_step, current_year):
         """
         Prepare graphics.
 
@@ -149,24 +155,47 @@ class Graphics:
         # Create new figure window
         if self._fig is None:
             self._fig = plt.figure()
+            self._fig.tight_layout(pad=0.5, w_pad=0.5, h_pad=0.5)
             plt.axis('off')
 
         # Subplot for island map
         if self._map_ax is None:
-            self._map_ax = self._fig.add_subplot(1, 2, 1)
+            self._map_ax = self._fig.add_subplot(3, 3, 1)
             self._img_axis = None
             self._map_ax.title.set_text('Island')
 
+        # Subplot for current year
+        if self._year_ax is None:
+            self._year_ax = self._fig.add_axes([0.4, 0.8, 0.2, 0.2])
+            self._year_text = self._year_ax.text(0.5, 0.5,
+                                                 f'Year: {current_year}',
+                                                 horizontalalignment='center',
+                                                 verticalalignment='center',
+                                                 transform=self._year_ax.transAxes)
+            self._year_ax.axis('off')
+
         # Subplot for amount of animals per species
         if self._mean_ax is None:
-            self._mean_ax = self._fig.add_subplot(1, 2, 2)
+            self._mean_ax = self._fig.add_subplot(3, 3, 3)
             self._mean_ax.set_ylim(0, y_lim)
-            self._mean_ax.title.set_text('Amount of animals per species')
+            self._mean_ax.title.set_text('Animal count')
             self._mean_ax.set_box_aspect(1)
 
         # Needs updating on subsequent calls to simulate()
         # Add 1 so we can show values for time zero and time final_step
         self._mean_ax.set_xlim(0, final_year + 1)
+
+        # Subplot for herbivore heatmap
+        if self._herb_ax is None:
+            self._herb_ax = self._fig.add_subplot(3, 3, 4)
+            self._herb_axis = None
+            self._herb_ax.title.set_text('Herbivore distribution')
+
+        # Subplot for carnivore heatmap
+        if self._carn_ax is None:
+            self._carn_ax = self._fig.add_subplot(3, 3, 6)
+            self._carn_axis = None
+            self._carn_ax.title.set_text('Carnivore distribution')
 
         # Graph line for herbivores
         if self._mean_line_herb is None:
@@ -193,7 +222,6 @@ class Graphics:
                 y_new = np.full(x_new.shape, np.nan)
                 self._mean_line_carn.set_data(np.hstack((x_data, x_new)),
                                               np.hstack((y_data, y_new)))
-
 
     def _update_system_map(self, sys_map):
         """

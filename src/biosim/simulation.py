@@ -133,7 +133,7 @@ class BioSim:
             raise ValueError('img_years must be multiple of vis_years')
 
         self._final_year = self._current_year + num_years
-        self._graphics._setup_graphics(self.ymax_animals, self._final_year, self.img_years)
+        self._graphics._setup_graphics(self.ymax_animals, self._final_year, self.img_years, self._current_year)
         self._graphics._update_system_map(self.island_map)
 
         while self._current_year < self._final_year:
