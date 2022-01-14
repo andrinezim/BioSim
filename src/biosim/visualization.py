@@ -6,7 +6,7 @@ __email__ = 'andrine.zimmermann@nmbu.no, karin.mollatt@nmbu.no'
 Module for visualization graphics of Rossumøya.
 
 
-:mod:`randvis.graphics` provides graphics support for RandVis.
+:mod:`biosim.visualization` provides graphics support for BioSim.
 
 .. note::
    * This module requires the program ``ffmpeg`` or ``convert``
@@ -18,6 +18,7 @@ Module for visualization graphics of Rossumøya.
      directory and file-name start you want to use for the graphics output
      files.
 
+This file is based on and very much inspired by Plesser, H.E.
 """
 
 import matplotlib.pyplot as plt
@@ -40,7 +41,9 @@ _DEFAULT_MOVIE_FORMAT = 'mp4'   # alternatives: mp4, gif
 
 
 class Graphics:
-    """Provides graphics support for RandVis."""
+    """
+    Provides graphics support for BioSim
+    """
 
     def __init__(self, img_dir=None, img_name=None, img_fmt=None):
         """
@@ -51,7 +54,6 @@ class Graphics:
         :param img_fmt: image file format suffix
         :type img_fmt: str
         """
-
         if img_name is None:
             img_name = _DEFAULT_GRAPHICS_NAME
 
@@ -70,7 +72,7 @@ class Graphics:
         self._map_ax = None
         self._img_axis = None
         self._mean_ax = None
-        self._mean_line = None
+        self._mean_line_herb = None
 
     def update(self, step, sys_map, sys_mean):
         """
@@ -129,53 +131,83 @@ class Graphics:
         else:
             raise ValueError('Unknown movie format: ' + movie_fmt)
 
-    def _setup_graphics(self, final_step, img_step):
+    def _setup_graphics(self, y_lim, final_year, img_step):
         """
         Prepare graphics.
 
         Call this before calling :meth:`update()` for the first time after
         the final time step has changed.
 
-        :param final_step: last time step to be visualised (upper limit of x-axis)
+        :param y_lim: upper limit of y-axis
+        :param final_year: last time step to be visualised (upper limit of x-axis)
         :param img_step: interval between saving image to file
         """
 
         self._img_step = img_step
 
-        # create new figure window
+        # Create new figure window
         if self._fig is None:
             self._fig = plt.figure()
+            plt.axis('off')
 
-        # Add left subplot for images created with imshow().
-        # We cannot create the actual ImageAxis object before we know
-        # the size of the image, so we delay its creation.
+        # Subplot for island map
         if self._map_ax is None:
             self._map_ax = self._fig.add_subplot(1, 2, 1)
             self._img_axis = None
+            self._map_ax.title.set_text('Island')
 
-        # Add right subplot for line graph of mean.
+        # Subplot for amount of animals per species
         if self._mean_ax is None:
             self._mean_ax = self._fig.add_subplot(1, 2, 2)
-            self._mean_ax.set_ylim(0, 0.05)
+            self._mean_ax.set_ylim(0, y_lim)
+
+            self._mean_ax.title.set_text('Amount of animals per species')
 
         # needs updating on subsequent calls to simulate()
         # add 1 so we can show values for time zero and time final_step
-        self._mean_ax.set_xlim(0, final_step+1)
+        self._mean_ax.set_xlim(0, final_year + 1)
 
-        if self._mean_line is None:
-            mean_plot = self._mean_ax.plot(np.arange(0, final_step+1),
-                                           np.full(final_step+1, np.nan))
-            self._mean_line = mean_plot[0]
+        # Graph line for herbivores
+        if self._mean_line_herb is None:
+            mean_plot_herb = self._mean_ax.plot(np.arange(0, final_year + 1),
+                                           np.full(final_year + 1, np.nan), label='Herbivore')
+            self._mean_line_herb = mean_plot_herb[0]
         else:
-            x_data, y_data = self._mean_line.get_data()
-            x_new = np.arange(x_data[-1] + 1, final_step+1)
+            x_data, y_data = self._mean_line_herb.get_data()
+            x_new = np.arange(x_data[-1] + 1, final_year + 1)
             if len(x_new) > 0:
                 y_new = np.full(x_new.shape, np.nan)
-                self._mean_line.set_data(np.hstack((x_data, x_new)),
-                                         np.hstack((y_data, y_new)))
+                self._mean_line_herb.set_data(np.hstack((x_data, x_new)),
+                                              np.hstack((y_data, y_new)))
+
+        # Graph line for herbivores
+        if self._mean_line_carn is None:
+            mean_plot_carn = self._mean_ax.plot(np.arange(0, final_year + 1),
+                                                np.full(final_year + 1, np.nan), label='Carnivore')
+            self._mean_line_carn = mean_plot_carn[0]
+        else:
+            x_data, y_data = self._mean_line_carn.get_data()
+            x_new = np.arange(x_data[-1] + 1, final_year + 1)
+            if len(x_new) > 0:
+                y_new = np.full(x_new.shape, np.nan)
+                self._mean_line_carn.set_data(np.hstack((x_data, x_new)),
+                                              np.hstack((y_data, y_new)))
+
+
 
     def _update_system_map(self, sys_map):
-        """Update the 2D-view of the system."""
+        """
+        Method for updating the island map.
+        """
+
+        #                   R    G    B
+        rgb_value = {'W': (0.0, 0.0, 1.0),  # blue
+                     'L': (0.0, 0.6, 0.0),  # dark green
+                     'H': (0.5, 1.0, 0.5),  # light green
+                     'D': (1.0, 1.0, 0.5)}  # light yellow
+
+        map_rgb = [[rgb_value[column] for column in row]
+                   for row in sys_map.splitlines()]
 
         if self._img_axis is not None:
             self._img_axis.set_data(sys_map)
@@ -186,10 +218,22 @@ class Graphics:
             plt.colorbar(self._img_axis, ax=self._map_ax,
                          orientation='horizontal')
 
-    def _update_mean_graph(self, step, mean):
-        y_data = self._mean_line.get_ydata()
-        y_data[step] = mean
-        self._mean_line.set_ydata(y_data)
+    def _update_mean_graph(self, amount_herbs, amount_carns, year):
+        """
+        Method for updating the graphs for amount of animals per species.
+
+        :param amount_herbs: Amount of herbivores.
+        :param amount_carns: Amount of carnivores.
+        :param year: Current year.
+        """
+        y_data_herb = self._mean_line_herb.get_ydata()
+        y_data_herb[year] = amount_herbs
+        self._mean_line_herb.set_ydata(y_data_herb)
+
+        y_data_carn = self._mean_line_carn.get_ydata()
+        y_data_carn[year] = amount_carns
+        self._mean_line_carn.set_ydata(y_data_carn)
+
 
     def _save_graphics(self, step):
         """Saves graphics to file if file name given."""
