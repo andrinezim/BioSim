@@ -322,7 +322,6 @@ class TestHerbivores:
         gains the correct amount of weight.
 
         F is the amount of fodder the herbivore wants to eat.
-        :return:
         """
         ini_weight = self.herb.weight
         self.herb.herbs_eating(5)
@@ -332,9 +331,30 @@ class TestHerbivores:
 
 class TestCarnivores:
 
+    @pytest.fixture(autouse=True)
+    def standard_carn(self):
+        """
+        Fixture setting standard carnivore.
+
+        :return: Standard carnivore class.
+        """
+        self.carn = Carnivores()
+
     # Tests for carns_eating_herbs method
-    def test_random_lower_prob_kill(self):
-        pass
+    def test_random_lower_prob_kill(self, mocker):
+        """
+        Testing that if the drawn number is lower than the killing probability, the weight
+        of the animal increases with the correct amount.
+
+        Using mocker to trick the random.random function to return the value of probability
+        to migrate.
+        """
+        mocker.patch('random.random', return_value=0)
+        prob_kill = 1
+        ini_weight = self.carn.weight
+        self.carn.carns_eating_herbs([Herbivores(age=1, weight=5)])
+        amount_eaten = 10
+        assert self.carn.weight == ini_weight + self.carn.default_params['beta']*amount_eaten
 
     def test_amount_eaten(self):
         pass
