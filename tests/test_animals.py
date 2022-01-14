@@ -349,24 +349,12 @@ class TestCarnivores:
         Using mocker to trick the random.random function to return the value of probability
         to migrate.
         """
+
         mocker.patch('random.random', return_value=0)
-        prob_kill = 1
         ini_weight = self.carn.weight
-        self.carn.carns_eating_herbs([Herbivores(age=1, weight=5)])
-        amount_eaten = 10
+        herblist =[Herbivores(age=1, weight=5)]
+        self.carn.carns_eating_herbs(herblist)
+        amount_eaten = herblist[0].weight
         assert self.carn.weight == ini_weight + self.carn.default_params['beta']*amount_eaten
-
-    def test_amount_eaten(self):
-        pass
-
-    def test_weight_gain(self):
-        pass
-
-    def test_weight_eaten_herbs_update(self):
-        pass
-
-    def test_weight_eaten_herbs_higher_equal_F(self):
-        pass
-
 
 pytest.main(['test_animals.py'])
