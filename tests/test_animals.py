@@ -187,7 +187,6 @@ class TestAnimals:
         self.herb.fitness()
         assert self.herb.phi != current_phi
 
-
     # Tests for procreation method
     def test_weight_lower_than_demand(self):
         """
@@ -199,14 +198,6 @@ class TestAnimals:
                  (self.herb.default_params['w_birth']+self.herb.default_params['sigma_birth'])
         self.herb.weight = demand - 10
         assert self.herb.procreation(10) is None
-
-    def test_random_lower_than_birth_prob(self):
-        """
-        Testing if a newborn is made when the random drawn number is below birth_prob.
-
-        Using mocker to trick the function random.random to return 1.
-        """
-        pass
 
     def test_random_higher_than_birth_prob(self, mocker):
         """
@@ -230,7 +221,6 @@ class TestAnimals:
         self.herb.weight = 50
         ini_weight = self.herb.weight
         baby = self.herb.procreation(10)
-
         assert self.herb.weight == ini_weight - (self.herb.default_params["xi"] * baby.weight)
 
     def test_weight_lower_than_newborn(self):
@@ -241,7 +231,6 @@ class TestAnimals:
         newborn = Herbivores(age=0)
         self.herb.weight = (self.herb.default_params["xi"] * newborn.weight) - 1
         assert self.herb.procreation(10) is None
-
 
     # Tests for death method
     def test_death_weight_zero(self):
@@ -256,9 +245,9 @@ class TestAnimals:
         Testing that if the weight is higher than zero AND the drawn number is LOWER
         than the death probability, the death() method returns False.
 
-        Using mocker to trick the random.random function to return the value 1.
+        Using mocker to trick the random.random function to return the value 0.
         """
-        mocker.patch("random.random", return_value=0)
+        mocker.patch('random.random', return_value=0)
         self.herb.weight = 1
         assert self.herb.death() is True
 
@@ -269,9 +258,44 @@ class TestAnimals:
 
         Using mocker to trick the random.random function to return the value 1.
         """
-        mocker.patch("random.random", return_value=1)
+        mocker.patch('random.random', return_value=1)
         self.herb.weight = 20
         assert self.herb.death() is False
+
+    def test_lower_prob_migrate(self, mocker):
+        """
+        Testing that if the drawn number is lower than the probability to migrate, that
+        the method will return True.
+
+        Using mocker to trick the random.random function to return the value 0.
+        """
+        mocker.patch('random.random', return_value=0)
+        self.herb.phi = 1
+        assert self.herb.probability_migrate() is True
+
+    def test_higher_prob_migrate(self, mocker):
+        """
+        Testing that if the drawn number is higher than the probability to migrate, that
+        the method will return False.
+
+        Using mocker to trick the random.random function to return the value 1.
+        """
+        mocker.patch('random.random', return_value=1)
+        self.herb.phi = 0.1
+        assert self.herb.probability_migrate() is False
+
+    def test_equal_prob_migrate(self, mocker):
+        """
+        Testing that if the drawn number is equal to the probability to migrate, that
+        the method will return False.
+
+        Using mocker to trick the random.random function to return the value of probability
+        to migrate.
+        """
+        self.herb.phi = 1
+        prob_migrate = self.herb.default_params['mu'] * self.herb.phi
+        mocker.patch('random.random', return_value=prob_migrate)
+        assert self.herb.probability_migrate() is False
 
 
 class TestHerbivores:
@@ -287,12 +311,25 @@ class TestHerbivores:
 
     # Tests for herbs_eating method
     def test_F_lower_than_amount_fodder(self):
+        """
+        Testing that if F is lower than the amount of fodder available, the herbivore
+        gains the correct amount of weight.
+
+        F is the amount of fodder the herbivore wants to eat.
+        """
         ini_weight = self.herb.weight
         self.herb.herbs_eating(20)
         amount_eaten = self.herb.default_params["F"]
         assert self.herb.weight == ini_weight + (self.herb.default_params["beta"] * amount_eaten)
 
     def test_F_higher_equal_than_amount_fodder(self):
+        """
+        Testing that if F is higher or equal to the amount of fodder available, the herbivore
+        gains the correct amount of weight.
+
+        F is the amount of fodder the herbivore wants to eat.
+        :return:
+        """
         ini_weight = self.herb.weight
         self.herb.herbs_eating(5)
         amount_eaten = 5
@@ -302,16 +339,8 @@ class TestHerbivores:
 class TestCarnivores:
 
     # Tests for carns_eating_herbs method
-    def test_fitness_carn_lower_equal_than_fitness_herb(self):
-        pass
 
-    def test_difference_between_0_deltaphimax(self):
-        pass
-
-    def test_difference_higher_than_deltaphimax(self):
-        pass
-
-    def test_random_lower_equal_prob_kill(self):
+    def test_random_lower_prob_kill(self):
         pass
 
     def test_amount_eaten(self):
