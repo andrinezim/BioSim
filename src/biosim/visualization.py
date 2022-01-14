@@ -73,6 +73,7 @@ class Graphics:
         self._img_axis = None
         self._mean_ax = None
         self._mean_line_herb = None
+        self._mean_line_carn = None
 
     def update(self, step, sys_map, sys_mean):
         """
@@ -163,8 +164,8 @@ class Graphics:
 
             self._mean_ax.title.set_text('Amount of animals per species')
 
-        # needs updating on subsequent calls to simulate()
-        # add 1 so we can show values for time zero and time final_step
+        # Needs updating on subsequent calls to simulate()
+        # Add 1 so we can show values for time zero and time final_step
         self._mean_ax.set_xlim(0, final_year + 1)
 
         # Graph line for herbivores
@@ -210,9 +211,9 @@ class Graphics:
                    for row in sys_map.splitlines()]
 
         if self._img_axis is not None:
-            self._img_axis.set_data(sys_map)
+            self._img_axis.set_data(map_rgb)
         else:
-            self._img_axis = self._map_ax.imshow(sys_map,
+            self._img_axis = self._map_ax.imshow(map_rgb,
                                                  interpolation='nearest',
                                                  vmin=-0.25, vmax=0.25)
             plt.colorbar(self._img_axis, ax=self._map_ax,

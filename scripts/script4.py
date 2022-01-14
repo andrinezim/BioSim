@@ -1,35 +1,55 @@
 """
 Example for creating axes and updating text in an axes.
 """
-
+from biosim.simulation import BioSim
 import matplotlib.pyplot as plt
+import textwrap
 
-fig = plt.figure()
+geogr = """\
+              WWWWWWWWWWWWWWWWWWWWW
+              WHHHHHLLLLWWLLLLLLLWW
+              WHHHHHLLLLWWLLLLLLLWW
+              WHHHHHLLLLWWLLLLLLLWW
+              WWHHLLLLLLLWWLLLLLLLW
+              WWHHLLLLLLLWWLLLLLLLW
+              WWWWWWWWHWWWWLLLLLLLW
+              WHHHHHLLLLWWLLLLLLLWW
+              WHHHHHHHHHWWLLLLLLWWW
+              WHHHHHDDDDDLLLLLLLWWW
+              WHHHHHDDDDDLLLLLLLWWW
+              WHHHHHDDDDDLLLLLLLWWW
+              WHHHHHDDDDDWWLLLLLWWW
+              WHHHHDDDDDDLLLLWWWWWW
+              WWHHHHDDDDDDLWWWWWWWW
+              WWHHHHDDDDDLLLWWWWWWW
+              WHHHHHDDDDDLLLLLLLWWW
+              WHHHHDDDDDDLLLLWWWWWW
+              WWHHHHDDDDDLLLWWWWWWW
+              WWWHHHHLLLLLLLWWWWWWW
+              WWWHHHHHHWWWWWWWWWWWW
+              WWWWWWWWWWWWWWWWWWWWW"""
 
-# normal subplots
-ax1 = fig.add_subplot(2, 3, 1)
-ax2 = fig.add_subplot(2, 3, 3)
-ax3 = fig.add_subplot(2, 3, 4)
-ax4 = fig.add_subplot(2, 3, 5)
-ax5 = fig.add_subplot(2, 3, 6)
+geogr = textwrap.dedent(geogr)
 
-# axes for text
-axt = fig.add_axes([0.4, 0.8, 0.2, 0.2])  # llx, lly, w, h
-axt.axis('off')  # turn off coordinate system
+ini_herbs = [{'loc': (2, 7),
+              'pop': [{'species': 'Herbivore',
+                       'age': 5,
+                       'weight': 20}
+                      for _ in range(200)]}]
+ini_carns = [{'loc': (2, 7),
+              'pop': [{'species': 'Carnivore',
+                       'age': 5,
+                       'weight': 20}
+                      for _ in range(50)]}]
 
-template = 'Count: {:5d}'
-txt = axt.text(0.5, 0.5, template.format(0),
-               horizontalalignment='center',
-               verticalalignment='center',
-               transform=axt.transAxes)  # relative coordinates
+sim = BioSim(geogr, ini_herbs + ini_carns, seed=1,
+             hist_specs={'fitness': {'max': 1.0, 'delta': 0.05},
+                         'age': {'max': 60.0, 'delta': 2},
+                         'weight': {'max': 60, 'delta': 2}},
+             cmax_animals={'Herbivore': 200, 'Carnivore': 50},
+             img_dir='results',
+             img_base='sample')
+sim.simulate(40)
 
-plt.pause(0.01)  # pause required to make figure visible
-
-input('Press ENTER to begin counting')
-
-for k in range(30):
-    txt.set_text(template.format(k))
-    plt.pause(0.1)  # pause required to make update visible
-
-plt.show()
+input('Press ENTER')
 

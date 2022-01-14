@@ -73,6 +73,26 @@ class Island:
             pop = dict_loc_pop['pop']
             self.map[loc].animals_population(pop)
 
+    def animals_per_species(self):
+        """
+        Method for creating a dictionary containing the amount of animals per species.
+
+        :return: Dictionary with the amount of animals per species.
+        """
+        amount_herbs = 0
+        amount_carns = 0
+
+        for cell in self.map:
+            if self.map[cell].available:
+                herb_list = self.map[cell].list_herbivores
+                carn_list = self.map[cell].list_carnivores
+                amount_herbs += len(herb_list)
+                amount_carns += len(carn_list)
+
+        amount_animals_species = {'Herbivores': amount_herbs, 'Carnivores': amount_carns}
+        total_amount_animals = amount_herbs + amount_carns
+        return amount_animals_species, total_amount_animals
+
     @staticmethod
     def find_adjacent_cell_migrate(cell):
         """

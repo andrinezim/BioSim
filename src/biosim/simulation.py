@@ -10,14 +10,15 @@ Template for BioSim class.
 # https://opensource.org/licenses/BSD-3-Clause
 # (C) Copyright 2021 Hans Ekkehard Plesser / NMBU
 
-from .landscapes import Lowland, Highland, Desert, Water
-from .animals import Herbivores, Carnivores
-from .visualization import Graphics
-from .island import Island
+from biosim.landscapes import Lowland, Highland, Desert, Water
+from biosim.animals import Herbivores, Carnivores
+from biosim.visualization import Graphics
+from biosim.island import Island
 import random
 import os
 
 _DEFAULT_GRAPHICS_NAME = 'bs'
+
 
 class BioSim:
     def __init__(self,
@@ -126,7 +127,8 @@ class BioSim:
             raise ValueError('img_years must be multiple of vis_years')
 
         self._final_year = self._current_year + num_years
-        self._graphics._setup_graphics(self._final_year, self.img_years)
+        self._graphics._setup_graphics(self._final_year, self._final_year, self.img_years)
+        self._graphics._update_system_map(self.island_map)
 
         while self._current_year < self._final_year:
             self.island.annual_cycle_simulation()
@@ -135,7 +137,7 @@ class BioSim:
             if self._current_year % self.vis_years == 0:
                 self._graphics.update(self._current_year,
                                       self.island_map,
-                                      self._system.mean_value())
+                                      self.img_years)
 
     def add_population(self, population):
         """
@@ -147,21 +149,31 @@ class BioSim:
 
     @property
     def year(self):
-        """Last year simulated."""
+        """
+        Last year simulated.
+        """
         return self._current_year
 
     @property
     def num_animals(self):
-        """Total number of animals on island."""
-        pass
+        """
+        Total number of animals on island.
+        """
+        _, total_amount_animals = self.island.animals_per_species()
+        return total_amount_animals
 
     @property
     def num_animals_per_species(self):
-        """Number of animals per species in island, as dictionary."""
-        pass
+        """
+        Number of animals per species in island, as dictionary.
+        """
+        amount_animals_species, _ = self.island.animals_per_species()
+        return amount_animals_species
 
     def make_movie(self):
-        """Create MPEG4 movie from visualization images saved."""
+        """
+        Create MPEG4 movie from visualization images saved.
+        """
         pass
 
     def save_graphics(self):
