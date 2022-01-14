@@ -14,9 +14,6 @@ from math import exp
 class TestAnimals:
 
     # Tests for set_param method
-    def test_set_params(self, request):
-        pass
-
     @pytest.fixture(autouse=True)
     def standard_herb(self):
         """
@@ -83,7 +80,6 @@ class TestAnimals:
         with pytest.raises(KeyError):
             self.herb.set_params({"alpha": 1})
 
-
     # Tests for __init__ method
     def test_age_negative(self):
         """
@@ -129,11 +125,10 @@ class TestAnimals:
         self.herb.weight = 5
         assert self.herb.weight == 5
 
-
     # Tests for q_func and fitness methods
-    @pytest.mark.parametrize( "x, x_half, phi_aw, pos_neg, expected",
-                              [[5, 5, 0.5, 1, 0.5],
-                               [6, 4, 1, -1, (1/(1+(1/exp(2))))]])
+    @pytest.mark.parametrize("x, x_half, phi_aw, pos_neg, expected",
+                             [[5, 5, 0.5, 1, 0.5],
+                              [6, 4, 1, -1, (1/(1+(1/exp(2))))]])
     def test_q_func(self, x, x_half, phi_aw, pos_neg, expected):
         """
         Testing if the q function calculates the correct value.
@@ -159,7 +154,6 @@ class TestAnimals:
         """
         self.herb.weight = 3
         assert self.herb.weight == 3
-
 
     # Tests for aging method
     def test_aging(self):
@@ -194,7 +188,7 @@ class TestAnimals:
         is lower than our demand.
         Setting the weight to be low, to ensure that we are lower than the demand.
         """
-        demand = self.herb.default_params['zeta']*\
+        demand = self.herb.default_params['zeta'] * \
                  (self.herb.default_params['w_birth']+self.herb.default_params['sigma_birth'])
         self.herb.weight = demand - 10
         assert self.herb.procreation(10) is None
@@ -339,7 +333,6 @@ class TestHerbivores:
 class TestCarnivores:
 
     # Tests for carns_eating_herbs method
-
     def test_random_lower_prob_kill(self):
         pass
 
@@ -347,9 +340,6 @@ class TestCarnivores:
         pass
 
     def test_weight_gain(self):
-        pass
-
-    def test_append_herb(self):
         pass
 
     def test_weight_eaten_herbs_update(self):
