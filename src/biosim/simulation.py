@@ -89,6 +89,12 @@ class BioSim:
 
         self._graphics = Graphics(img_dir, img_base, img_fmt)
 
+        if ymax_animals is None:
+            self.ymax_animals = 10000
+
+        if cmax_animals is None:
+            self.cmax_animals = {'Herbivore': 50, 'Carnivore': 20}
+
     def set_animal_parameters(self, species, params):
         """
         Set parameters for animal species.
@@ -127,7 +133,7 @@ class BioSim:
             raise ValueError('img_years must be multiple of vis_years')
 
         self._final_year = self._current_year + num_years
-        self._graphics._setup_graphics(self._final_year, self._final_year, self.img_years)
+        self._graphics._setup_graphics(self.ymax_animals, self._final_year, self.img_years)
         self._graphics._update_system_map(self.island_map)
 
         while self._current_year < self._final_year:
@@ -135,9 +141,9 @@ class BioSim:
             self._current_year += 1
 
             if self._current_year % self.vis_years == 0:
-                self._graphics.update(self._current_year,
-                                      self.island_map,
-                                      self.img_years)
+                self._graphics.update(self.island_map,
+                                      self.num_animals_per_species,
+                                      self._current_year)
 
     def add_population(self, population):
         """
@@ -159,7 +165,7 @@ class BioSim:
         """
         Total number of animals on island.
         """
-        _, total_amount_animals = self.island.animals_per_species()
+        _ , total_amount_animals = self.island.animals_per_species()
         return total_amount_animals
 
     @property

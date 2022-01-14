@@ -75,7 +75,7 @@ class Graphics:
         self._mean_line_herb = None
         self._mean_line_carn = None
 
-    def update(self, step, sys_map, sys_mean):
+    def update(self, sys_map, amount_animals_species, step):
         """
         Updates graphics with current data and save to file if necessary.
 
@@ -85,11 +85,11 @@ class Graphics:
         """
 
         self._update_system_map(sys_map)
-        self._update_mean_graph(step, sys_mean)
+        self._update_mean_graph(amount_animals_species, step)
         self._fig.canvas.flush_events()  # ensure every thing is drawn
         plt.pause(0.001)  # pause required to pass control to GUI
 
-        self._save_graphics(step)
+        #self._save_graphics(step)
 
     def make_movie(self, movie_fmt=None):
         """
@@ -161,8 +161,8 @@ class Graphics:
         if self._mean_ax is None:
             self._mean_ax = self._fig.add_subplot(1, 2, 2)
             self._mean_ax.set_ylim(0, y_lim)
-
             self._mean_ax.title.set_text('Amount of animals per species')
+            self._mean_ax.set_box_aspect(1)
 
         # Needs updating on subsequent calls to simulate()
         # Add 1 so we can show values for time zero and time final_step
@@ -195,12 +195,10 @@ class Graphics:
                                               np.hstack((y_data, y_new)))
 
 
-
     def _update_system_map(self, sys_map):
         """
         Method for updating the island map.
         """
-
         #                   R    G    B
         rgb_value = {'W': (0.0, 0.0, 1.0),  # blue
                      'L': (0.0, 0.6, 0.0),  # dark green
@@ -214,27 +212,28 @@ class Graphics:
             self._img_axis.set_data(map_rgb)
         else:
             self._img_axis = self._map_ax.imshow(map_rgb,
-                                                 interpolation='nearest',
-                                                 vmin=-0.25, vmax=0.25)
-            plt.colorbar(self._img_axis, ax=self._map_ax,
-                         orientation='horizontal')
+                                                 interpolation='nearest')
 
-    def _update_mean_graph(self, amount_herbs, amount_carns, year):
+    def _update_mean_graph(self, amount_animals_species, year):
         """
         Method for updating the graphs for amount of animals per species.
 
-        :param amount_herbs: Amount of herbivores.
-        :param amount_carns: Amount of carnivores.
-        :param year: Current year.
+        :param amount_animals_species: Dictionary containing amount of animals per species.
+        :param year: Current year
         """
+        amount_herbs = amount_animals_species['Herbivores']
+        amount_carns = amount_animals_species['Carnivores']
+
         y_data_herb = self._mean_line_herb.get_ydata()
         y_data_herb[year] = amount_herbs
         self._mean_line_herb.set_ydata(y_data_herb)
 
+        """if self._mean_ax.get_ylim()[1] < amount_herbs:
+            self._mean_ax.autoscale(enable=True, axis='y')"""
+
         y_data_carn = self._mean_line_carn.get_ydata()
         y_data_carn[year] = amount_carns
         self._mean_line_carn.set_ydata(y_data_carn)
-
 
     def _save_graphics(self, step):
         """Saves graphics to file if file name given."""
