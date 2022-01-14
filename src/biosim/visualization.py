@@ -93,7 +93,7 @@ class Graphics:
         self._update_system_map(sys_map)
         self._update_mean_graph(amount_animals_species, step)
         self._fig.canvas.flush_events()  # ensure every thing is drawn
-        plt.pause(0.001)  # pause required to pass control to GUI
+        plt.pause(0.0001)  # pause required to pass control to GUI
 
         #self._save_graphics(step)
 
@@ -154,8 +154,7 @@ class Graphics:
 
         # Create new figure window
         if self._fig is None:
-            self._fig = plt.figure()
-            self._fig.tight_layout(pad=0.5, w_pad=0.5, h_pad=0.5)
+            self._fig = plt.figure(constrained_layout=True, figsize=(9, 6))
             plt.axis('off')
 
         # Subplot for island map
