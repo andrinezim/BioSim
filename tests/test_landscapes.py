@@ -24,7 +24,8 @@ class TestLandscapes:
         :param class_to_test: Lowland, Highland, Desert and Water subclasses
         """
         obj = class_to_test()
-        pass
+        with pytest.raises(ValueError):
+            obj.set_params({'f_max': -3})
 
     def test_param_update(self, class_to_test):
         """
@@ -33,7 +34,9 @@ class TestLandscapes:
         :param class_to_test: Lowland, Highland, Desert and Water subclasses
         """
         obj = class_to_test()
-        pass
+        new_params = {'f_max': 300}
+        current_params = obj.set_params(new_params)
+        assert current_params != new_params
 
     def test_invalid_param_name(self, class_to_test):
         """
@@ -42,7 +45,8 @@ class TestLandscapes:
         :param class_to_test: Lowland, Highland, Desert and Water subclasses.
         """
         obj = class_to_test()
-        pass
+        with pytest.raises(ValueError):
+            obj.set_params({'fodder': 10})
 
     # Test for animals_population
     def test_invalid_species_name(self, class_to_test):
@@ -52,6 +56,9 @@ class TestLandscapes:
         :param class_to_test: Lowland, Highland, Desert and Water subclasses.
         """
         obj = class_to_test()
+        with pytest.raises(ValueError):
+            obj.animals_population()
+        # sender inn en int i denne funksjonen...
         pass
 
     # Test for feeding_herbs
@@ -72,11 +79,13 @@ class TestLandscapes:
 
         :param class_to_test: Lowland, Highland, Desert and Water subclasses.
         """
-        obj = class_to_test()
+        """obj = class_to_test()
         obj.animals_population(self.pop_h)
         ini_list_herb = obj.list_herbivores
         obj.feeding_carn_with_herbs()
         assert len(obj.list_herbivores) < len(ini_list_herb)
+"""
+        pass
 
     # Test for animal_gives_birth
     # Nødvendig test????
@@ -124,8 +133,6 @@ class TestLowland:
     def test_fodder_regrows_update(self):
         """
         Testing that the correct parameter is given for fodder available.
-
-        :return:
         """
         pass
 
@@ -136,8 +143,6 @@ class TestHighland:
     def test_fodder_regrows_update(self):
         """
         Testing that the correct parameter is given for fodder available.
-
-        :return:
         """
         pass
 
@@ -148,8 +153,6 @@ class TestDesert:
     def test_fodder_regrows_update(self):
         """
         Testing that the correct parameter is given for fodder available.
-
-        :return:
         """
         pass
 
@@ -160,8 +163,6 @@ class TestWater:
     def test_fodder_regrows_update(self):
         """
         Testing that the correct parameter is given for fodder available.
-
-        :return:
         """
         pass
 
