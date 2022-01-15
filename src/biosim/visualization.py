@@ -80,6 +80,7 @@ class Graphics:
         self._herb_axis = None
         self._carn_ax = None
         self._carn_axis = None
+        self._gridspec = None
 
     def update(self, sys_map, amount_animals_species, step):
         """
@@ -155,27 +156,29 @@ class Graphics:
         # Create new figure window
         if self._fig is None:
             self._fig = plt.figure(constrained_layout=True, figsize=(9, 6))
+            self._gridspec = self._fig.add_gridspec(3,6)
             plt.axis('off')
 
         # Subplot for island map
         if self._map_ax is None:
-            self._map_ax = self._fig.add_subplot(3, 3, 1)
+            self._map_ax = self._fig.add_subplot(self._gridspec[0, :2])
             self._img_axis = None
             self._map_ax.title.set_text('Island')
 
         # Subplot for current year
         if self._year_ax is None:
-            self._year_ax = self._fig.add_axes([0.4, 0.8, 0.2, 0.2])
+            self._year_ax = self._fig.add_subplot(self._gridspec[0, 2:4])
             self._year_text = self._year_ax.text(0.5, 0.5,
                                                  f'Year: {current_year}',
                                                  horizontalalignment='center',
                                                  verticalalignment='center',
-                                                 transform=self._year_ax.transAxes)
+                                                 transform=self._year_ax.transAxes,
+                                                 fontsize = 16)
             self._year_ax.axis('off')
 
         # Subplot for amount of animals per species
         if self._mean_ax is None:
-            self._mean_ax = self._fig.add_subplot(3, 3, 3)
+            self._mean_ax = self._fig.add_subplot(self._gridspec[0, 4:6])
             self._mean_ax.set_ylim(0, y_lim)
             self._mean_ax.title.set_text('Animal count')
             self._mean_ax.set_box_aspect(1)
@@ -186,13 +189,13 @@ class Graphics:
 
         # Subplot for herbivore heatmap
         if self._herb_ax is None:
-            self._herb_ax = self._fig.add_subplot(3, 3, 4)
+            self._herb_ax = self._fig.add_subplot(self._gridspec[1, 1:3])
             self._herb_axis = None
             self._herb_ax.title.set_text('Herbivore distribution')
 
         # Subplot for carnivore heatmap
         if self._carn_ax is None:
-            self._carn_ax = self._fig.add_subplot(3, 3, 6)
+            self._carn_ax = self._fig.add_subplot(self._gridspec[1, 3:5])
             self._carn_axis = None
             self._carn_ax.title.set_text('Carnivore distribution')
 
