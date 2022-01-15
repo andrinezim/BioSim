@@ -55,10 +55,10 @@ class TestLandscapes:
 
         :param class_to_test: Lowland, Highland, Desert and Water subclasses.
         """
-        obj = class_to_test()
+        """ obj = class_to_test()
         with pytest.raises(ValueError):
             obj.animals_population()
-        # sender inn en int i denne funksjonen...
+        # sender inn en int i denne funksjonen..."""
         pass
 
     # Test for feeding_herbs
@@ -125,46 +125,83 @@ class TestLandscapes:
         :param class_to_test: Lowland, Highland, Desert and Water subclasses
         :return:
         """
+        pass
 
 
 class TestLowland:
 
+    @pytest.fixture
+    def standard_lowland(self):
+        """
+        Fixture setting standard lowland.
+
+        :return: Standard lowland class.
+        """
+        return Lowland()
+
     # Test for grow_fodder
-    def test_fodder_regrows_update(self):
+    def test_fodder_regrows_update(self, standard_lowland):
         """
         Testing that the correct parameter is given for fodder available.
         """
-        pass
+        standard_lowland.grow_fodder()
 
 
 class TestHighland:
 
+    @pytest.fixture
+    def standard_highland(self):
+        """
+        Fixture setting standard highland.
+
+        :return: Standard highland class.
+        """
+        return Highland()
+
     # Test for grow_fodder
-    def test_fodder_regrows_update(self):
+    def test_fodder_regrows_update(self, standard_highland):
         """
         Testing that the correct parameter is given for fodder available.
         """
-        pass
+        standard_highland.grow_fodder()
 
 
 class TestDesert:
 
+    @pytest.fixture
+    def standard_desert(self):
+        """
+        Fixture setting standard desert.
+
+        :return: Standard desert class.
+        """
+        return Desert()
+
     # Test for grow_fodder
-    def test_fodder_regrows_update(self):
+    def test_fodder_regrows_update(self, standard_desert):
         """
         Testing that the correct parameter is given for fodder available.
         """
-        pass
+        standard_desert.grow_fodder()
 
 
 class TestWater:
 
+    @pytest.fixture
+    def standard_water(self):
+        """
+        Fixture setting standard water.
+
+        :return: Standard water class.
+        """
+        return Water()
+
     # Test for grow_fodder
-    def test_fodder_regrows_update(self):
+    def test_fodder_regrows_update(self, standard_water):
         """
         Testing that the correct parameter is given for fodder available.
         """
-        pass
+        standard_water.grow_fodder()
 
 
 pytest.main(['test_landscapes.py'])
