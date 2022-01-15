@@ -72,26 +72,35 @@ class Graphics:
         self._map_ax = None
         self._img_axis = None
         self._mean_ax = None
+
         self._mean_line_herb = None
         self._mean_line_carn = None
+
         self._year_ax = None
         self._year_text = None
+
         self._herb_ax = None
         self._herb_axis = None
         self._carn_ax = None
         self._carn_axis = None
+
+        self._fitness_axis = None
+        self._age_axis = None
+        self._weight_axis = None
+
         self._gridspec = None
 
     def update(self, sys_map, amount_animals_species, step):
         """
         Updates graphics with current data and save to file if necessary.
 
-        :param step: current time step
         :param sys_map: current system status (2d array)
-        :param sys_mean: current mean value of system
+        :param amount_animals_species: amount of animals per species
+        :param step: current time step
         """
 
         self._update_system_map(sys_map)
+        # self._update_herb_heatmap(sys_map)
         self._update_mean_graph(amount_animals_species, step)
         self._fig.canvas.flush_events()  # ensure every thing is drawn
         plt.pause(0.0001)  # pause required to pass control to GUI
@@ -163,6 +172,8 @@ class Graphics:
         if self._map_ax is None:
             self._map_ax = self._fig.add_subplot(self._gridspec[0, :2])
             self._img_axis = None
+            # self._map_ax.set_xticklabels([])
+            # self._map_ax.set_yticklabels([])
             self._map_ax.title.set_text('Island')
 
         # Subplot for current year
@@ -173,19 +184,18 @@ class Graphics:
                                                  horizontalalignment='center',
                                                  verticalalignment='center',
                                                  transform=self._year_ax.transAxes,
-                                                 fontsize = 16)
+                                                 fontsize=16)
             self._year_ax.axis('off')
 
         # Subplot for amount of animals per species
         if self._mean_ax is None:
             self._mean_ax = self._fig.add_subplot(self._gridspec[0, 4:6])
+            self._mean_ax.set_xlim(0, final_year + 1)
             self._mean_ax.set_ylim(0, y_lim)
             self._mean_ax.title.set_text('Animal count')
             self._mean_ax.set_box_aspect(1)
-
-        # Needs updating on subsequent calls to simulate()
-        # Add 1 so we can show values for time zero and time final_step
-        self._mean_ax.set_xlim(0, final_year + 1)
+        elif self._mean_ax is not None:
+            self._mean_ax.set_xlim(0, final_year + 1)
 
         # Subplot for herbivore heatmap
         if self._herb_ax is None:
@@ -198,6 +208,21 @@ class Graphics:
             self._carn_ax = self._fig.add_subplot(self._gridspec[1, 3:5])
             self._carn_axis = None
             self._carn_ax.title.set_text('Carnivore distribution')
+
+        # Subplot for fitness histogram
+        if self._fitness_axis is None:
+            self._fitness_axis = self._fig.add_subplot(self._gridspec[2, :2])
+            self._fitness_axis.set_title('Fitness')
+
+        # Subplot for age histogram
+        if self._age_axis is None:
+            self._age_axis = self._fig.add_subplot(self._gridspec[2, 2:4])
+            self._age_axis.set_title('Age')
+
+        # Subplot for weight histogram
+        if self._weight_axis is None:
+            self._weight_axis = self._fig.add_subplot(self._gridspec[2, 4:6])
+            self._weight_axis.set_title('Weight')
 
         # Graph line for herbivores
         if self._mean_line_herb is None:
@@ -243,6 +268,27 @@ class Graphics:
         else:
             self._img_axis = self._map_ax.imshow(map_rgb,
                                                  interpolation='nearest')
+
+    def _update_herb_heatmap(self, sys_map):
+        """
+        Method for updating heatmap for herbivores.
+
+        :param sys_map: multiline string specifying island geography
+        """
+        if self._herb_axis is not None:
+            self._herb_axis.set_data(sys_map)
+        else:
+            self._herb_axis = self._herb_ax.imshow(sys_map, interpolation='nearest')
+            plt.colorbar(self._herb_axis, ax=self._herb_ax, orientation='vertical')
+
+    def _update_fitness(self):
+        pass
+
+    def _update_age(self):
+        pass
+
+    def _update_weight(self):
+        pass
 
     def _update_mean_graph(self, amount_animals_species, year):
         """

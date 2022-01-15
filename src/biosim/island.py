@@ -44,13 +44,9 @@ class Island:
         map_dict = {}
         list_map_string = island_map.strip().split('\n')
 
-        loc_x = 1
-        for line in list_map_string:
-            loc_y = 1
-            for landscape_type in line:
-                map_dict[(loc_x, loc_y)] = self.map_params[landscape_type]()
-                loc_y += 1
-            loc_x += 1
+        for loc_x, lines in enumerate(list_map_string):
+            for loc_y, landscape_type in enumerate(lines):
+                map_dict[(1 + loc_x, 1 + loc_y)] = self.map_params[landscape_type]()
 
         return map_dict
 
@@ -160,6 +156,63 @@ class Island:
         """
         for cell in self.map:
             self.map[cell].annual_restart_migration()
+
+    def fitness_list(self):
+        """
+        Method for creating list with fitness for all animals.
+
+        :return: Lists containing fitness for herbivores and carnivores.
+        """
+        fitness_list_herb = []
+        fitness_list_carn = []
+
+        for cell in self.map.values():
+            for herb in cell.list_herbivores:
+                fitness_list_herb.append(herb.phi)
+
+        for cell in self.map.values():
+            for carn in cell.list_carnivores:
+                fitness_list_carn.append(carn.phi)
+
+        return fitness_list_herb, fitness_list_carn
+
+    def age_list(self):
+        """
+        Method for creating list with ages for all animals.
+
+        :return: Lists containing fitness for herbivores and carnivores.
+        """
+        age_list_herb = []
+        age_list_carn = []
+
+        for cell in self.map.values():
+            for herb in cell.list_herbivores:
+                age_list_herb.append(herb.phi)
+
+        for cell in self.map.values():
+            for carn in cell.list_carnivores:
+                age_list_carn.append(carn.phi)
+
+        return age_list_herb, age_list_carn
+
+    def weight_list(self):
+        """
+        Method for creating list with weights for all animals.
+
+        :return: Lists containing fitness for herbivores and carnivores.
+        """
+        weight_list_herb = []
+        weight_list_carn = []
+
+        for cell in self.map.values():
+            for herb in cell.list_herbivores:
+                weight_list_herb.append(herb.phi)
+
+        for cell in self.map.values():
+            for carn in cell.list_carnivores:
+                weight_list_carn.append(carn.phi)
+
+        return weight_list_herb, weight_list_carn
 
     def annual_cycle_simulation(self):
         """
