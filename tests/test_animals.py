@@ -357,4 +357,5 @@ class TestCarnivores:
         amount_eaten = herblist[0].weight
         assert self.carn.weight == ini_weight + self.carn.default_params['beta']*amount_eaten
 
+
 pytest.main(['test_animals.py'])
