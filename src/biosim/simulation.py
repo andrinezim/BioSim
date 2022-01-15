@@ -90,10 +90,12 @@ class BioSim:
         self._graphics = Graphics(img_dir, img_base, img_fmt)
 
         if ymax_animals is None:
-            self.ymax_animals = 10000
+            self.ymax_animals = 6000
 
         if cmax_animals is None:
             self.cmax_animals = {'Herbivore': 50, 'Carnivore': 20}
+
+        self.hist_specs = hist_specs
 
     def set_animal_parameters(self, species, params):
         """
@@ -144,6 +146,15 @@ class BioSim:
                 self._graphics.update(self.island_map,
                                       self.num_animals_per_species,
                                       self._current_year)
+                self._graphics._update_fitness_hist(self.island.fitness_list()[0],
+                                                    self.island.fitness_list()[1],
+                                                    self.hist_specs)
+                self._graphics._update_age_hist(self.island.age_list()[0],
+                                                    self.island.age_list()[1],
+                                                    self.hist_specs)
+                self._graphics._update_weight_hist(self.island.weight_list()[0],
+                                                    self.island.weight_list()[1],
+                                                    self.hist_specs)
 
     def add_population(self, population):
         """

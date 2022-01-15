@@ -170,7 +170,6 @@ class Island:
             for herb in cell.list_herbivores:
                 fitness_list_herb.append(herb.phi)
 
-        for cell in self.map.values():
             for carn in cell.list_carnivores:
                 fitness_list_carn.append(carn.phi)
 
@@ -189,7 +188,6 @@ class Island:
             for herb in cell.list_herbivores:
                 age_list_herb.append(herb.phi)
 
-        for cell in self.map.values():
             for carn in cell.list_carnivores:
                 age_list_carn.append(carn.phi)
 
@@ -208,7 +206,6 @@ class Island:
             for herb in cell.list_herbivores:
                 weight_list_herb.append(herb.phi)
 
-        for cell in self.map.values():
             for carn in cell.list_carnivores:
                 weight_list_carn.append(carn.phi)
 

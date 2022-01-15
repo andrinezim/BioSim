@@ -84,8 +84,11 @@ class Graphics:
         self._carn_ax = None
         self._carn_axis = None
 
+        self._fitness_ax = None
         self._fitness_axis = None
+        self._age_ax = None
         self._age_axis = None
+        self._weight_ax = None
         self._weight_axis = None
 
         self._gridspec = None
@@ -210,19 +213,19 @@ class Graphics:
             self._carn_ax.title.set_text('Carnivore distribution')
 
         # Subplot for fitness histogram
-        if self._fitness_axis is None:
-            self._fitness_axis = self._fig.add_subplot(self._gridspec[2, :2])
-            self._fitness_axis.set_title('Fitness')
+        if self._fitness_ax is None:
+            self._fitness_ax = self._fig.add_subplot(self._gridspec[2, :2])
+            self._fitness_ax.set_title('Fitness')
 
         # Subplot for age histogram
-        if self._age_axis is None:
-            self._age_axis = self._fig.add_subplot(self._gridspec[2, 2:4])
-            self._age_axis.set_title('Age')
+        if self._age_ax is None:
+            self._age_ax = self._fig.add_subplot(self._gridspec[2, 2:4])
+            self._age_ax.set_title('Age')
 
         # Subplot for weight histogram
-        if self._weight_axis is None:
-            self._weight_axis = self._fig.add_subplot(self._gridspec[2, 4:6])
-            self._weight_axis.set_title('Weight')
+        if self._weight_ax is None:
+            self._weight_ax = self._fig.add_subplot(self._gridspec[2, 4:6])
+            self._weight_ax.set_title('Weight')
 
         # Graph line for herbivores
         if self._mean_line_herb is None:
@@ -281,14 +284,71 @@ class Graphics:
             self._herb_axis = self._herb_ax.imshow(sys_map, interpolation='nearest')
             plt.colorbar(self._herb_axis, ax=self._herb_ax, orientation='vertical')
 
-    def _update_fitness(self):
-        pass
+    def _update_fitness_hist(self, herb_list=None, carn_list=None, hist_specs=None):
+        """
+        Method for updating the fitness histogram.
 
-    def _update_age(self):
-        pass
+        :param herb_list: List with fitness for herbivores
+        :param carn_list: List with fitness for carnivores
+        :param hist_specs: Specifications for histograms
+        """
+        if hist_specs is None:
+            self._fitness_ax.clear()
+            self._fitness_ax.hist(herb_list, histtype='step', color='b')
+            self._fitness_ax.hist(carn_list, histtype='step', color='r')
+            self._fitness_ax.title.set_text('Fitness')
+        else:
+            fit_bins = (int(hist_specs["fitness"]["max"] / hist_specs["fitness"]["delta"]))
+            self._fitness_ax.clear()
+            self._fitness_ax.hist(herb_list, bins=fit_bins, histtype='step', color='b',
+                                    range=(0, hist_specs["fitness"]["max"]))
+            self._fitness_ax.hist(carn_list, bins=fit_bins, histtype='step', color='r',
+                                    range=(0, hist_specs["fitness"]["max"]))
+            self._fitness_ax.title.set_text('Fitness')
 
-    def _update_weight(self):
-        pass
+    def _update_age_hist(self, herb_list=None, carn_list=None, hist_specs=None):
+        """
+        Method for updating the age histogram.
+
+        :param herb_list: List with age for herbivores
+        :param carn_list: List with age for carnivores
+        :param hist_specs: Specifications for histograms
+        """
+        if hist_specs is None:
+            self._age_ax.clear()
+            self._age_ax.hist(herb_list, histtype='step', color='b')
+            self._age_ax.hist(carn_list, histtype='step', color='r')
+            self._age_ax.title.set_text('Age')
+        else:
+            age_bins = (int(hist_specs["age"]["max"] / hist_specs["age"]["delta"]))
+            self._age_ax.clear()
+            self._age_ax.hist(herb_list, bins=age_bins, histtype='step', color='b',
+                              range=(0, hist_specs["age"]["max"]))
+            self._age_ax.hist(carn_list, bins=age_bins, histtype='step', color='r',
+                              range=(0, hist_specs["age"]["max"]))
+            self._age_ax.title.set_text('Age')
+
+    def _update_weight_hist(self, herb_list=None, carn_list=None, hist_specs=None):
+        """
+        Method for updating the weight histogram.
+
+        :param herb_list: List with weight for herbivores
+        :param carn_list: List with weight for carnivores
+        :param hist_specs: Specifications for histograms
+        """
+        if hist_specs is None:
+            self._weight_ax.clear()
+            self._weight_ax.hist(herb_list, histtype='step', color='b')
+            self._weight_ax.hist(carn_list, histtype='step', color='r')
+            self._weight_ax.title.set_text('Weight')
+        else:
+            weight_bins = (int(hist_specs["weight"]["max"] / hist_specs["weight"]["delta"]))
+            self._weight_ax.clear()
+            self._weight_ax.hist(herb_list, bins=weight_bins, histtype='step', color='b',
+                              range=(0, hist_specs["weight"]["max"]))
+            self._weight_ax.hist(carn_list, bins=weight_bins, histtype='step', color='r',
+                              range=(0, hist_specs["weight"]["max"]))
+            self._weight_ax.title.set_text('Weight')
 
     def _update_mean_graph(self, amount_animals_species, year):
         """
