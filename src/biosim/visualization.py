@@ -93,18 +93,19 @@ class Graphics:
 
         self._gridspec = None
 
-    def update(self, sys_map, amount_animals_species, step):
+    def update(self, sys_map, amount_animals_species, year):
         """
         Updates graphics with current data and save to file if necessary.
 
         :param sys_map: current system status (2d array)
         :param amount_animals_species: amount of animals per species
-        :param step: current time step
+        :param year: current year
         """
 
         self._update_system_map(sys_map)
         # self._update_herb_heatmap(sys_map)
-        self._update_mean_graph(amount_animals_species, step)
+        self._update_year(year)
+        self._update_mean_graph(amount_animals_species, year)
         self._fig.canvas.flush_events()  # ensure every thing is drawn
         plt.pause(0.0001)  # pause required to pass control to GUI
 
@@ -271,6 +272,14 @@ class Graphics:
         else:
             self._img_axis = self._map_ax.imshow(map_rgb,
                                                  interpolation='nearest')
+
+    def _update_year(self, current_year):
+        """
+        Method for updating current year.
+
+        :param current_year: The current year on the island.
+        """
+        self._year_text.set_text(f'Year: {current_year}')
 
     def _update_herb_heatmap(self, sys_map):
         """
