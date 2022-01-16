@@ -55,11 +55,13 @@ class TestLandscapes:
 
         :param class_to_test: Lowland, Highland, Desert and Water subclasses.
         """
-        """ obj = class_to_test()
-        with pytest.raises(ValueError):
-            obj.animals_population()
-        # sender inn en int i denne funksjonen..."""
-        pass
+        obj = class_to_test()
+        invalid_list = [{'species': 'Lion',
+                         'age': 5,
+                         'weight': 20}
+                        for _ in range(10)]
+        with pytest.raises(TypeError):
+            obj.animals_population(invalid_list)
 
     # Test for feeding_herbs
     def test_amount_fodder_available(self, class_to_test):
@@ -79,16 +81,21 @@ class TestLandscapes:
 
         :param class_to_test: Lowland, Highland, Desert and Water subclasses.
         """
-        """obj = class_to_test()
-        obj.animals_population(self.pop_h)
-        ini_list_herb = obj.list_herbivores
+        obj = class_to_test()
+        herb_list = [{'species': 'Herbivore',
+                           'age': 5,
+                           'weight': 20}
+                          for _ in range(10)]
+        carn_list = [{'species': 'Carnivore',
+                      'age': 5,
+                      'weight': 20}
+                     for _ in range(10)]
+        obj.animals_population(herb_list + carn_list)
+        # ini_list_herb = obj.list_herbivores
         obj.feeding_carn_with_herbs()
-        assert len(obj.list_herbivores) < len(ini_list_herb)
-"""
-        pass
+        assert len(obj.list_herbivores) < len(obj.list_carnivores)
 
     # Test for animal_gives_birth
-    # Nødvendig test????
     def test_animals_get_born(self, class_to_test):
         """
         Testing that the newborn are added to the population in the cell.
