@@ -26,12 +26,9 @@ class Island:
         :param ini_pop: List of dictionaries specifying initial population
         """
         self.ini_pop = ini_pop
+        self.map_string = island_map
         self.map = self.creating_map(island_map)
         self.adding_population(self.ini_pop)
-
-        # Defining values for the length of rows and columns to use in heatmap_population
-        self.row_length = 0
-        self.col_length = 0
 
     def creating_map(self, island_map):
         """
@@ -43,15 +40,28 @@ class Island:
 
         map_dict = {}
         list_map_string = island_map.strip().split('\n')
-        self.row_length = len(list_map_string[0])           # length of first line
-        self.col_length = len(list_map_string)              # amount of lines
-        print(self.row_length, self.col_length)
 
         for loc_x, lines in enumerate(list_map_string):
             for loc_y, landscape_type in enumerate(lines):
                 map_dict[(1 + loc_x, 1 + loc_y)] = self.map_params[landscape_type]()
 
         return map_dict
+
+    @property
+    def row_length(self):
+        """
+        Number of rows.
+        """
+        list_map_string = self.map_string.strip().split('\n')
+        return len(list_map_string[0])
+
+    @property
+    def col_length(self):
+        """
+        Number of columns.
+        """
+        list_map_string = self.map_string.strip().split('\n')
+        return len(list_map_string)
 
     def adding_population(self, incoming_pop=None):
         """
@@ -166,11 +176,10 @@ class Island:
 
         :return: 2D arrays with population in each cell for herbivores and carnivores.
         """
-        herb_array = [[len(self.map[(row, col)].list_herbivores) for col in range(1, self.col_length + 1)]
-                      for row in range(1, self.row_length + 1)]
-        carn_array = [[len(self.map[(row, col)].list_carnivores) for col in range(1, self.col_length + 1)]
-                      for row in range(1, self.row_length + 1)]
-        #print(herb_array)
+        herb_array = [[len(self.map[(row, col)].list_herbivores) for col in range(1, self.col_length)]
+                      for row in range(1, self.row_length+1)]
+        carn_array = [[len(self.map[(row, col)].list_carnivores) for col in range(1, self.col_length)]
+                      for row in range(1, self.row_length+1)]
         return herb_array, carn_array
 
     def fitness_list(self):
@@ -202,10 +211,10 @@ class Island:
 
         for cell in self.map.values():
             for herb in cell.list_herbivores:
-                age_list_herb.append(herb.phi)
+                age_list_herb.append(herb.age)
 
             for carn in cell.list_carnivores:
-                age_list_carn.append(carn.phi)
+                age_list_carn.append(carn.age)
 
         return age_list_herb, age_list_carn
 
@@ -220,10 +229,10 @@ class Island:
 
         for cell in self.map.values():
             for herb in cell.list_herbivores:
-                weight_list_herb.append(herb.phi)
+                weight_list_herb.append(herb.weight)
 
             for carn in cell.list_carnivores:
-                weight_list_carn.append(carn.phi)
+                weight_list_carn.append(carn.weight)
 
         return weight_list_herb, weight_list_carn
 

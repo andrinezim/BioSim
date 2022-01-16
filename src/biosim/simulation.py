@@ -93,7 +93,11 @@ class BioSim:
             self.ymax_animals = 6000
 
         if cmax_animals is None:
-            self.cmax_animals = {'Herbivore': 50, 'Carnivore': 20}
+            self.cmax_herb = 50
+            self.cmax_carn = 20
+        else:
+            self.cmax_herb = cmax_animals['Herbivore']
+            self.cmax_carn = cmax_animals['Carnivore']
 
         self.hist_specs = hist_specs
 
@@ -146,6 +150,8 @@ class BioSim:
                 self._graphics.update(self.island_map,
                                       self.island.heatmap_population()[0],
                                       self.island.heatmap_population()[1],
+                                      self.cmax_herb,
+                                      self.cmax_carn,
                                       self.num_animals_per_species,
                                       self._current_year)
                 self._graphics._update_fitness_hist(self.island.fitness_list()[0],

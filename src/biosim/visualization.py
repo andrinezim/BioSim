@@ -93,7 +93,7 @@ class Graphics:
 
         self._gridspec = None
 
-    def update(self, sys_map, herb_array, carn_array, amount_animals_species, year):
+    def update(self, sys_map, herb_array, carn_array, cmax_herb, cmax_carn, amount_animals_species, year):
         """
         Updates graphics with current data and save to file if necessary.
 
@@ -103,7 +103,8 @@ class Graphics:
         """
 
         self._update_system_map(sys_map)
-        #self._update_herb_heatmap(herb_array)
+        self._update_herb_heatmap(herb_array, cmax_herb)
+        self._update_carn_heatmap(carn_array, cmax_carn)
         self._update_year(year)
         self._update_mean_graph(amount_animals_species, year)
         self._fig.canvas.flush_events()  # ensure every thing is drawn
@@ -168,13 +169,13 @@ class Graphics:
 
         # Create new figure window
         if self._fig is None:
-            self._fig = plt.figure(constrained_layout=True, figsize=(9, 6))
-            self._gridspec = self._fig.add_gridspec(3,6)
+            self._fig = plt.figure(constrained_layout=True, figsize=(10, 8))
+            self._gridspec = self._fig.add_gridspec(9,18)
             plt.axis('off')
 
         # Subplot for island map
         if self._map_ax is None:
-            self._map_ax = self._fig.add_subplot(self._gridspec[0, :2])
+            self._map_ax = self._fig.add_subplot(self._gridspec[:3, :6])
             self._img_axis = None
             # self._map_ax.set_xticklabels([])
             # self._map_ax.set_yticklabels([])
@@ -182,7 +183,7 @@ class Graphics:
 
         # Subplot for current year
         if self._year_ax is None:
-            self._year_ax = self._fig.add_subplot(self._gridspec[0, 2:4])
+            self._year_ax = self._fig.add_subplot(self._gridspec[:3, 6:12])
             self._year_text = self._year_ax.text(0.5, 0.5,
                                                  f'Year: {current_year}',
                                                  horizontalalignment='center',
@@ -193,7 +194,7 @@ class Graphics:
 
         # Subplot for amount of animals per species
         if self._mean_ax is None:
-            self._mean_ax = self._fig.add_subplot(self._gridspec[0, 4:6])
+            self._mean_ax = self._fig.add_subplot(self._gridspec[:3, 12:18])
             self._mean_ax.set_xlim(0, final_year + 1)
             self._mean_ax.set_ylim(0, y_lim)
             self._mean_ax.title.set_text('Animal count')
@@ -203,29 +204,30 @@ class Graphics:
 
         # Subplot for herbivore heatmap
         if self._herb_ax is None:
-            self._herb_ax = self._fig.add_subplot(self._gridspec[1, 1:3])
+            self._herb_ax = self._fig.add_subplot(self._gridspec[4:7, 2:8])
             self._herb_axis = None
             self._herb_ax.title.set_text('Herbivore distribution')
 
         # Subplot for carnivore heatmap
         if self._carn_ax is None:
-            self._carn_ax = self._fig.add_subplot(self._gridspec[1, 3:5])
+            self._carn_ax = self._fig.add_subplot(self._gridspec[4:7, 10:16])
             self._carn_axis = None
             self._carn_ax.title.set_text('Carnivore distribution')
 
         # Subplot for fitness histogram
         if self._fitness_ax is None:
-            self._fitness_ax = self._fig.add_subplot(self._gridspec[2, :2])
+            self._fitness_ax = self._fig.add_subplot(self._gridspec[8:, 1:6])
+            self._fitness_axis = None
             self._fitness_ax.set_title('Fitness')
 
         # Subplot for age histogram
         if self._age_ax is None:
-            self._age_ax = self._fig.add_subplot(self._gridspec[2, 2:4])
+            self._age_ax = self._fig.add_subplot(self._gridspec[8:, 7:12])
             self._age_ax.set_title('Age')
 
         # Subplot for weight histogram
         if self._weight_ax is None:
-            self._weight_ax = self._fig.add_subplot(self._gridspec[2, 4:6])
+            self._weight_ax = self._fig.add_subplot(self._gridspec[8:, 13:18])
             self._weight_ax.set_title('Weight')
 
         # Graph line for herbivores
@@ -281,7 +283,7 @@ class Graphics:
         """
         self._year_text.set_text(f'Year: {current_year}')
 
-    def _update_herb_heatmap(self, herb_array):
+    def _update_herb_heatmap(self, herb_array, cmax):
         """
         Method for updating heatmap for herbivores.
 
@@ -290,8 +292,20 @@ class Graphics:
         if self._herb_axis is not None:
             self._herb_axis.set_data(herb_array)
         else:
-            self._herb_axis = self._herb_ax.imshow(herb_array, interpolation='nearest')
+            self._herb_axis = self._herb_ax.imshow(herb_array, interpolation='nearest', vmin=0, vmax=cmax)
             plt.colorbar(self._herb_axis, ax=self._herb_ax, orientation='vertical')
+
+    def _update_carn_heatmap(self, carn_array, cmax):
+        """
+        Method for updating heatmap for herbivores.
+
+        :param sys_map: multiline string specifying island geography
+        """
+        if self._carn_axis is not None:
+            self._carn_axis.set_data(carn_array)
+        else:
+            self._carn_axis = self._carn_ax.imshow(carn_array, interpolation='nearest', vmin=0, vmax=cmax)
+            plt.colorbar(self._carn_axis, ax=self._carn_ax, orientation='vertical')
 
     def _update_fitness_hist(self, herb_list=None, carn_list=None, hist_specs=None):
         """

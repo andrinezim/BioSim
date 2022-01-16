@@ -47,7 +47,7 @@ sim = BioSim(geogr, ini_herbs + ini_carns, seed=1,
                          'age': {'max': 60.0, 'delta': 2},
                          'weight': {'max': 60, 'delta': 2}},
              cmax_animals={'Herbivore': 200, 'Carnivore': 50})
-sim.simulate(200)
+sim.simulate(400)
 
 input('Press ENTER')
 
