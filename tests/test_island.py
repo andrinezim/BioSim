@@ -12,11 +12,11 @@ class TestIsland:
     @pytest.fixture(autouse=True)
     def standard_island(self):
         """
-        Fixture setting standard carnivore.
+        Fixture setting standard island.
 
-        :return: Standard carnivore class.
+        :return: Standard island class.
         """
-        self.island = Island()  # skal ha to argumenter
+        self.standard_island = Island(ini_pop=[], island_map="HWW\nWLW\nWWD")
 
     # Test for creating_map
     def test_creating_map(self):
@@ -27,13 +27,9 @@ class TestIsland:
         """
         Testing that we get a KeyError if the location is invalid.
         """
-        island_map = """\
-                   WWW
-                   WLW
-                   WWW"""
-        island_map = textwrap.dedent(island_map)
+        """ invalid_loc_name = {'F': 'Forest'}
         with pytest.raises(KeyError):
-            self.island.creating_map(island_map).map_params({})
+            self.standard_island.adding_population(invalid_loc_name)"""  # ikke riktig
 
     # Test for animals_per_species
     def test_animals_per_species(self):
