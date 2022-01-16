@@ -11,12 +11,8 @@ class TestLandscapes:
     """
     Class for testing the landscapes superclass.
     """
-    pop_h = [{'species': 'Herbivore',
-             'age': 5,
-              'weight': 20}
-             for _ in range(50)]
 
-    # Tests for set_params method.
+    # Tests for set_params method
     def test_negative_param_value(self, class_to_test):
         """
         Testing that we get a ValueError if the parameters are negative.
@@ -72,11 +68,17 @@ class TestLandscapes:
         :param class_to_test: Lowland, Highland, Desert and Water subclasses.
         """
         obj = class_to_test()
-        obj.params_fodder = 15
+        herb_list = [{'species': 'Herbivore',
+                      'age': 5,
+                      'weight': 20}
+                     for _ in range(10)]
+        obj.animals_population(herb_list)
+        obj.params_fodder['f_max'] = 150
+        obj.grow_fodder()
         obj.feeding_herbs()
-        assert obj.feeding_herbs == 5
+        assert obj.amount_fodder == 50          # Every herb wants to eat 10. (10x10=100)
 
-    # Test for feeding_carn_with_herbs.
+    # Test for feeding_carn_with_herbs
     def test_herbs_get_eaten(self, class_to_test):
         """
         Testing that the eaten herbivores are removed from the list of present herbivores.
@@ -98,44 +100,129 @@ class TestLandscapes:
         assert len(obj.list_herbivores) < len(obj.list_carnivores)
 
     # Test for animal_gives_birth
-    def test_animals_get_born(self, class_to_test):
+    def test_herbs_get_born(self, class_to_test, mocker):
         """
         Testing that the newborn are added to the population in the cell.
 
         :param class_to_test: Lowland, Highland, Desert and Water subclasses
         """
+        """mocker.patch('random.random', return_value=0)
+        mocker.patch('random.gauss', return_value=5)
         obj = class_to_test()
+        herb_list = [{'species': 'Herbivore',
+                      'age': 5,
+                      'weight': 20}
+                     for _ in range(10)]
+        obj.animals_population(herb_list)
+        for _ in range(20):
+            obj.animal_gives_birth()
+        assert len(obj.list_herbivores) > len(herb_list)"""
         pass
 
     # Test for animal_dies
-    def test_animals_die(self, class_to_test):
+    def test_herbs_die(self, class_to_test):
         """
         Testing that the animal is removed from the rest of population if it dies.
 
         :param class_to_test: Lowland, Highland, Desert and Water subclasses
         """
         obj = class_to_test()
-        pass
+        herb_list = [{'species': 'Herbivore',
+                      'age': 5,
+                      'weight': 20}
+                     for _ in range(10)]
+        obj.animals_population(herb_list)
+        for _ in range(10):
+            obj.animal_dies()
+        assert len(obj.list_herbivores) < len(herb_list)
+
+    def test_carns_die(self, class_to_test):
+        """
+        Testing that the animal is removed from the rest of population if it dies.
+
+        :param class_to_test: Lowland, Highland, Desert and Water subclasses
+        """
+        obj = class_to_test()
+        carn_list = [{'species': 'Carnivore',
+                      'age': 5,
+                      'weight': 20}
+                     for _ in range(10)]
+        obj.animals_population(carn_list)
+        for _ in range(200):    # Needs to go through enough years for carnivores to die of old age
+            obj.animal_dies()
+        assert len(obj.list_carnivores) < len(carn_list)
 
     # Test for distribute_migrated_animals
-    def test_distribute_migrated_animals(self, class_to_test):
+    def test_distribute_migrated_herbs(self, class_to_test):
         """
-
+        Testing that the animals that migrates, is put to a list.
 
         :param class_to_test: Lowland, Highland, Desert and Water subclasses
-        :return:
         """
-        pass
+        obj = class_to_test()
+        ini_migrated_herbs, _ = obj.distribute_migrated_animals()
+        herb_list = [{'species': 'Herbivore',
+                      'age': 5,
+                      'weight': 20}
+                     for _ in range(20)]
+        obj.animals_population(herb_list)
+        final_migrated_herbs, _ = obj.distribute_migrated_animals()
+        assert len(ini_migrated_herbs) < len(final_migrated_herbs)
+
+    def test_distribute_migrated_carns(self, class_to_test):
+        """
+        Testing that the animals that migrates, is put to a list.
+
+        :param class_to_test: Lowland, Highland, Desert and Water subclasses
+        """
+        obj = class_to_test()
+        _, ini_migrated_carns = obj.distribute_migrated_animals()
+        carn_list = [{'species': 'Carnivore',
+                      'age': 5,
+                      'weight': 20}
+                     for _ in range(20)]
+        obj.animals_population(carn_list)
+        _, final_migrated_carns = obj.distribute_migrated_animals()
+        assert len(ini_migrated_carns) < len(final_migrated_carns)
 
     # Test for annual_restart_migration
-    def test_has_migrated_is_false(self, class_to_test):
+    def test_herb_has_migrated_is_false(self, class_to_test):
         """
+        Testing that the animal's migration 'flag' is changed to False, if it
+        has migrated.
 
         :param class_to_test: Lowland, Highland, Desert and Water subclasses
-        :return:
         """
-        pass
+        obj = class_to_test()
+        herb_list = [{'species': 'Herbivore',
+                      'age': 5,
+                      'weight': 20}
+                     for _ in range(10)]
+        obj.animals_population(herb_list)
+        for i in range(10):
+            migrated_herbs, _ = obj.distribute_migrated_animals()
+        obj.annual_restart_migration()
+        for herb in migrated_herbs:
+            assert herb.has_migrated is False
 
+    def test_carn_has_migrated_is_false(self, class_to_test):
+        """
+        Testing that the animal's migration 'flag' is changed to False, if it
+        has migrated.
+
+        :param class_to_test: Lowland, Highland, Desert and Water subclasses
+        """
+        obj = class_to_test()
+        carn_list = [{'species': 'Carnivore',
+                      'age': 5,
+                      'weight': 20}
+                     for _ in range(10)]
+        obj.animals_population(carn_list)
+        for i in range(10):
+            _, migrated_carns = obj.distribute_migrated_animals()
+        obj.annual_restart_migration()
+        for carn in migrated_carns:
+            assert carn.has_migrated is False
 
 class TestLowland:
 
@@ -143,8 +230,6 @@ class TestLowland:
     def standard_lowland(self):
         """
         Fixture setting standard lowland.
-
-        :return: Standard lowland class.
         """
         self.standard_lowland = Lowland()
 
@@ -163,8 +248,6 @@ class TestHighland:
     def standard_highland(self):
         """
         Fixture setting standard highland.
-
-        :return: Standard highland class.
         """
         self.standard_highland = Highland()
 
@@ -183,8 +266,6 @@ class TestDesert:
     def standard_desert(self):
         """
         Fixture setting standard desert.
-
-        :return: Standard desert class.
         """
         self.standard_desert = Desert()
 
@@ -203,8 +284,6 @@ class TestWater:
     def standard_water(self):
         """
         Fixture setting standard water.
-
-        :return: Standard water class.
         """
         self.standard_water = Water()
 
