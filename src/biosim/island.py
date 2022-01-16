@@ -25,13 +25,13 @@ class Island:
         :param island_map: Multi-line string specifying island geography
         :param ini_pop: List of dictionaries specifying initial population
         """
-
-        # Defining the value for amount of years to use.
-        self.amount_years = 0
-
         self.ini_pop = ini_pop
         self.map = self.creating_map(island_map)
         self.adding_population(self.ini_pop)
+
+        # Defining values for the length of rows and columns to use in heatmap_population
+        self.row_length = 0
+        self.col_length = 0
 
     def creating_map(self, island_map):
         """
@@ -43,6 +43,8 @@ class Island:
 
         map_dict = {}
         list_map_string = island_map.strip().split('\n')
+        self.row_length = len(list_map_string[0])           # length of first line
+        self.col_length = len(list_map_string)              # amount of lines
 
         for loc_x, lines in enumerate(list_map_string):
             for loc_y, landscape_type in enumerate(lines):
@@ -156,6 +158,18 @@ class Island:
         """
         for cell in self.map:
             self.map[cell].annual_restart_migration()
+
+    def heatmap_population(self):
+        """
+        Method for creating population distribution of heatmap for herbivores and carnivores.
+
+        :return: 2D arrays with population in each cell for herbivores and carnivores.
+        """
+        herb_array = [[self.map[row, col].list_herbivores for col in range(1, self.col_length + 1)]
+                      for row in range(1, self.row_length + 1)]
+        carn_array = [[self.map[row, col].list_carnivores for col in range(1, self.col_length + 1)]
+                      for row in range(1, self.row_length + 1)]
+        return herb_array, carn_array
 
     def fitness_list(self):
         """
