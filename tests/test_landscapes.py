@@ -137,71 +137,75 @@ class TestLowland:
 
         :return: Standard lowland class.
         """
-        return Lowland()
+        self.standard_lowland = Lowland()
 
     # Test for grow_fodder
     def test_fodder_regrows_update(self, standard_lowland):
         """
         Testing that the correct parameter is given for fodder available.
         """
-        standard_lowland.grow_fodder()
+        self.standard_lowland.grow_fodder()
+        assert self.standard_lowland.amount_fodder == self.standard_lowland.params_fodder['f_max']
 
 
 class TestHighland:
 
-    @pytest.fixture
+    @pytest.fixture(autouse=True)
     def standard_highland(self):
         """
         Fixture setting standard highland.
 
         :return: Standard highland class.
         """
-        return Highland()
+        self.standard_highland = Highland()
 
     # Test for grow_fodder
-    def test_fodder_regrows_update(self, standard_highland):
+    def test_fodder_regrows_update(self):
         """
         Testing that the correct parameter is given for fodder available.
         """
-        standard_highland.grow_fodder()
+        self.standard_highland.grow_fodder()
+        assert self.standard_highland.amount_fodder == self.standard_highland.params_fodder['f_max']
 
 
 class TestDesert:
 
-    @pytest.fixture
+    @pytest.fixture(autouse=True)
     def standard_desert(self):
         """
         Fixture setting standard desert.
 
         :return: Standard desert class.
         """
-        return Desert()
+        self.standard_desert = Desert()
 
     # Test for grow_fodder
-    def test_fodder_regrows_update(self, standard_desert):
+    def test_fodder_regrows_update(self):
         """
         Testing that the correct parameter is given for fodder available.
         """
-        standard_desert.grow_fodder()
+        self.standard_desert.grow_fodder()
+        assert self.standard_desert.amount_fodder == self.standard_desert.params_fodder['f_max']
 
 
 class TestWater:
 
-    @pytest.fixture
+    @pytest.fixture(autouse=True)
     def standard_water(self):
         """
         Fixture setting standard water.
 
         :return: Standard water class.
         """
-        return Water()
+        self.standard_water = Water()
 
     # Test for grow_fodder
-    def test_fodder_regrows_update(self, standard_water):
+    def test_fodder_regrows_update(self):
         """
         Testing that the correct parameter is given for fodder available.
         """
-        standard_water.grow_fodder()
+        self.standard_water.grow_fodder()
+        assert self.standard_water.amount_fodder == self.standard_water.params_fodder['f_max']
 
 
 pytest.main(['test_landscapes.py'])
