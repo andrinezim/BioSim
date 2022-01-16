@@ -4,17 +4,36 @@ __email__ = 'andrine.zimmermann@nmbu.no, karin.mollatt@nmbu.no'
 
 import pytest
 from biosim.island import Island
+import textwrap
 
 
 class TestIsland:
+
+    @pytest.fixture(autouse=True)
+    def standard_island(self):
+        """
+        Fixture setting standard carnivore.
+
+        :return: Standard carnivore class.
+        """
+        self.island = Island()  # skal ha to argumenter
 
     # Test for creating_map
     def test_creating_map(self):
         pass
 
     # Test for adding_population
-    def test_key_error_invalid_location(self):
-        pass
+    def test_key_error_invalid_location(self, standard_island):
+        """
+        Testing that we get a KeyError if the location is invalid.
+        """
+        island_map = """\
+                   WWW
+                   WLW
+                   WWW"""
+        island_map = textwrap.dedent(island_map)
+        with pytest.raises(KeyError):
+            self.island.creating_map(island_map).map_params({})
 
     # Test for animals_per_species
     def test_animals_per_species(self):

@@ -72,7 +72,9 @@ class TestLandscapes:
         :param class_to_test: Lowland, Highland, Desert and Water subclasses.
         """
         obj = class_to_test()
-        pass
+        obj.params_fodder = 15
+        obj.feeding_herbs()
+        assert obj.feeding_herbs == 5
 
     # Test for feeding_carn_with_herbs.
     def test_herbs_get_eaten(self, class_to_test):
