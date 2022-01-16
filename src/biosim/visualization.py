@@ -93,7 +93,7 @@ class Graphics:
 
         self._gridspec = None
 
-    def update(self, sys_map, amount_animals_species, year):
+    def update(self, sys_map, herb_array, carn_array, amount_animals_species, year):
         """
         Updates graphics with current data and save to file if necessary.
 
@@ -103,7 +103,7 @@ class Graphics:
         """
 
         self._update_system_map(sys_map)
-        # self._update_herb_heatmap(sys_map)
+        #self._update_herb_heatmap(herb_array)
         self._update_year(year)
         self._update_mean_graph(amount_animals_species, year)
         self._fig.canvas.flush_events()  # ensure every thing is drawn
@@ -281,16 +281,16 @@ class Graphics:
         """
         self._year_text.set_text(f'Year: {current_year}')
 
-    def _update_herb_heatmap(self, sys_map):
+    def _update_herb_heatmap(self, herb_array):
         """
         Method for updating heatmap for herbivores.
 
         :param sys_map: multiline string specifying island geography
         """
         if self._herb_axis is not None:
-            self._herb_axis.set_data(sys_map)
+            self._herb_axis.set_data(herb_array)
         else:
-            self._herb_axis = self._herb_ax.imshow(sys_map, interpolation='nearest')
+            self._herb_axis = self._herb_ax.imshow(herb_array, interpolation='nearest')
             plt.colorbar(self._herb_axis, ax=self._herb_ax, orientation='vertical')
 
     def _update_fitness_hist(self, herb_list=None, carn_list=None, hist_specs=None):

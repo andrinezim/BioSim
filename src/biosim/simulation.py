@@ -144,6 +144,8 @@ class BioSim:
 
             if self._current_year % self.vis_years == 0:
                 self._graphics.update(self.island_map,
+                                      self.island.heatmap_population()[0],
+                                      self.island.heatmap_population()[1],
                                       self.num_animals_per_species,
                                       self._current_year)
                 self._graphics._update_fitness_hist(self.island.fitness_list()[0],

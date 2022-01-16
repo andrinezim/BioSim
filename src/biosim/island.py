@@ -45,6 +45,7 @@ class Island:
         list_map_string = island_map.strip().split('\n')
         self.row_length = len(list_map_string[0])           # length of first line
         self.col_length = len(list_map_string)              # amount of lines
+        print(self.row_length, self.col_length)
 
         for loc_x, lines in enumerate(list_map_string):
             for loc_y, landscape_type in enumerate(lines):
@@ -165,10 +166,11 @@ class Island:
 
         :return: 2D arrays with population in each cell for herbivores and carnivores.
         """
-        herb_array = [[self.map[row, col].list_herbivores for col in range(1, self.col_length + 1)]
+        herb_array = [[len(self.map[(row, col)].list_herbivores) for col in range(1, self.col_length + 1)]
                       for row in range(1, self.row_length + 1)]
-        carn_array = [[self.map[row, col].list_carnivores for col in range(1, self.col_length + 1)]
+        carn_array = [[len(self.map[(row, col)].list_carnivores) for col in range(1, self.col_length + 1)]
                       for row in range(1, self.row_length + 1)]
+        #print(herb_array)
         return herb_array, carn_array
 
     def fitness_list(self):
