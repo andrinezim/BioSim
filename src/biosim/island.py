@@ -27,8 +27,21 @@ class Island:
         """
         self.ini_pop = ini_pop
         self.map_string = island_map
+        self.map_lines = island_map.splitlines()
         self.map = self.creating_map(island_map)
         self.adding_population(self.ini_pop)
+
+        for line in self.map_lines:
+            if len(line) is not len(self.map_lines[0]):
+                raise ValueError(f'Each line must be of equal length.')
+
+        for i in range(len(self.map_lines[0])):
+            if self.map_lines[0][i] != 'W' or self.map_lines[-1][i] != 'W':
+                raise ValueError(f'The must be surrounded of water')
+
+        for i in range(len(self.map_lines)):
+            if self.map_lines[i][0] != 'W' or self.map_lines[i][-1] != 'W':
+                raise ValueError(f'The must be surrounded of water')
 
     def creating_map(self, island_map):
         """
@@ -40,6 +53,11 @@ class Island:
 
         map_dict = {}
         list_map_string = island_map.strip().split('\n')
+
+        for line in self.map_lines:
+            for landscape_type in line:
+                if landscape_type not in self.map_params.keys():
+                    raise ValueError('Invalid landscape type: ' + landscape_type)
 
         for loc_x, lines in enumerate(list_map_string):
             for loc_y, landscape_type in enumerate(lines):
@@ -98,7 +116,7 @@ class Island:
                 amount_herbs += len(herb_list)
                 amount_carns += len(carn_list)
 
-        amount_animals_species = {'Herbivores': amount_herbs, 'Carnivores': amount_carns}
+        amount_animals_species = {'Herbivore': amount_herbs, 'Carnivore': amount_carns}
         total_amount_animals = amount_herbs + amount_carns
         return amount_animals_species, total_amount_animals
 

@@ -36,9 +36,8 @@ class TestIsland:
                                      'age': 5,
                                      'weight': 20}
                                     for _ in range(20)]}]
-        obj = Island(ini_pop=invalid_loc_pop, island_map="WWWWW\nWWLWW\nWLLLW\nWWLWW\nWWWWW")
         with pytest.raises(KeyError):
-            obj.adding_population()
+            Island(ini_pop=invalid_loc_pop, island_map="WWWWW\nWWLWW\nWLLLW\nWWLWW\nWWWWW")
 
     # Test for animals_per_species
     def test_animals_per_species(self):

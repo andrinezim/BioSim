@@ -152,7 +152,7 @@ class Graphics:
         else:
             raise ValueError('Unknown movie format: ' + movie_fmt)
 
-    def _setup_graphics(self, y_lim, final_year, img_step, current_year):
+    def _setup_graphics(self, y_lim, final_year, img_step, current_year, row_length, col_length):
         """
         Prepare graphics.
 
@@ -175,10 +175,10 @@ class Graphics:
         if self._map_ax is None:
             self._map_ax = self._fig.add_subplot(self._gridspec[:3, :4])
             self._img_axis = None
-            #self._map_ax.set_xticks()
-            #self._map_ax.set_xticklabels([])
-            #self._map_ax.set_yticks()
-            #self._map_ax.set_yticklabels([])
+            self._map_ax.set_xticks(np.linspace(1, row_length, 5))
+            self._map_ax.set_xticklabels(np.linspace(1, row_length + 1, 5, dtype=int))
+            self._map_ax.set_yticks(np.linspace(1, col_length + 1, 5))
+            self._map_ax.set_yticklabels(np.linspace(1, col_length + 1, 5, dtype=int))
             self._map_ax.title.set_text('Island')
 
         # Subplot for current year
@@ -392,8 +392,8 @@ class Graphics:
         :param amount_animals_species: Dictionary containing amount of animals per species.
         :param year: Current year
         """
-        amount_herbs = amount_animals_species['Herbivores']
-        amount_carns = amount_animals_species['Carnivores']
+        amount_herbs = amount_animals_species['Herbivore']
+        amount_carns = amount_animals_species['Carnivore']
 
         y_data_herb = self._mean_line_herb.get_ydata()
         y_data_herb[year] = amount_herbs
