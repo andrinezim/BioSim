@@ -79,12 +79,13 @@ class TestLandscapes:
         assert obj.amount_fodder == 50          # Every herb wants to eat 10. (10x10=100)
 
     # Test for feeding_carn_with_herbs
-    def test_herbs_get_eaten(self, class_to_test):
+    def test_herbs_get_eaten(self, class_to_test, mocker):
         """
         Testing that the eaten herbivores are removed from the list of present herbivores.
 
         :param class_to_test: Lowland, Highland, Desert and Water subclasses.
         """
+        mocker.patch('random.random', return_value=0)
         obj = class_to_test()
         herb_list = [{'species': 'Herbivore',
                            'age': 5,
@@ -95,19 +96,16 @@ class TestLandscapes:
                       'weight': 20}
                      for _ in range(10)]
         obj.animals_population(herb_list + carn_list)
-        # ini_list_herb = obj.list_herbivores
         obj.feeding_carn_with_herbs()
         assert len(obj.list_herbivores) < len(obj.list_carnivores)
 
     # Test for animal_gives_birth
-    def test_herbs_get_born(self, class_to_test, mocker):
+    def test_herbs_get_born(self, class_to_test):
         """
         Testing that the newborn are added to the population in the cell.
 
         :param class_to_test: Lowland, Highland, Desert and Water subclasses
         """
-        mocker.patch('random.random', return_value=0)
-        mocker.patch('random.gauss', return_value=5)
         obj = class_to_test()
         herb_list = [{'species': 'Herbivore',
                       'age': 5,
@@ -118,12 +116,13 @@ class TestLandscapes:
         assert len(obj.list_herbivores) > len(herb_list)
 
     # Test for animal_dies
-    def test_herbs_die(self, class_to_test):
+    def test_herbs_die(self, class_to_test, mocker):
         """
         Testing that the animal is removed from the rest of population if it dies.
 
         :param class_to_test: Lowland, Highland, Desert and Water subclasses
         """
+        mocker.patch('random.random', return_value=0)
         obj = class_to_test()
         herb_list = [{'species': 'Herbivore',
                       'age': 5,
@@ -134,12 +133,13 @@ class TestLandscapes:
             obj.animal_dies()
         assert len(obj.list_herbivores) < len(herb_list)
 
-    def test_carns_die(self, class_to_test):
+    def test_carns_die(self, class_to_test, mocker):
         """
         Testing that the animal is removed from the rest of population if it dies.
 
         :param class_to_test: Lowland, Highland, Desert and Water subclasses
         """
+        mocker.patch('random.random', return_value=0)
         obj = class_to_test()
         carn_list = [{'species': 'Carnivore',
                       'age': 5,
