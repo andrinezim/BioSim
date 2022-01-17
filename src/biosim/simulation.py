@@ -137,19 +137,24 @@ class BioSim:
 
         :param num_years: number of years to simulate
         """
-        if self.img_years % self.vis_years != 0:
-            raise ValueError('img_years must be multiple of vis_years')
+        enable_graphics = True
 
         self._final_year = self._current_year + num_years
-        self._graphics._setup_graphics(self.ymax_animals, self._final_year, self.img_years, self._current_year,
-                                       self.island.row_length, self.island.col_length)
-        self._graphics._update_system_map(self.island_map)
+        if self.vis_years != 0:
+            self._graphics._setup_graphics(self.ymax_animals, self._final_year, self.img_years, self._current_year,
+                                           self.island.row_length, self.island.col_length)
+            self._graphics._update_system_map(self.island_map)
+            if self.img_years % self.vis_years != 0:
+                raise ValueError('img_years must be multiple of vis_years')
+        else:
+            enable_graphics = False
+            self.vis_years = 1
 
         while self._current_year < self._final_year:
             self.island.annual_cycle_simulation()
             self._current_year += 1
 
-            if self._current_year % self.vis_years == 0:
+            if self._current_year % self.vis_years == 0 and enable_graphics:
                 self._graphics.update(self.island_map,
                                       self.island.heatmap_population()[0],
                                       self.island.heatmap_population()[1],
