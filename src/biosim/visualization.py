@@ -167,7 +167,7 @@ class Graphics:
 
         # Create new figure window
         if self._fig is None:
-            self._fig = plt.figure(constrained_layout=True, figsize=(10, 8))
+            self._fig = plt.figure(figsize=(10, 8))
             self._gridspec = self._fig.add_gridspec(9,18)
             plt.axis('off')
 

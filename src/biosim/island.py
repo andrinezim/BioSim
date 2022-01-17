@@ -8,7 +8,7 @@ import random
 Module for island. 
 """
 
-from biosim.landscapes import Lowland, Highland, Desert, Water
+from .landscapes import Lowland, Highland, Desert, Water
 
 
 class Island:

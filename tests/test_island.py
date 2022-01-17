@@ -4,7 +4,6 @@ __email__ = 'andrine.zimmermann@nmbu.no, karin.mollatt@nmbu.no'
 
 import pytest
 from biosim.island import Island
-import textwrap
 
 
 class TestIsland:
@@ -33,10 +32,10 @@ class TestIsland:
         Testing that we get a KeyError if the location is invalid.
         """
         invalid_loc_pop = [{'loc': (0, 0),
-                      'pop': [{'species': 'Herbivore',
-                               'age': 5,
-                               'weight': 20}
-                              for _ in range(20)]}]
+                            'pop': [{'species': 'Herbivore',
+                                     'age': 5,
+                                     'weight': 20}
+                                    for _ in range(20)]}]
         obj = Island(ini_pop=invalid_loc_pop, island_map="WWWWW\nWWLWW\nWLLLW\nWWLWW\nWWWWW")
         with pytest.raises(KeyError):
             obj.adding_population()

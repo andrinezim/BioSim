@@ -106,18 +106,16 @@ class TestLandscapes:
 
         :param class_to_test: Lowland, Highland, Desert and Water subclasses
         """
-        """mocker.patch('random.random', return_value=0)
+        mocker.patch('random.random', return_value=0)
         mocker.patch('random.gauss', return_value=5)
         obj = class_to_test()
         herb_list = [{'species': 'Herbivore',
                       'age': 5,
-                      'weight': 20}
+                      'weight': 50}
                      for _ in range(10)]
         obj.animals_population(herb_list)
-        for _ in range(20):
-            obj.animal_gives_birth()
-        assert len(obj.list_herbivores) > len(herb_list)"""
-        pass
+        obj.animal_gives_birth()
+        assert len(obj.list_herbivores) > len(herb_list)
 
     # Test for animal_dies
     def test_herbs_die(self, class_to_test):
