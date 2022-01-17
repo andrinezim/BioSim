@@ -175,10 +175,10 @@ class Graphics:
         if self._map_ax is None:
             self._map_ax = self._fig.add_subplot(self._gridspec[:3, :4])
             self._img_axis = None
-            self._map_ax.set_xticks(np.linspace(1, row_length, 5))
-            self._map_ax.set_xticklabels(np.linspace(1, row_length + 1, 5, dtype=int))
-            self._map_ax.set_yticks(np.linspace(1, col_length + 1, 5))
-            self._map_ax.set_yticklabels(np.linspace(1, col_length + 1, 5, dtype=int))
+            self._map_ax.set_xticks(np.linspace(0, row_length + 1, 6))
+            self._map_ax.set_xticklabels(np.linspace(1, row_length + 1, 6, dtype=int))
+            self._map_ax.set_yticks(np.linspace(0, col_length + 1, 6))
+            self._map_ax.set_yticklabels(np.linspace(1, col_length + 1, 6, dtype=int))
             self._map_ax.title.set_text('Island')
 
         # Subplot for current year
@@ -206,12 +206,20 @@ class Graphics:
         if self._herb_ax is None:
             self._herb_ax = self._fig.add_subplot(self._gridspec[4:7, 2:8])
             self._herb_axis = None
+            self._herb_ax.set_xticks(np.linspace(0, row_length + 1, 6))
+            self._herb_ax.set_xticklabels(np.linspace(1, row_length + 1, 6, dtype=int))
+            self._herb_ax.set_yticks(np.linspace(0, col_length + 1, 6))
+            self._herb_ax.set_yticklabels(np.linspace(1, col_length + 1, 6, dtype=int))
             self._herb_ax.title.set_text('Herbivore distribution')
 
         # Subplot for carnivore heatmap
         if self._carn_ax is None:
             self._carn_ax = self._fig.add_subplot(self._gridspec[4:7, 10:16])
             self._carn_axis = None
+            self._carn_ax.set_xticks(np.linspace(0, row_length + 1, 6))
+            self._carn_ax.set_xticklabels(np.linspace(1, row_length + 1, 6, dtype=int))
+            self._carn_ax.set_yticks(np.linspace(0, col_length + 1, 6))
+            self._carn_ax.set_yticklabels(np.linspace(1, col_length + 1, 6, dtype=int))
             self._carn_ax.title.set_text('Carnivore distribution')
 
         # Subplot for fitness histogram
