@@ -16,20 +16,30 @@ class TestIsland:
 
         :return: Standard island class.
         """
-        self.standard_island = Island(ini_pop=[], island_map="HWW\nWLW\nWWD")
+        ini_herbs = [{'loc': (3, 3),
+                      'pop': [{'species': 'Herbivore',
+                               'age': 5,
+                               'weight': 20}
+                              for _ in range(20)]}]
+        self.standard_island = Island(ini_pop=ini_herbs, island_map="WWWWW\nWWLWW\nWLLLW\nWWLWW\nWWWWW")
 
     # Test for creating_map
     def test_creating_map(self):
         pass
 
     # Test for adding_population
-    def test_key_error_invalid_location(self, standard_island):
+    def test_key_error_invalid_location(self):
         """
         Testing that we get a KeyError if the location is invalid.
         """
-        """ invalid_loc_name = {'F': 'Forest'}
+        invalid_loc_pop = [{'loc': (0, 0),
+                      'pop': [{'species': 'Herbivore',
+                               'age': 5,
+                               'weight': 20}
+                              for _ in range(20)]}]
+        obj = Island(ini_pop=invalid_loc_pop, island_map="WWWWW\nWWLWW\nWLLLW\nWWLWW\nWWWWW")
         with pytest.raises(KeyError):
-            self.standard_island.adding_population(invalid_loc_name)"""  # ikke riktig
+            obj.adding_population()
 
     # Test for animals_per_species
     def test_animals_per_species(self):

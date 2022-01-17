@@ -8,7 +8,7 @@ import random
 Module for island. 
 """
 
-from .landscapes import Lowland, Highland, Desert, Water
+from biosim.landscapes import Lowland, Highland, Desert, Water
 
 
 class Island:
@@ -176,10 +176,10 @@ class Island:
 
         :return: 2D arrays with population in each cell for herbivores and carnivores.
         """
-        herb_array = [[len(self.map[(row, col)].list_herbivores) for col in range(1, self.col_length)]
-                      for row in range(1, self.row_length+1)]
-        carn_array = [[len(self.map[(row, col)].list_carnivores) for col in range(1, self.col_length)]
-                      for row in range(1, self.row_length+1)]
+        herb_array = [[len(self.map[(row, col)].list_herbivores) for col in range(1, self.row_length+1)]
+                      for row in range(1, self.col_length+1)]
+        carn_array = [[len(self.map[(row, col)].list_carnivores) for col in range(1, self.row_length+1)]
+                      for row in range(1, self.col_length+1)]
         return herb_array, carn_array
 
     def fitness_list(self):

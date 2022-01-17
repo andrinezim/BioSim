@@ -108,7 +108,7 @@ class Graphics:
         self._update_year(year)
         self._update_mean_graph(amount_animals_species, year)
         self._fig.canvas.flush_events()  # ensure every thing is drawn
-        plt.pause(0.0001)  # pause required to pass control to GUI
+        plt.pause(0.00001)  # pause required to pass control to GUI
 
         #self._save_graphics(step)
 
@@ -121,7 +121,6 @@ class Graphics:
 
         The movie is stored as img_base + movie_fmt
         """
-
         if self._img_base is None:
             raise RuntimeError("No filename defined.")
 
@@ -164,7 +163,6 @@ class Graphics:
         :param final_year: last time step to be visualised (upper limit of x-axis)
         :param img_step: interval between saving image to file
         """
-
         self._img_step = img_step
 
         # Create new figure window
