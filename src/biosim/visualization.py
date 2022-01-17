@@ -173,10 +173,12 @@ class Graphics:
 
         # Subplot for island map
         if self._map_ax is None:
-            self._map_ax = self._fig.add_subplot(self._gridspec[:3, :6])
+            self._map_ax = self._fig.add_subplot(self._gridspec[:3, :4])
             self._img_axis = None
-            # self._map_ax.set_xticklabels([])
-            # self._map_ax.set_yticklabels([])
+            #self._map_ax.set_xticks()
+            #self._map_ax.set_xticklabels([])
+            #self._map_ax.set_yticks()
+            #self._map_ax.set_yticklabels([])
             self._map_ax.title.set_text('Island')
 
         # Subplot for current year
@@ -272,6 +274,18 @@ class Graphics:
         else:
             self._img_axis = self._map_ax.imshow(map_rgb,
                                                  interpolation='nearest')
+
+        # This next part is picked up from Plesser, H.E. file 'mapping.py' from
+        # https://gitlab.com/nmbu.no/emner/inf200/h2021/inf200-course-materials/-/blob/
+        # main/january_block/examples/plotting/mapping.py
+        ax_lg = self._fig.add_subplot(self._gridspec[:2, 5:6])
+        ax_lg.axis('off')
+        for ix, name in enumerate(('Water', 'Lowland',
+                                   'Highland', 'Desert')):
+            ax_lg.add_patch(plt.Rectangle((0., ix * 0.2), 0.3, 0.1,
+                                          edgecolor='none',
+                                          facecolor=rgb_value[name[0]]))
+            ax_lg.text(0.35, ix * 0.2, name, transform=ax_lg.transAxes)
 
     def _update_year(self, current_year):
         """
