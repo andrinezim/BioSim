@@ -55,7 +55,7 @@ class Graphics:
         :type img_fmt: str
         """
         if img_name is None:
-            img_name = _DEFAULT_GRAPHICS_NAME
+            img_base = _DEFAULT_GRAPHICS_NAME
 
         if img_dir is not None:
             self._img_base = os.path.join(img_dir, img_name)
@@ -97,9 +97,13 @@ class Graphics:
         """
         Updates graphics with current data and save to file if necessary.
 
-        :param sys_map: current system status (2d array)
-        :param amount_animals_species: amount of animals per species
-        :param year: current year
+        :param sys_map: Current system status (2d array)
+        :param herb_array: Array with herbivore distribution
+        :param carn_array: Array with carnivore distribution
+        :param cmax_herb: Value specifying color-code limits for herbivore density
+        :param cmax_carn: Value specifying color-code limits for carnivore density
+        :param amount_animals_species: Amount of animals per species
+        :param year: Current year
         """
 
         self._update_system_map(sys_map)
@@ -110,7 +114,7 @@ class Graphics:
         self._fig.canvas.flush_events()  # ensure every thing is drawn
         plt.pause(0.00001)  # pause required to pass control to GUI
 
-        #self._save_graphics(step)
+        self._save_graphics(year)
 
     def make_movie(self, movie_fmt=None):
         """
@@ -307,7 +311,8 @@ class Graphics:
         """
         Method for updating heatmap for herbivores.
 
-        :param sys_map: multiline string specifying island geography
+        :param herb_array: Array with herbivore distribution
+        :param cmax: Dict specifying color-code limits for animal densities
         """
         if self._herb_axis is not None:
             self._herb_axis.set_data(herb_array)
@@ -317,9 +322,11 @@ class Graphics:
 
     def _update_carn_heatmap(self, carn_array, cmax):
         """
-        Method for updating heatmap for herbivores.
+        Method for updating heatmap for carnivores.
 
-        :param sys_map: multiline string specifying island geography
+        :param carn_array: Array with carnivore distribution
+        :param cmax: Dict specifying color-code limits for animal densities
+        :return:
         """
         if self._carn_axis is not None:
             self._carn_axis.set_data(carn_array)
