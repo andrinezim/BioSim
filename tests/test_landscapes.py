@@ -83,6 +83,9 @@ class TestLandscapes:
         """
         Testing that the eaten herbivores are removed from the list of present herbivores.
 
+        Using mocker to trick the function random.random to return 0, to be lower than
+        probability of killing.
+
         :param class_to_test: Lowland, Highland, Desert and Water subclasses.
         """
         mocker.patch('random.random', return_value=0)

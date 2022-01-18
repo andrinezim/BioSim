@@ -201,13 +201,13 @@ class Graphics:
         if self._mean_ax is None:
             self._mean_ax = self._fig.add_subplot(self._gridspec[:3, 12:18])
             self._mean_ax.set_xlim(0, final_year + 1)
-            self._mean_ax.set_ylim(0, y_lim + 20)
+            self._mean_ax.set_ylim(0, y_lim + 100)
             self._mean_ax.title.set_text('Animal count')
             self._mean_ax.set_box_aspect(1)
             #self._mean_ax.legend(['Herbivores', 'Carnivores'], loc='upper left')
         elif self._mean_ax is not None:
             self._mean_ax.set_xlim(0, final_year + 1)
-            self._mean_ax.set_ylim(0, y_lim + 20)
+            self._mean_ax.set_ylim(0, y_lim + 100)
 
         # Subplot for herbivore heatmap
         if self._herb_ax is None:
@@ -417,12 +417,12 @@ class Graphics:
         y_data_herb[year] = amount_herbs
         self._mean_line_herb.set_ydata(y_data_herb)
 
-        """if self._mean_ax.get_ylim()[1] < amount_herbs:
-            self._mean_ax.autoscale(enable=True, axis='y')"""
-
         y_data_carn = self._mean_line_carn.get_ydata()
         y_data_carn[year] = amount_carns
         self._mean_line_carn.set_ydata(y_data_carn)
+
+        if self._mean_ax.get_ylim()[1] < max(amount_herbs, amount_carns):
+            self._mean_ax.set_ylim(0, max(amount_herbs, amount_carns) + 100)
 
     def _save_graphics(self, step):
         """Saves graphics to file if file name given."""

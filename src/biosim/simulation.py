@@ -92,7 +92,7 @@ class BioSim:
         self._graphics = Graphics(img_dir, img_base, img_fmt)
 
         if ymax_animals is None:
-            self.ymax_animals = 6000
+            self.ymax_animals = 1000
         else:
             self.ymax_animals = ymax_animals
 

@@ -82,15 +82,14 @@ class TestIsland:
         Using mocker to trick the function random.random to return 0, for the migrating to happen.
         Also using it on the function random.choice, for knowing which cell it chooses.
         """
-        """mocker.patch('random.random', return_value=0)
-        mocker.patch('random.choice', return_value=1)
+        mocker.patch('random.random', return_value=0)
+        mocker.patch('random.choice', return_value=(3,4))
         ini_pop = len(self.standard_island.map[(3, 3)].list_herbivores) + \
                   len(self.standard_island.map[(3, 3)].list_carnivores)
         self.standard_island.migrating_animals((3, 3))
         final_pop = len(self.standard_island.map[(3, 3)].list_herbivores) + \
                     len(self.standard_island.map[(3, 3)].list_carnivores)
-        assert ini_pop > final_pop"""
-        pass
+        assert ini_pop > final_pop
 
 
 pytest.main(['test_island.py'])
