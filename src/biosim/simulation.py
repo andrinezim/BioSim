@@ -1,10 +1,78 @@
+# -*- coding: utf-8 -*-
 
 __author__ = 'Andrine Zimmermann, Karin Mollatt'
 __email__ = 'andrine.zimmermann@nmbu.no, karin.mollatt@nmbu.no'
 
 """
-Template for BioSim class.
+:mod:`biosim.simulation` provides the user interface to the package.
+
+Each simulation is represented by a :class:`BioSim` instance. On each
+instance, the :meth:`BioSim.simulate` method can be called as often as
+you like to simulate a given number of steps.
+
+The state of the system is visualized as the simulation runs, at intervals
+that can be chosen. The graphics can also be saved to file at regular
+intervals. By calling :meth:`BioSim.make_movie` after a simulation is complete,
+individual graphics files can be combined into an animation.
+
+Example
+--------
+::
+    geogr = '''\
+               WWWWWWWWWWWWWWWWWWWWW
+               WHHHHHLLLLWWLLLLLLLWW
+               WHHHHHLLLLWWLLLLLLLWW
+               WHHHHHLLLLWWLLLLLLLWW
+               WWHHLLLLLLLWWLLLLLLLW
+               WWHHLLLLLLLWWLLLLLLLW
+               WWWWWWWWHWWWWLLLLLLLW
+               WHHHHHLLLLWWLLLLLLLWW
+               WHHHHHHHHHWWLLLLLLWWW
+               WHHHHHDDDDDLLLLLLLWWW
+               WHHHHHDDDDDLLLLLLLWWW
+               WHHHHHDDDDDLLLLLLLWWW
+               WHHHHHDDDDDWWLLLLLWWW
+               WHHHHDDDDDDLLLLWWWWWW
+               WWHHHHDDDDDDLWWWWWWWW
+               WWHHHHDDDDDLLLWWWWWWW
+               WHHHHHDDDDDLLLLLLLWWW
+               WHHHHDDDDDDLLLLWWWWWW
+               WWHHHHDDDDDLLLWWWWWWW
+               WWWHHHHLLLLLLLWWWWWWW
+               WWWHHHHHHWWWWWWWWWWWW
+               WWWWWWWWWWWWWWWWWWWWW'''
+    geogr = textwrap.dedent(geogr)
+
+    ini_herbs = [{'loc': (2, 7),
+                  'pop': [{'species': 'Herbivore',
+                           'age': 5,
+                           'weight': 20}
+                          for _ in range(200)]}]
+    ini_carns = [{'loc': (2, 7),
+                  'pop': [{'species': 'Carnivore',
+                           'age': 5,
+                           'weight': 20}
+                          for _ in range(50)]}]
+                          
+    sim = BioSim((geogr, ini_herbs + ini_carns, seed=1,
+                 hist_specs={'fitness': {'max': 1.0, 'delta': 0.05},
+                             'age': {'max': 60.0, 'delta': 2},
+                             'weight': {'max': 60, 'delta': 2}},
+                 cmax_animals={'Herbivore': 200, 'Carnivore': 50},
+                 img_dir='results',
+                 img_base='sample')
+    sim.simulate(100)
+    sim.make_movie()
+
+This code
+
+#. creates a system with a 21x22 matrix, set the initial population, 
+    details for histograms and graphs.
+#. performs a simulation of 100 steps, updating the graphics after each
+   step and saving a figure after each step;
+#. creates a movie from the individual figures saved.
 """
+
 
 # The material in this file is licensed under the BSD 3-clause license
 # https://opensource.org/licenses/BSD-3-Clause
@@ -18,6 +86,9 @@ _DEFAULT_GRAPHICS_NAME = 'bs'
 
 
 class BioSim:
+    """
+    Class for simulating the island.
+    """
     def __init__(self,
                  island_map,
                  ini_pop,
@@ -63,6 +134,8 @@ class BioSim:
         where img_number are consecutive image numbers starting from 0.
 
         img_dir and img_base must either be both None or both strings.
+
+        .. note:: For default values for img_* parameters, see :mod:`biosim.visualization`.
         """
         random.seed(seed)
 

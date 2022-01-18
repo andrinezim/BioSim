@@ -1,12 +1,10 @@
+# -*- coding: utf-8 -*-
 
 __author__ = 'Andrine Zimmermann, Karin Mollatt'
 __email__ = 'andrine.zimmermann@nmbu.no, karin.mollatt@nmbu.no'
 
 """
-Module for visualization graphics of Rossumøya.
-
-
-:mod:`biosim.visualization` provides graphics support for BioSim.
+:mod:`biosim.visualization` contains information about the visualization for BioSim.
 
 .. note::
    * This module requires the program ``ffmpeg`` or ``convert``
