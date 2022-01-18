@@ -10,8 +10,6 @@ Template for BioSim class.
 # https://opensource.org/licenses/BSD-3-Clause
 # (C) Copyright 2021 Hans Ekkehard Plesser / NMBU
 
-from .landscapes import Lowland, Highland, Desert, Water
-from .animals import Herbivores, Carnivores
 from .visualization import Graphics
 from .island import Island
 import random
@@ -82,11 +80,6 @@ class BioSim:
         self.island_map = island_map
         self.island = Island(island_map, ini_pop)
 
-        if img_dir is None:
-            self.img_base = None
-        else:
-            self.img_base = os.path.join(img_dir, _DEFAULT_GRAPHICS_NAME)
-
         self.img_fmt = img_fmt
 
         self._graphics = Graphics(img_dir, img_base, img_fmt)
@@ -104,6 +97,8 @@ class BioSim:
             self.cmax_carn = cmax_animals['Carnivore']
 
         self.hist_specs = hist_specs
+
+        self.log_file = log_file
 
     def set_animal_parameters(self, species, params):
         """
@@ -163,6 +158,12 @@ class BioSim:
                 self._graphics._update_weight_hist(self.island.weight_list()[0],
                                                     self.island.weight_list()[1],
                                                     self.hist_specs)
+
+            if self.log_file is not None:
+                amount_herbs = self.num_animals_per_species['Herbivore']
+                amount_carns = self.num_animals_per_species['Carnivore']
+                with open(self.log_file, 'a') as infile:
+                    infile.writelines(f'{self._current_year},{amount_herbs},{amount_carns}\n')
 
     def add_population(self, population):
         """

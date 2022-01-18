@@ -262,7 +262,7 @@ class Island:
         :param params: Dict with valid parameter specification for species
         """
         for cell in self.map.values():
-            cell.set_animal_params_landscape(params, species)
+            cell.set_animal_params_landscapes(params, species)
 
     def set_landscape_params_island(self, landscape, params):
         """

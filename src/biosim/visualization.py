@@ -55,7 +55,7 @@ class Graphics:
         :type img_fmt: str
         """
         if img_name is None:
-            img_base = _DEFAULT_GRAPHICS_NAME
+            img_name = _DEFAULT_GRAPHICS_NAME
 
         if img_dir is not None:
             self._img_base = os.path.join(img_dir, img_name)
@@ -430,7 +430,7 @@ class Graphics:
         if self._img_base is None or step % self._img_step != 0:
             return
 
-        plt.savefig('{base}_{num:04d}.{type}'.format(base=self._img_base,
+        plt.savefig('{base}_{num:05d}.{type}'.format(base=self._img_base,
                                                      num=self._img_ctr,
                                                      type=self._img_fmt))
         self._img_ctr += 1
