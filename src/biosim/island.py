@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 __author__ = 'Andrine Zimmermann, Karin Mollatt'
 __email__ = 'andrine.zimmermann@nmbu.no, karin.mollatt@nmbu.no'
@@ -5,7 +6,9 @@ __email__ = 'andrine.zimmermann@nmbu.no, karin.mollatt@nmbu.no'
 import random
 
 """
-Module for island. 
+:mod: 'biosim.island' contains information about the annual cycle of Rossumøya. 
+
+This file only has one class, Island. 
 """
 
 from .landscapes import Lowland, Highland, Desert, Water

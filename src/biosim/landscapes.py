@@ -1,10 +1,16 @@
+# -*- coding: utf-8 -*-
 
 __author__ = 'Andrine Zimmermann, Karin Mollatt'
 __email__ = 'andrine.zimmermann@nmbu.no, karin.mollatt@nmbu.no'
 
 
 """
-Module for Landscapes 
+:mod: 'biosim.landscapes' contain information about the different landscape types of Rossumøya.
+     
+The different landscape types have different characteristics. The animals on Rossumøya 
+cannot move into the water. The desert does not contain fodder for the herbivores, but the
+animals can still move to these cells. The lowland and highland cells contain fodder for 
+the herbivores, where lowland cells have more available fodder. 
 """
 from .animals import Herbivores, Carnivores
 

@@ -1,9 +1,14 @@
+# -*- coding: utf-8 -*-
 
 __author__ = 'Andrine Zimmermann, Karin Mollatt'
 __email__ = 'andrine.zimmermann@nmbu.no, karin.mollatt@nmbu.no'
 
 """
-Module for Animals
+:mod: 'biosim.animals' contains information about the animals on Rossumøya. 
+
+The two different animal species on the island are herbivores and carnivores. Some of the 
+characteristics are in common and are in the superclass Animals. The specified characteristics are
+put in their corresponding subclasses, Herbivores and Carivores. 
 """
 
 from math import exp
@@ -67,11 +72,30 @@ class Animals:
         """
         Static function for fitness method.
 
+        .. math::
+            \begin{equation}
+            \Phi =
+            \begin{cases}
+             0 & w \leq 0 \\
+            q^+(a, a_{\frac{1}{2}}, \phi_{age}) \times q^-(w, w_{\frac{1}{2}},
+            \phi_{weight}) & else
+            \end{cases}
+            \end{equation}
+
+        where
+
+        .. math::
+            \begin{equation}
+            q^\pm(x, x_{\frac{1}{2}}, \phi) =
+            \frac{1}{1 + e^{\pm \phi(x - x_{\frac{1}{2}})}}
+            \end{equation}
+
+        Note that :math:`0 \leq \Phi \leq 1`.
+
         :param x: current age/weight of animal
         :param x_half: constant parameter for age/weight
         :param phi_aw: constant parameter for age/weight
         :param pos_neg: determines positive(age)/negative(weight)
-
         :return: value of q function
         """
         q = (1 / (1 + exp(pos_neg * phi_aw * (x - x_half))))
@@ -109,6 +133,20 @@ class Animals:
         Animals can mate if there are at least to animals of the same
         species in one cell. At birth, the mother looses the actual weight of the baby.
 
+        .. math::
+            \begin{equation}
+            min(1, \gamma \times \Phi \times (N-1))
+            \end{equation}
+
+        where N is the number of same type of animals.
+
+        The probability of birth is zero when the weight is:
+
+        .. math::
+            \begin{equation}
+            w < \zeta(w_{birth} + \sigma_{birth})
+            \end{equation}
+
         :return: Returns None if there is no birth, and returns newborn if there is new offspring
         """
         birth_prob = min(1, self.default_params['gamma']*self.phi*(amount_same_species-1))
@@ -131,6 +169,11 @@ class Animals:
     def death(self):
         """
         Method of deciding if the animal dies or not.
+
+        .. math::
+            \begin{equation}
+            \omega(1 - \Phi)
+            \end{equation}
 
         :return: True if animal dies, and False if it survives.
         """
@@ -246,6 +289,18 @@ class Carnivores(Animals):
                 - the rest of the herbivore goes to waste, and cannot be eaten by another carnivore.
         - or has tried to kill each herbivore in the cell.
 
+        .. math::
+            \begin{equation}
+            p =
+            \begin{cases}
+             0 & if\;  \Phi_{carn} \leq \Phi_{herb}\\
+             \frac{\Phi_{carn} - \Phi_{herb}}{\Delta\Phi_{max}} & if\; 0 < \Phi_{carn} -
+             \Phi_{herb} < \Delta\Phi_{max}\\
+            1 & otherwise.
+            \end{cases}
+            \end{equation}
+
+        :param sorted_list_fitness_herbs: List with sorted fitness for herbs.
         :return: List of dead herbivores.
         """
 
