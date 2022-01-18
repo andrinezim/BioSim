@@ -1,3 +1,7 @@
+
+__author__ = 'Andrine Zimmermann, Karin Mollatt'
+__email__ = 'andrine.zimmermann@nmbu.no, karin.mollatt@nmbu.no'
+
 """
 Template for BioSim class.
 """
@@ -6,12 +10,27 @@ Template for BioSim class.
 # https://opensource.org/licenses/BSD-3-Clause
 # (C) Copyright 2021 Hans Ekkehard Plesser / NMBU
 
-class BioSim:
-    def __init__(self, island_map, ini_pop, seed,
-                 vis_years=1, ymax_animals=None, cmax_animals=None, hist_specs=None,
-                 img_dir=None, img_base=None, img_fmt='png', img_years=None,
-                 log_file=None):
+from .visualization import Graphics
+from .island import Island
+import random
 
+_DEFAULT_GRAPHICS_NAME = 'bs'
+
+
+class BioSim:
+    def __init__(self,
+                 island_map,
+                 ini_pop,
+                 seed,
+                 vis_years=1,
+                 ymax_animals=None,
+                 cmax_animals=None,
+                 hist_specs=None,
+                 img_dir=None,
+                 img_base=None,
+                 img_fmt='png',
+                 img_years=None,
+                 log_file=None):
         """
         :param island_map: Multi-line string specifying island geography
         :param ini_pop: List of dictionaries specifying initial population
@@ -45,6 +64,40 @@ class BioSim:
 
         img_dir and img_base must either be both None or both strings.
         """
+        random.seed(seed)
+
+        if img_years is None:
+            self.img_years = vis_years
+        else:
+            self.img_years = vis_years
+
+        self.vis_years = vis_years
+
+        self._current_year = 0
+        self._final_year = None
+
+        self.island_map = island_map
+        self.island = Island(island_map, ini_pop)
+
+        self.img_fmt = img_fmt
+
+        self._graphics = Graphics(img_dir, img_base, img_fmt)
+
+        if ymax_animals is None:
+            self.ymax_animals = 1000
+        else:
+            self.ymax_animals = ymax_animals
+
+        if cmax_animals is None:
+            self.cmax_herb = 50
+            self.cmax_carn = 20
+        else:
+            self.cmax_herb = cmax_animals['Herbivore']
+            self.cmax_carn = cmax_animals['Carnivore']
+
+        self.hist_specs = hist_specs
+
+        self.log_file = log_file
 
     def set_animal_parameters(self, species, params):
         """
@@ -53,6 +106,7 @@ class BioSim:
         :param species: String, name of animal species
         :param params: Dict with valid parameter specification for species
         """
+        self.island.set_animal_params_island(species, params)
 
     def set_landscape_parameters(self, landscape, params):
         """
@@ -61,6 +115,7 @@ class BioSim:
         :param landscape: String, code letter for landscape
         :param params: Dict with valid parameter specification for landscape
         """
+        self.island.set_landscape_params_island(landscape, params)
 
     def simulate(self, num_years):
         """
@@ -68,6 +123,46 @@ class BioSim:
 
         :param num_years: number of years to simulate
         """
+        enable_graphics = True
+
+        self._final_year = self._current_year + num_years
+        if self.vis_years != 0:
+            self._graphics._setup_graphics(self.ymax_animals, self._final_year, self.img_years, self._current_year,
+                                           self.island.row_length, self.island.col_length)
+            self._graphics._update_system_map(self.island_map)
+            if self.img_years % self.vis_years != 0:
+                raise ValueError('img_years must be multiple of vis_years')
+        else:
+            enable_graphics = False
+            self.vis_years = 1
+
+        while self._current_year < self._final_year:
+            self.island.annual_cycle_simulation()
+            self._current_year += 1
+
+            if self._current_year % self.vis_years == 0 and enable_graphics:
+                self._graphics.update(self.island_map,
+                                      self.island.heatmap_population()[0],
+                                      self.island.heatmap_population()[1],
+                                      self.cmax_herb,
+                                      self.cmax_carn,
+                                      self.num_animals_per_species,
+                                      self._current_year)
+                self._graphics._update_fitness_hist(self.island.fitness_list()[0],
+                                                    self.island.fitness_list()[1],
+                                                    self.hist_specs)
+                self._graphics._update_age_hist(self.island.age_list()[0],
+                                                self.island.age_list()[1],
+                                                self.hist_specs)
+                self._graphics._update_weight_hist(self.island.weight_list()[0],
+                                                   self.island.weight_list()[1],
+                                                   self.hist_specs)
+
+            if self.log_file is not None:
+                amount_herbs = self.num_animals_per_species['Herbivore']
+                amount_carns = self.num_animals_per_species['Carnivore']
+                with open(self.log_file, 'a') as infile:
+                    infile.writelines(f'{self._current_year},{amount_herbs},{amount_carns}\n')
 
     def add_population(self, population):
         """
@@ -75,18 +170,38 @@ class BioSim:
 
         :param population: List of dictionaries specifying population
         """
+        self.island.adding_population(population)
 
     @property
     def year(self):
-        """Last year simulated."""
+        """
+        Last year simulated.
+        """
+        return self._current_year
 
     @property
     def num_animals(self):
-        """Total number of animals on island."""
+        """
+        Total number of animals on island.
+        """
+        _, total_amount_animals = self.island.animals_per_species()
+        return total_amount_animals
 
     @property
     def num_animals_per_species(self):
-        """Number of animals per species in island, as dictionary."""
+        """
+        Number of animals per species in island, as dictionary.
+        """
+        amount_animals_species, _ = self.island.animals_per_species()
+        return amount_animals_species
 
-    def make_movie(self):
-        """Create MPEG4 movie from visualization images saved."""
+    def make_movie(self, movie_fmt=None):
+        """
+        Create MPEG4 movie from visualization images saved.
+
+        .. :note:
+            Requires ffmpeg for MP4 and magick for GIF
+
+        The movie is stored as img_base + movie_fmt.
+        """
+        self._graphics.make_movie(movie_fmt)

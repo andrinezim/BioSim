@@ -269,3 +269,5 @@ def test_figure_saved(figfile_base):
 
     assert os.path.isfile(figfile_base + '_00000.png')
     assert os.path.isfile(figfile_base + '_00001.png')
+
+pytest.main(['test_biosim_interface.py'])
