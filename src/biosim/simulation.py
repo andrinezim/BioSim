@@ -201,6 +201,3 @@ class BioSim:
         Create MPEG4 movie from visualization images saved.
         """
         pass
-
-    def save_graphics(self):
-        pass
