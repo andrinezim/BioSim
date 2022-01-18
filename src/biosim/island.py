@@ -12,6 +12,9 @@ from .landscapes import Lowland, Highland, Desert, Water
 
 
 class Island:
+    """
+    Class for Island.
+    """
 
     map_params = {'L': Lowland,
                   'H': Highland,

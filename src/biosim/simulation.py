@@ -18,6 +18,9 @@ _DEFAULT_GRAPHICS_NAME = 'bs'
 
 
 class BioSim:
+    """
+    Class for simulating the island.
+    """
     def __init__(self,
                  island_map,
                  ini_pop,
