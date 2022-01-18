@@ -13,7 +13,6 @@ Template for BioSim class.
 from .visualization import Graphics
 from .island import Island
 import random
-import os
 
 _DEFAULT_GRAPHICS_NAME = 'bs'
 
@@ -196,8 +195,13 @@ class BioSim:
         amount_animals_species, _ = self.island.animals_per_species()
         return amount_animals_species
 
-    def make_movie(self):
+    def make_movie(self, movie_fmt=None):
         """
         Create MPEG4 movie from visualization images saved.
+
+        .. :note:
+            Requires ffmpeg for MP4 and magick for GIF
+
+        The movie is stored as img_base + movie_fmt.
         """
-        pass
+        self._graphics.make_movie(movie_fmt)

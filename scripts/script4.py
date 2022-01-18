@@ -2,7 +2,6 @@
 Example for creating axes and updating text in an axes.
 """
 from biosim.simulation import BioSim
-import matplotlib.pyplot as plt
 import textwrap
 
 geogr = """\

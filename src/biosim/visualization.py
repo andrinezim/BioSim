@@ -271,6 +271,8 @@ class Graphics:
                 self._mean_line_carn.set_data(np.hstack((x_data, x_new)),
                                               np.hstack((y_data, y_new)))
 
+        self._mean_ax.legend(handles=[self._mean_line_herb, self._mean_line_carn])
+
     def _update_system_map(self, sys_map):
         """
         Method for updating the island map.
