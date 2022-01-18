@@ -254,6 +254,16 @@ class Island:
 
         return weight_list_herb, weight_list_carn
 
+    def set_animal_params_island(self, params, species):
+        """
+        Set parameters for animal species.
+
+        :param species: String, name of animal species
+        :param params: Dict with valid parameter specification for species
+        """
+        for cell in self.map.values():
+            cell.set_animal_params_landscape(params, species)
+
     def annual_cycle_simulation(self):
         """
         Method for simulating one year one the island. It follows the annual cycle.

@@ -83,6 +83,7 @@ class Graphics:
         self._herb_axis = None
         self._carn_ax = None
         self._carn_axis = None
+        self._ymax = None
 
         self._fitness_ax = None
         self._fitness_axis = None
@@ -200,11 +201,13 @@ class Graphics:
         if self._mean_ax is None:
             self._mean_ax = self._fig.add_subplot(self._gridspec[:3, 12:18])
             self._mean_ax.set_xlim(0, final_year + 1)
-            self._mean_ax.set_ylim(0, y_lim)
+            self._mean_ax.set_ylim(0, y_lim + 20)
             self._mean_ax.title.set_text('Animal count')
             self._mean_ax.set_box_aspect(1)
+            #self._mean_ax.legend(['Herbivores', 'Carnivores'], loc='upper left')
         elif self._mean_ax is not None:
             self._mean_ax.set_xlim(0, final_year + 1)
+            self._mean_ax.set_ylim(0, y_lim + 20)
 
         # Subplot for herbivore heatmap
         if self._herb_ax is None:
@@ -255,7 +258,7 @@ class Graphics:
                 self._mean_line_herb.set_data(np.hstack((x_data, x_new)),
                                               np.hstack((y_data, y_new)))
 
-        # Graph line for herbivores
+        # Graph line for carnivores
         if self._mean_line_carn is None:
             mean_plot_carn = self._mean_ax.plot(np.arange(0, final_year + 1),
                                                 np.full(final_year + 1, np.nan), label='Carnivore')

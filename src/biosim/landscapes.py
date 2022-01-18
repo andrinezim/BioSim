@@ -191,6 +191,18 @@ class Landscapes:
         for carn in self.list_carnivores:
             carn.has_migrated = False
 
+    def set_animal_params_landscapes(self, species, params):
+        """
+        Set parameters for animal species.
+
+        :param species: String, name of animal species
+        :param params: Dict with valid parameter specification for species
+        """
+        if species == 'Herbivore':
+            Herbivores.set_params(params)
+        elif species == 'Carnivore':
+            Carnivores.set_params(params)
+
 
 class Lowland(Landscapes):
     """

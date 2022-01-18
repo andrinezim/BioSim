@@ -92,7 +92,9 @@ class BioSim:
         self._graphics = Graphics(img_dir, img_base, img_fmt)
 
         if ymax_animals is None:
-            self.ymax_animals = 20000
+            self.ymax_animals = 6000
+        else:
+            self.ymax_animals = ymax_animals
 
         if cmax_animals is None:
             self.cmax_herb = 50
@@ -110,10 +112,7 @@ class BioSim:
         :param species: String, name of animal species
         :param params: Dict with valid parameter specification for species
         """
-        if species == 'Herbivore':
-            Herbivores.set_params(params)
-        elif species == 'Carnivore':
-            Carnivores.set_params(params)
+        self.island.set_animal_params_island(species, params)
 
     def set_landscape_parameters(self, landscape, params):
         """
