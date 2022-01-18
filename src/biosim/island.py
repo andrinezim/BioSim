@@ -264,6 +264,23 @@ class Island:
         for cell in self.map.values():
             cell.set_animal_params_landscape(params, species)
 
+    def set_landscape_params_island(self, landscape, params):
+        """
+        Set parameters for landscape type.
+
+        :param landscape: String, code letter for landscape
+        :param params: Dict with valid parameter specification for landscape
+        """
+        for cell in self.map.values():
+            if landscape == 'L':
+                cell.set_params(params)
+            elif landscape == 'H':
+                cell.set_params(params)
+            elif landscape == 'D':
+                cell.set_params(params)
+            elif landscape == 'W':
+                cell.set_params(params)
+
     def annual_cycle_simulation(self):
         """
         Method for simulating one year one the island. It follows the annual cycle.

@@ -121,14 +121,7 @@ class BioSim:
         :param landscape: String, code letter for landscape
         :param params: Dict with valid parameter specification for landscape
         """
-        if landscape == 'L':
-            Lowland.set_params(params)
-        elif landscape == 'H':
-            Highland.set_params(params)
-        elif landscape == 'D':
-            Desert.set_params(params)
-        elif landscape == 'W':
-            Water.set_params(params)
+        self.island.set_landscape_params_island(landscape, params)
 
     def simulate(self, num_years):
         """
