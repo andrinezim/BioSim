@@ -152,11 +152,11 @@ class BioSim:
                                                     self.island.fitness_list()[1],
                                                     self.hist_specs)
                 self._graphics._update_age_hist(self.island.age_list()[0],
-                                                    self.island.age_list()[1],
-                                                    self.hist_specs)
+                                                self.island.age_list()[1],
+                                                self.hist_specs)
                 self._graphics._update_weight_hist(self.island.weight_list()[0],
-                                                    self.island.weight_list()[1],
-                                                    self.hist_specs)
+                                                   self.island.weight_list()[1],
+                                                   self.hist_specs)
 
             if self.log_file is not None:
                 amount_herbs = self.num_animals_per_species['Herbivore']
@@ -184,7 +184,7 @@ class BioSim:
         """
         Total number of animals on island.
         """
-        _ , total_amount_animals = self.island.animals_per_species()
+        _, total_amount_animals = self.island.animals_per_species()
         return total_amount_animals
 
     @property

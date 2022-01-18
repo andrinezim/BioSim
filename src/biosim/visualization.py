@@ -34,7 +34,7 @@ _MAGICK_BINARY = 'magick'
 
 # update this to the directory and file-name beginning
 # for the graphics files
-_DEFAULT_GRAPHICS_DIR = os.path.join('../..', 'data')
+_DEFAULT_GRAPHICS_DIR = os.path.join('../..', 'results')
 _DEFAULT_GRAPHICS_NAME = 'bs'
 _DEFAULT_IMG_FORMAT = 'png'
 _DEFAULT_MOVIE_FORMAT = 'mp4'   # alternatives: mp4, gif
@@ -58,6 +58,8 @@ class Graphics:
             img_name = _DEFAULT_GRAPHICS_NAME
 
         if img_dir is not None:
+            if not os.path.isdir(img_dir):
+                os.mkdir(img_dir)
             self._img_base = os.path.join(img_dir, img_name)
         else:
             self._img_base = None
@@ -173,7 +175,7 @@ class Graphics:
         # Create new figure window
         if self._fig is None:
             self._fig = plt.figure(figsize=(10, 8))
-            self._gridspec = self._fig.add_gridspec(9,18)
+            self._gridspec = self._fig.add_gridspec(9, 18)
             plt.axis('off')
 
         # Subplot for island map
@@ -204,7 +206,6 @@ class Graphics:
             self._mean_ax.set_ylim(0, y_lim + 100)
             self._mean_ax.title.set_text('Animal count')
             self._mean_ax.set_box_aspect(1)
-            #self._mean_ax.legend(['Herbivores', 'Carnivores'], loc='upper left')
         elif self._mean_ax is not None:
             self._mean_ax.set_xlim(0, final_year + 1)
             self._mean_ax.set_ylim(0, y_lim + 100)
@@ -248,7 +249,7 @@ class Graphics:
         # Graph line for herbivores
         if self._mean_line_herb is None:
             mean_plot_herb = self._mean_ax.plot(np.arange(0, final_year + 1),
-                                           np.full(final_year + 1, np.nan), label='Herbivore')
+                                                np.full(final_year + 1, np.nan), label='Herbivore')
             self._mean_line_herb = mean_plot_herb[0]
         else:
             x_data, y_data = self._mean_line_herb.get_data()
@@ -356,9 +357,9 @@ class Graphics:
             fit_bins = (int(hist_specs["fitness"]["max"] / hist_specs["fitness"]["delta"]))
             self._fitness_ax.clear()
             self._fitness_ax.hist(herb_list, bins=fit_bins, histtype='step', color='b',
-                                    range=(0, hist_specs["fitness"]["max"]))
+                                  range=(0, hist_specs["fitness"]["max"]))
             self._fitness_ax.hist(carn_list, bins=fit_bins, histtype='step', color='r',
-                                    range=(0, hist_specs["fitness"]["max"]))
+                                  range=(0, hist_specs["fitness"]["max"]))
             self._fitness_ax.title.set_text('Fitness')
 
     def _update_age_hist(self, herb_list=None, carn_list=None, hist_specs=None):
@@ -400,9 +401,9 @@ class Graphics:
             weight_bins = (int(hist_specs["weight"]["max"] / hist_specs["weight"]["delta"]))
             self._weight_ax.clear()
             self._weight_ax.hist(herb_list, bins=weight_bins, histtype='step', color='b',
-                              range=(0, hist_specs["weight"]["max"]))
+                                 range=(0, hist_specs["weight"]["max"]))
             self._weight_ax.hist(carn_list, bins=weight_bins, histtype='step', color='r',
-                              range=(0, hist_specs["weight"]["max"]))
+                                 range=(0, hist_specs["weight"]["max"]))
             self._weight_ax.title.set_text('Weight')
 
     def _update_mean_graph(self, amount_animals_species, year):

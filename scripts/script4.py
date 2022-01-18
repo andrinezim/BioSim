@@ -45,8 +45,10 @@ sim = BioSim(geogr, ini_herbs + ini_carns, seed=1,
              hist_specs={'fitness': {'max': 1.0, 'delta': 0.05},
                          'age': {'max': 60.0, 'delta': 2},
                          'weight': {'max': 60, 'delta': 2}},
-             cmax_animals={'Herbivore': 200, 'Carnivore': 50}, log_file='test.csv')
+             cmax_animals={'Herbivore': 200, 'Carnivore': 50}, log_file='test.csv', img_dir='results',
+                 img_base='sample')
 sim.simulate(100)
+sim.make_movie()
 
 input('Press ENTER')
 
