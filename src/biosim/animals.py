@@ -8,7 +8,7 @@ __email__ = 'andrine.zimmermann@nmbu.no, karin.mollatt@nmbu.no'
 
 The two different animal species on the island are herbivores and carnivores. Some of the 
 characteristics are in common and are in the superclass Animals. The specified characteristics are
-put in their corresponding subclasses, Herbivores and Carivores. 
+put in their corresponding subclasses, Herbivores and Carnivores. 
 """
 
 from math import exp
@@ -69,17 +69,16 @@ class Animals:
 
     @staticmethod
     def q_func(x, x_half, phi_aw, pos_neg):
-        """
+        r"""
         Static function for fitness method.
 
         .. math::
             \begin{equation}
-            \Phi =
-            \begin{cases}
-             0 & w \leq 0 \\
+            \Phi = \left\{\begin{matrix}
+            0 & w \leq 0\\
             q^+(a, a_{\frac{1}{2}}, \phi_{age}) \times q^-(w, w_{\frac{1}{2}},
             \phi_{weight}) & else
-            \end{cases}
+            \end{matrix}\right.
             \end{equation}
 
         where
@@ -87,7 +86,7 @@ class Animals:
         .. math::
             \begin{equation}
             q^\pm(x, x_{\frac{1}{2}}, \phi) =
-            \frac{1}{1 + e^{\pm \phi(x - x_{\frac{1}{2}})}}
+            \frac{1}{1 + e^{\pm \phi (x - x_{\frac{1}{2}}) }}
             \end{equation}
 
         Note that :math:`0 \leq \Phi \leq 1`.
@@ -97,6 +96,7 @@ class Animals:
         :param phi_aw: constant parameter for age/weight
         :param pos_neg: determines positive(age)/negative(weight)
         :return: value of q function
+
         """
         q = (1 / (1 + exp(pos_neg * phi_aw * (x - x_half))))
 
@@ -127,7 +127,7 @@ class Animals:
         self.fitness()
 
     def procreation(self, amount_same_species):
-        """
+        r"""
         Method to determine the probability of birth.
 
         Animals can mate if there are at least to animals of the same
@@ -167,7 +167,7 @@ class Animals:
                 return None
 
     def death(self):
-        """
+        r"""
         Method of deciding if the animal dies or not.
 
         .. math::
@@ -276,7 +276,7 @@ class Carnivores(Animals):
         super().__init__(age, weight)
 
     def carns_eating_herbs(self, sorted_list_fitness_herbs):
-        """
+        r"""
         Method for carnivores hunting herbivores.
 
         One carnivore hunts at a time, in random order. Two carnivores cannot prey on the same
@@ -284,6 +284,7 @@ class Carnivores(Animals):
         the herbivore with the lowest fitness.
 
         A carnivore continues to kill herbivores until:
+
         - the carnivore has eaten an amount F
             - if the herbivore weights more than F, the carnivore only eats amount F
                 - the rest of the herbivore goes to waste, and cannot be eaten by another carnivore.
@@ -293,9 +294,9 @@ class Carnivores(Animals):
             \begin{equation}
             p =
             \begin{cases}
-             0 & if\;  \Phi_{carn} \leq \Phi_{herb}\\
-             \frac{\Phi_{carn} - \Phi_{herb}}{\Delta\Phi_{max}} & if\; 0 < \Phi_{carn} -
-             \Phi_{herb} < \Delta\Phi_{max}\\
+            0 & if\;  \Phi_{carn} \leq \Phi_{herb}\\
+            \frac{\Phi_{carn} - \Phi_{herb}}{\Delta\Phi_{max}} & if\; 0 < \Phi_{carn} -
+            \Phi_{herb} < \Delta\Phi_{max}\\
             1 & otherwise.
             \end{cases}
             \end{equation}
