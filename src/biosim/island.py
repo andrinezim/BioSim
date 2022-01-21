@@ -43,11 +43,11 @@ class Island:
 
         for i in range(len(self.map_lines[0])):
             if self.map_lines[0][i] != 'W' or self.map_lines[-1][i] != 'W':
-                raise ValueError(f'The must be surrounded of water')
+                raise ValueError(f'The island must be surrounded of water')
 
         for i in range(len(self.map_lines)):
             if self.map_lines[i][0] != 'W' or self.map_lines[i][-1] != 'W':
-                raise ValueError(f'The must be surrounded of water')
+                raise ValueError(f'The island must be surrounded of water')
 
     def creating_map(self, island_map):
         """
