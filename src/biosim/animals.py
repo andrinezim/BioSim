@@ -110,7 +110,6 @@ class Animals:
         """
         if self.weight == 0:
             self.phi = 0
-            print(self.phi)
         else:
             q_pos = self.q_func(self.age, self.default_params['a_half'], self.default_params['phi_age'], 1)
             q_neg = self.q_func(self.weight, self.default_params['w_half'], self.default_params['phi_weight'], -1)

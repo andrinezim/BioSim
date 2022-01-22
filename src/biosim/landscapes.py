@@ -52,10 +52,10 @@ class Landscapes:
 
     def animals_population(self, ini_population):
         """
-        Method for distributing herbivores into a list.
+        Method for distributing herbivores and carnivores into a list.
 
         :param ini_population: Initial population in one cell.
-        :return: List with herbivores in one cell.
+        :return: List with herbivores and carnivores in one cell.
         """
         for pop_dict in ini_population:
             if pop_dict['species'] == 'Herbivore':
