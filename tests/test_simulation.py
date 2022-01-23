@@ -32,8 +32,6 @@ class TestSimulation:
         """
         Testing that we get a ValueError if img_years is not a multiple of vis_years.
         """
-        # obj = BioSim(ini_pop=[], island_map="WWWWW\nWWLWW\nWLLLW\nWWLWW\nWWWWW",
-                     # seed=1, img_years=5, vis_years=2)
         self.standard_simulation.img_years = 5
         self.standard_simulation.vis_years = 2
         with pytest.raises(ValueError):

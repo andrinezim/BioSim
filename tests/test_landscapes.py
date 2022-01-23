@@ -200,8 +200,7 @@ class TestLandscapes:
                       'weight': 20}
                      for _ in range(10)]
         obj.animals_population(herb_list)
-        for i in range(10):
-            migrated_herbs, _ = obj.distribute_migrated_animals()
+        migrated_herbs, _ = obj.distribute_migrated_animals()
         obj.annual_restart_migration()
         for herb in migrated_herbs:
             assert herb.has_migrated is False
@@ -219,8 +218,7 @@ class TestLandscapes:
                       'weight': 20}
                      for _ in range(10)]
         obj.animals_population(carn_list)
-        for i in range(10):
-            _, migrated_carns = obj.distribute_migrated_animals()
+        _, migrated_carns = obj.distribute_migrated_animals()
         obj.annual_restart_migration()
         for carn in migrated_carns:
             assert carn.has_migrated is False
